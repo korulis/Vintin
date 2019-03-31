@@ -1,0 +1,9 @@
+TODO:
+Fix file reading to be unix compatible.
+Use date time offset converted from France DateTime in ShippingEntry.Date.
+Use ShippingEntry.PackageSize as enum instead of string.
+Use ShippingEntry.ShippingProvider as enum.
+Protect ShippingEntry type better.
+Use Monads to parse lines.
+Implement Linq to file parser for lazy loading.
+Implement custome deserializer and use it for file parsing.

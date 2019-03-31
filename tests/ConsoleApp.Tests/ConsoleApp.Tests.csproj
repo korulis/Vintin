@@ -14,7 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="expected-output.txt">
+    <None Update="free-shipping-output.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="discouted-shipping-output.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="input.txt">
