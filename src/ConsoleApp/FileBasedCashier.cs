@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Discounts;
 
 namespace ConsoleApp
@@ -7,16 +9,19 @@ namespace ConsoleApp
     {
         private readonly ShippingEntryMapper _shippingEntryMapper;
         private readonly ShippingCostsCalculator _shippingCostsCalculator;
+        private readonly Action<IEnumerable<string>> _outputMethod;
 
         public FileBasedCashier(
             ShippingEntryMapper shippingEntryMapper,
-            ShippingCostsCalculator shippingCostsCalculator)
+            ShippingCostsCalculator shippingCostsCalculator,
+            Action<IEnumerable<string>> outputMethod)
         {
             _shippingEntryMapper = shippingEntryMapper;
             _shippingCostsCalculator = shippingCostsCalculator;
+            _outputMethod = outputMethod;
         }
 
-        public void Process(string inputFilePath, string outputFilePath)
+        public void Process(string inputFilePath)
         {
             var shippingEntryLines = File.ReadLines(inputFilePath);
 
@@ -26,7 +31,7 @@ namespace ConsoleApp
 
             var shippingCostsLines = _shippingEntryMapper.FormatOutput(discountedShippingEntries);
 
-            File.WriteAllLines(outputFilePath, shippingCostsLines);
+            _outputMethod(shippingCostsLines);
         }
     }
 }

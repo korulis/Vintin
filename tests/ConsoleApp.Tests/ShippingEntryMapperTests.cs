@@ -152,7 +152,7 @@ namespace ConsoleApp.Tests
             var input = new List<ProcessedShippingEntry>
             {
                 new ProcessedShippingEntry(
-                    ShippingEntry.Corrupt("Something corrupt"),
+                    ShippingEntry.Corrupt("This is some corrupt entry"),
                     0.00m,
                     0.00m
                 )};

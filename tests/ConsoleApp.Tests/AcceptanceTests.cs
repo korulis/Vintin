@@ -23,10 +23,11 @@ namespace ConsoleApp.Tests
 
             var fileProcessor = new FileBasedCashier(
                 shippingEntryParser,
-                shippingCostCalculator);
+                shippingCostCalculator, 
+                (x => { File.WriteAllLines("output.txt", x); }));
 
             //Act
-            fileProcessor.Process(inputFilePath, outputFilePath);
+            fileProcessor.Process(inputFilePath);
 
             //Assert
             var actualDiscountedEntries = File.ReadLines(outputFilePath).ToArray();
