@@ -8,3 +8,10 @@ Protect ShippingEntry type better.
 Use Monads to parse lines.
 Implement Linq to file parser for lazy loading.
 Implement custome deserializer and use it for file parsing.
+
+Some of the architecture notes.
+# Decided against async methods, because if I use async for reading the file, then I loose the Ienumerable<> interface,
+	and if I use the async only on the output part of the method it does not save much, because this is the last step, 
+	and no other processes/calculations of the program should be happening then. So all in all it would just be an 
+	unnecessary code complication.
+#
