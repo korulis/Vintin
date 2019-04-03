@@ -19,7 +19,7 @@ namespace ConsoleApp.Tests
             const string outputFilePath = "actual-free-shipping-output.txt";
 
             var shippingEntryParser = new ShippingEntryMapper(separator, acceptableDateFormat);
-            var shippingCostCalculator = new ShippingCostsCalculator();
+            var shippingCostCalculator = new ShippingPriceCalculator();
 
             var fileProcessor = new FileBasedCashier(
                 shippingEntryParser,

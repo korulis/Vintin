@@ -29,7 +29,7 @@ namespace ConsoleApp
 
             var processor = new FileBasedCashier(
                 new ShippingEntryMapper(" ", "yyyy-MM-dd"),
-                new ShippingCostsCalculator(),
+                new ShippingPriceCalculator(),
                 OutputMethod);
             return processor;
         }
