@@ -9,12 +9,14 @@ namespace ConsoleApp
     public class ShippingEntryMapper
     {
         private readonly string _separator;
-        private static string _acceptableDateFormat;
+        private static string _dateFormat;
+        private static readonly string[] AcceptableSizes = {"S", "M", "L"};
+        private static readonly string[] AcceptableProviders = {"MR", "LP"};
 
-        public ShippingEntryMapper(string separator, string acceptableDateFormat)
+        public ShippingEntryMapper(string separator, string dateFormat)
         {
             _separator = separator;
-            _acceptableDateFormat = acceptableDateFormat;
+            _dateFormat = dateFormat;
         }
 
         public IEnumerable<ShippingEntry> ParseInput(IEnumerable<string> lines)
@@ -22,18 +24,29 @@ namespace ConsoleApp
             return lines.Select(ToShippingEntry);
         }
 
-        public ShippingEntry ToShippingEntry(string line)
+        private ShippingEntry ToShippingEntry(string line)
         {
             var lineElements = line.Split(_separator);
 
+            if (lineElements.Length != 3)
+            {
+                return ShippingEntry.Corrupt(lineElements);
+            }
+
+
             var isDatePresent = DateTime.TryParseExact(
                 lineElements[0],
-                _acceptableDateFormat,
+                _dateFormat,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out var date);
 
-            if (lineElements.Length != 3 || !isDatePresent)
+            var size = lineElements[1];
+            var provider = lineElements[2];
+
+            if (!(isDatePresent 
+                  && AcceptableProviders.Contains(provider) 
+                  && AcceptableSizes.Contains(size)))
             {
                 return ShippingEntry.Corrupt(lineElements);
             }
@@ -41,8 +54,8 @@ namespace ConsoleApp
             var result = new ShippingEntry
             {
                 Date = date,
-                PackageSize = lineElements[1],
-                ShippingProvider = lineElements[2]
+                PackageSize = size,
+                ShippingProvider = provider
             };
             return result;
         }

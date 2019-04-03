@@ -7,8 +7,6 @@ namespace ConsoleApp.Tests
 {
     public class AcceptanceTests
     {
-
-
         [Fact]
         public void FreeShippingTestCase()
         {

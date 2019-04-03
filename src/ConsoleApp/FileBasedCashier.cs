@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Discounts;
 
-namespace ConsoleApp.Tests
+namespace ConsoleApp
 {
     public class FileBasedCashier
     {
