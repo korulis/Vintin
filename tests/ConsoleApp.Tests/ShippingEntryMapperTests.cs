@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Discounts;
 using Xunit;
@@ -80,18 +81,20 @@ namespace ConsoleApp.Tests
         }
 
 
-        [Fact]
-        public void FormatDiscounted_TransformsTheObjectIntoString()
+        [Theory]
+        [InlineData("0.00", "-")]
+        [InlineData("0.01", "0.01")]
+        public void FormatDiscounted_TransformsTheObjectIntoString(string discountString, string expectedDiscount)
         {
             //Arrange
             var date = new DateTime(1999, 1, 1);
             const string packageSize = "SeriousPackageSize";
             const string shippingProvider = "SeriousShippingProvider";
-            const string shippingCost = "BigAmount";
-            const string discount = "BiggerAmount";
-            var input = new List<DiscountedShippingEntry>
+            const decimal shippingCost = 0.00m;
+            var discount = Convert.ToDecimal(discountString, CultureInfo.InvariantCulture);
+            var input = new List<ProcessedShippingEntry>
             {
-                new DiscountedShippingEntry(new ShippingEntry()
+                new ProcessedShippingEntry(new ShippingEntry()
                 {
                     Date = date,
                     PackageSize = packageSize,
@@ -105,12 +108,12 @@ namespace ConsoleApp.Tests
             //Assert
             Assert.Equal(
                 string.Join(
-                    Separator, 
-                    date.ToString(DateFormat), 
-                    packageSize, 
-                    shippingProvider, 
-                    shippingCost, 
-                    discount), 
+                    Separator,
+                    date.ToString(DateFormat),
+                    packageSize,
+                    shippingProvider,
+                    "0.00",
+                    expectedDiscount),
                 actual);
         }
 
@@ -118,20 +121,20 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_ReturnsListOfStrings_WithSameOrderingAsInput()
         {
             //Arrange
-            var input = new List<DiscountedShippingEntry>
+            var input = new List<ProcessedShippingEntry>
             {
-                new DiscountedShippingEntry(new ShippingEntry()
+                new ProcessedShippingEntry(new ShippingEntry()
                 {
                     Date = new DateTime(1999,1,1),
                     PackageSize = "S",
                     ShippingProvider = "ML"
-                }, "-","-"),
-                new DiscountedShippingEntry(new ShippingEntry()
+                }, 0.00m,0.00m),
+                new ProcessedShippingEntry(new ShippingEntry()
                 {
                     Date = new DateTime(1998,1,1),
                     PackageSize = "S",
                     ShippingProvider = "ML"
-                }, "-","-"),
+                }, 0.00m,0.00m),
             };
 
             //Act 
@@ -146,12 +149,12 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_MarksInvalidInputInTheOutput()
         {
             //Arrange
-            var input = new List<DiscountedShippingEntry>
+            var input = new List<ProcessedShippingEntry>
             {
-                new DiscountedShippingEntry(
+                new ProcessedShippingEntry(
                     ShippingEntry.Corrupt("Something corrupt"),
-                    "-",
-                    "-"
+                    0.00m,
+                    0.00m
                 )};
 
             //Act 

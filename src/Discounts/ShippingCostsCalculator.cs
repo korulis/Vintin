@@ -5,10 +5,10 @@ namespace Discounts
 {
     public class ShippingCostsCalculator
     {
-        public IEnumerable<DiscountedShippingEntry> CalculateCost(IEnumerable<ShippingEntry> shippingEntries)
+        public IEnumerable<ProcessedShippingEntry> CalculateCost(IEnumerable<ShippingEntry> shippingEntries)
         {
             return shippingEntries
-                .Select(x => new DiscountedShippingEntry(x, "0.00", "-"));
+                .Select(x => new ProcessedShippingEntry(x, 0.00m, 0.00m));
         }
 
     }

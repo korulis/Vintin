@@ -10,8 +10,8 @@ namespace ConsoleApp
     {
         private readonly string _separator;
         private static string _dateFormat;
-        private static readonly string[] AcceptableSizes = {"S", "M", "L"};
-        private static readonly string[] AcceptableProviders = {"MR", "LP"};
+        private static readonly string[] AcceptableSizes = { "S", "M", "L" };
+        private static readonly string[] AcceptableProviders = { "MR", "LP" };
 
         public ShippingEntryMapper(string separator, string dateFormat)
         {
@@ -44,8 +44,8 @@ namespace ConsoleApp
             var size = lineElements[1];
             var provider = lineElements[2];
 
-            if (!(isDatePresent 
-                  && AcceptableProviders.Contains(provider) 
+            if (!(isDatePresent
+                  && AcceptableProviders.Contains(provider)
                   && AcceptableSizes.Contains(size)))
             {
                 return ShippingEntry.Corrupt(line);
@@ -60,14 +60,14 @@ namespace ConsoleApp
             return result;
         }
 
-        public IEnumerable<string> FormatOutput(IEnumerable<DiscountedShippingEntry> discountedShippingEntries)
+        public IEnumerable<string> FormatOutput(IEnumerable<ProcessedShippingEntry> discountedShippingEntries)
         {
             return discountedShippingEntries.Select(FormatDiscounted);
         }
 
-        private string FormatDiscounted(DiscountedShippingEntry discounted)
+        private string FormatDiscounted(ProcessedShippingEntry processed)
         {
-            var shippingEntry = discounted.ShippingEntry;
+            var shippingEntry = processed.ShippingEntry;
             if (shippingEntry.IsCorrupt)
             {
                 return string.Join(
@@ -77,13 +77,14 @@ namespace ConsoleApp
             }
             else
             {
+                var processedDiscount = processed.Discount;
                 return string.Join(
                     _separator,
                     shippingEntry.Date.ToString(_dateFormat),
                     shippingEntry.PackageSize,
                     shippingEntry.ShippingProvider,
-                    discounted.ShippingCost,
-                    discounted.Discount);
+                    processed.ShippingCost.ToString(CultureInfo.InvariantCulture),
+                    processedDiscount == 0 ? "-" : processedDiscount.ToString(CultureInfo.InvariantCulture));
             }
         }
     }
