@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Discounts
 {
     public class ShippingEntry
     {
-        public IReadOnlyList<string> EntryElements { get; }
+        public string RawEntry { get; }
         public bool IsCorrupt { get; }
         public DateTime Date { get; set; }
         public string PackageSize { get; set; }
@@ -16,15 +15,16 @@ namespace Discounts
             IsCorrupt = false;
         }
 
-        private ShippingEntry(IReadOnlyList<string> entryElements)
+        private ShippingEntry(string rawEntry)
         {
-            EntryElements = entryElements;
+            RawEntry = rawEntry;
             IsCorrupt = true;
         }
 
-        public static ShippingEntry Corrupt(IReadOnlyList<string> lineElements)
+        public static ShippingEntry Corrupt(string lineElements)
         {
-            return new ShippingEntry(lineElements);
+            var shippingEntry = new ShippingEntry(lineElements);
+            return shippingEntry;
         }
     }
 }

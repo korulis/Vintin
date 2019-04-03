@@ -30,7 +30,7 @@ namespace ConsoleApp
 
             if (lineElements.Length != 3)
             {
-                return ShippingEntry.Corrupt(lineElements);
+                return ShippingEntry.Corrupt(line);
             }
 
 
@@ -48,7 +48,7 @@ namespace ConsoleApp
                   && AcceptableProviders.Contains(provider) 
                   && AcceptableSizes.Contains(size)))
             {
-                return ShippingEntry.Corrupt(lineElements);
+                return ShippingEntry.Corrupt(line);
             }
 
             var result = new ShippingEntry
@@ -72,14 +72,14 @@ namespace ConsoleApp
             {
                 return string.Join(
                     _separator,
-                    string.Join(_separator, shippingEntry.EntryElements),
+                    string.Join(_separator, shippingEntry.RawEntry),
                     "Ignored");
             }
             else
             {
                 return string.Join(
                     _separator,
-                    shippingEntry.Date.ToShortDateString(),
+                    shippingEntry.Date.ToString(_dateFormat),
                     shippingEntry.PackageSize,
                     shippingEntry.ShippingProvider,
                     discounted.ShippingCost,

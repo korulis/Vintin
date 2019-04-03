@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Discounts;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -8,16 +9,16 @@ namespace ConsoleApp.Tests
     public class ShippingEntryMapperTests
     {
         private const string Separator = " ";
+        private const string DateFormat = "yyyy-MM-dd";
         private readonly ShippingEntryMapper _sut;
 
         public ShippingEntryMapperTests()
         {
-            const string acceptableDateFormat = "yyyy-MM-dd";
-            _sut = new ShippingEntryMapper(Separator, acceptableDateFormat);
+            _sut = new ShippingEntryMapper(Separator, DateFormat);
         }
 
         [Fact]
-        public void MapperParsesStringLinesWithoutTransformingDataValues()
+        public void ParseInput_ParsesStringLines()
         {
             //Arrange
             var input = new List<string>
@@ -36,7 +37,7 @@ namespace ConsoleApp.Tests
         }
 
         [Fact]
-        public void MapperParsesStringLinesToProduceObjectArray_WithSameOrdering()
+        public void ParseInput_ParsesStringLinesToProduceObjectArray_WithSameOrderingAsInput()
         {
             //Arrange
             var input = new List<string>
@@ -66,7 +67,7 @@ namespace ConsoleApp.Tests
         [InlineData(false, "1999-03-30 S")]
         [InlineData(false, "1999-03-30 CUSP")]
         [InlineData(false, "Something completely else")]
-        public void TestValidDataFormats(bool expectedValidData, string inputLine)
+        public void ParseInput_ValidInputFormats(bool expectedValidData, string inputLine)
         {
             //Arrange
             var input = new List<string> { inputLine };
@@ -77,5 +78,88 @@ namespace ConsoleApp.Tests
             //Assert
             Assert.Equal(expectedValidData, !actual.IsCorrupt);
         }
+
+
+        [Fact]
+        public void FormatDiscounted_TransformsTheObjectIntoString()
+        {
+            //Arrange
+            var date = new DateTime(1999, 1, 1);
+            const string packageSize = "SeriousPackageSize";
+            const string shippingProvider = "SeriousShippingProvider";
+            const string shippingCost = "BigAmount";
+            const string discount = "BiggerAmount";
+            var input = new List<DiscountedShippingEntry>
+            {
+                new DiscountedShippingEntry(new ShippingEntry()
+                {
+                    Date = date,
+                    PackageSize = packageSize,
+                    ShippingProvider = shippingProvider
+                }, shippingCost, discount)
+            };
+
+            //Act 
+            var actual = _sut.FormatOutput(input).ToList()[0];
+
+            //Assert
+            Assert.Equal(
+                string.Join(
+                    Separator, 
+                    date.ToString(DateFormat), 
+                    packageSize, 
+                    shippingProvider, 
+                    shippingCost, 
+                    discount), 
+                actual);
+        }
+
+        [Fact]
+        public void FormatDiscounted_ReturnsListOfStrings_WithSameOrderingAsInput()
+        {
+            //Arrange
+            var input = new List<DiscountedShippingEntry>
+            {
+                new DiscountedShippingEntry(new ShippingEntry()
+                {
+                    Date = new DateTime(1999,1,1),
+                    PackageSize = "S",
+                    ShippingProvider = "ML"
+                }, "-","-"),
+                new DiscountedShippingEntry(new ShippingEntry()
+                {
+                    Date = new DateTime(1998,1,1),
+                    PackageSize = "S",
+                    ShippingProvider = "ML"
+                }, "-","-"),
+            };
+
+            //Act 
+            var actual = _sut.FormatOutput(input).ToList();
+
+            //Assert
+            Assert.Contains("1999", actual[0]);
+            Assert.Contains("1998", actual[1]);
+        }
+
+        [Fact]
+        public void FormatDiscounted_MarksInvalidInputInTheOutput()
+        {
+            //Arrange
+            var input = new List<DiscountedShippingEntry>
+            {
+                new DiscountedShippingEntry(
+                    ShippingEntry.Corrupt("Something corrupt"),
+                    "-",
+                    "-"
+                )};
+
+            //Act 
+            var actual = _sut.FormatOutput(input).ToList()[0];
+
+            //Assert
+            Assert.Contains("Ignored", actual);
+        }
+
     }
 }
