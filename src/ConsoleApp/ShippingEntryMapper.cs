@@ -83,8 +83,8 @@ namespace ConsoleApp
                     shippingEntry.Date.ToString(_dateFormat),
                     shippingEntry.PackageSize,
                     shippingEntry.ShippingProvider,
-                    processed.ShippingCost.ToString(CultureInfo.InvariantCulture),
-                    processedDiscount == 0 ? "-" : processedDiscount.ToString(CultureInfo.InvariantCulture));
+                    processed.ShippingCost.ToString("F", CultureInfo.InvariantCulture),
+                    processedDiscount == 0 ? "-" : processedDiscount.ToString("F", CultureInfo.InvariantCulture));
             }
         }
     }

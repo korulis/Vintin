@@ -5,13 +5,13 @@ using Discounts;
 
 namespace ConsoleApp
 {
-    public class FileBasedCashier
+    public class FileBasedShippingPriceCalculator
     {
         private readonly ShippingEntryMapper _shippingEntryMapper;
         private readonly ShippingPriceCalculator _shippingPriceCalculator;
         private readonly Action<IEnumerable<string>> _outputMethod;
 
-        public FileBasedCashier(
+        public FileBasedShippingPriceCalculator(
             ShippingEntryMapper shippingEntryMapper,
             ShippingPriceCalculator shippingPriceCalculator,
             Action<IEnumerable<string>> outputMethod)

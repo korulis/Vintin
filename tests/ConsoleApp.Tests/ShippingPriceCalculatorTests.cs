@@ -9,6 +9,12 @@ namespace ConsoleApp.Tests
 {
     public class ShippingPriceCalculatorTests
     {
+        private readonly ShippingPriceCalculator _sut;
+
+        public ShippingPriceCalculatorTests()
+        {
+            _sut = new ShippingPriceCalculator(new NoDiscounts());
+        }
 
         [Theory]
         [InlineData("S", "LP", "1.50")]
@@ -17,26 +23,43 @@ namespace ConsoleApp.Tests
         [InlineData("S", "MR", "2.00")]
         [InlineData("M", "MR", "3.00")]
         [InlineData("L", "MR", "4.00")]
-        public void CostsWithoutDiscount(string packageSize, string shippingProvider, string expectedCostString)
+        public void CalculatePrice_CalculatesCostsWithoutDiscount(
+            string packageSize, 
+            string shippingProvider, 
+            string expectedCostString)
         {
             //Arrange
             var expectedCost = Convert.ToDecimal(expectedCostString, CultureInfo.InvariantCulture);
-            var sut = new ShippingPriceCalculator();
-            var shippingEntries = new List<ShippingEntry>()
+            var shippingEntries = new List<ShippingEntry>
             {
-                new ShippingEntry()
+                new ShippingEntry
                 {
-                    Date = DateTime.Today,
                     PackageSize = packageSize,
                     ShippingProvider = shippingProvider
                 }
             };
 
             //Act
-            var actual = sut.CalculatePrice(shippingEntries).ToList();
+            var actual = _sut.CalculatePrice(shippingEntries).ToList();
 
             //Assert
             Assert.Equal(expectedCost, actual[0].ShippingCost);
+        }
+
+        [Fact]
+        public void CalculatePrice_ReturnsMarkedOutputIfInputIsCorrupt()
+        {
+            //Arrange
+            var shippingEntries = new List<ShippingEntry>
+            {
+                ShippingEntry.Corrupt("entry text")
+            };
+
+            //Act
+            var actual = _sut.CalculatePrice(shippingEntries).ToList();
+
+            //Assert
+            Assert.True(actual[0].ShippingEntry.IsCorrupt);
         }
     }
 }

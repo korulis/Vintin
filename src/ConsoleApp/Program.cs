@@ -17,7 +17,7 @@ namespace ConsoleApp
             Console.ReadKey();
         }
 
-        private static FileBasedCashier PoorMansDi()
+        private static FileBasedShippingPriceCalculator PoorMansDi()
         {
             void OutputMethod(IEnumerable<string> x)
             {
@@ -27,9 +27,9 @@ namespace ConsoleApp
                 }
             }
 
-            var processor = new FileBasedCashier(
+            var processor = new FileBasedShippingPriceCalculator(
                 new ShippingEntryMapper(" ", "yyyy-MM-dd"),
-                new ShippingPriceCalculator(),
+                new ShippingPriceCalculator(new NoDiscounts()),
                 OutputMethod);
             return processor;
         }

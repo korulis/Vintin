@@ -153,8 +153,8 @@ namespace ConsoleApp.Tests
             {
                 new ProcessedShippingEntry(
                     ShippingEntry.Corrupt("This is some corrupt entry"),
-                    0.00m,
-                    0.00m
+                    0,
+                    0
                 )};
 
             //Act 
