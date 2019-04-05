@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Discounts
+namespace Discounts.Discounters
 {
     public interface IDiscounter
     {

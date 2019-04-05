@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Discounts;
+using Discounts.Discounters;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -15,7 +16,7 @@ namespace ConsoleApp.Tests
             new TheoryData<string, IDiscounter>
             {
                 {"free-shipping-output.txt" , new CompleteDiscounts()},
-                {"greedy-shipping-output.txt" , new NoDiscounts()},
+                {"greedy-shipping-output.txt" , new ZeroDiscounter()},
                 {"discounted-shipping-output.txt" , new SmallPackageLowestPriceDiscounter()},
             };
 

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Discounts;
 
-namespace ConsoleApp.Tests
+namespace Discounts.Discounters
 {
-    public class NoDiscounts : IDiscounter
+    public class ZeroDiscounter : IDiscounter
     {
         public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
         {

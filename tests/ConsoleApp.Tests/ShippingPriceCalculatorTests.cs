@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Discounts;
+using Discounts.Discounters;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -13,7 +14,7 @@ namespace ConsoleApp.Tests
 
         public ShippingPriceCalculatorTests()
         {
-            _sut = new ShippingCostCalculator(new NoDiscounts());
+            _sut = new ShippingCostCalculator(new ZeroDiscounter());
         }
 
         [Theory]

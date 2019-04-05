@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Discounts;
 
-namespace ConsoleApp.Tests
+namespace Discounts.Discounters
 {
     public class SmallPackageLowestPriceDiscounter : IDiscounter
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Discounts;
+using Discounts.Discounters;
 
 namespace ConsoleApp
 {

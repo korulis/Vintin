@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Discounts;
+using Discounts.Discounters;
 using Xunit;
 
 namespace ConsoleApp.Tests
