@@ -30,6 +30,8 @@ namespace Discounts.Discounters
 
         private ShippingCostEntry MinimizeSmallPackagePrice(ShippingCostEntry x)
         {
+            if (x.ShippingEntry.IsCorrupt) return x;
+
             if (x.ShippingEntry.PackageSize == "S")
             {
                 var oldDiscount = x.Discount;

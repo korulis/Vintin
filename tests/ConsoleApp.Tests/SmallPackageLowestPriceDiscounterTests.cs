@@ -16,7 +16,7 @@ namespace ConsoleApp.Tests
             _sut = new SmallPackageLowestPriceDiscounter();
         }
 
-        public static TheoryData<string, string, decimal, decimal, decimal, decimal> SmallPackageData =>
+        public static TheoryData<string, string, decimal, decimal, decimal, decimal> PackageData =>
             new TheoryData<string, string, decimal, decimal, decimal, decimal>
             {
                 {"LP-vs-MR","S",2.0m, 0.0m, 1.5m, 0.5m},
@@ -27,7 +27,7 @@ namespace ConsoleApp.Tests
             };
 
         [Theory]
-        [MemberData(nameof(SmallPackageData))]
+        [MemberData(nameof(PackageData))]
         public void DiscountsOnlySmallestItems(
             string desc,
             string size,
@@ -54,6 +54,28 @@ namespace ConsoleApp.Tests
             //Assert
             Assert.Equal(expectedPrice, actual.Price);
             Assert.Equal(expectedDiscount, actual.Discount);
+        }
+
+        [Fact]
+        public void DoesNotDiscountCorruptEntries()
+        {
+            //Arrange
+            var shippingEntry = ShippingEntry.Corrupt("raw entry");
+            shippingEntry.Date = DateTime.Today;
+            shippingEntry.PackageSize = "S";
+            shippingEntry.ShippingProvider = "MR";
+            var shippingEntriesWithCosts = new List<ShippingCostEntry>()
+            {
+                new ShippingCostEntry(
+                    shippingEntry, 2.0m, 0.0m)
+            };
+
+            //Act
+            var actual = _sut.Discount(shippingEntriesWithCosts).ToList()[0];
+
+            //Assert
+            Assert.Equal(2.0m, actual.Price);
+            Assert.Equal(0.0m, actual.Discount);
         }
     }
 }
