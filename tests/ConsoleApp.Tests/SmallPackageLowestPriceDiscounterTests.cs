@@ -18,36 +18,36 @@ namespace ConsoleApp.Tests
             _sut = new SmallPackageLowestPriceDiscounter(CostReference);
         }
 
-        public static TheoryData<string, string, decimal, decimal, decimal, decimal> PackageData =>
-            new TheoryData<string, string, decimal, decimal, decimal, decimal>
+        public static TheoryData<string, ShippingCostEntry, decimal, decimal> PackageData
+        {
+            get
             {
-                {"LP-vs-MR","S",2.0m, 0.0m, 1.5m, 0.5m},
-                {"prior-discount","S",1.0m, 1.0m, 1.0m, 1.0m},
-                {"negative-discount","S",4.0m, -1.0m, 1.5m, 1.5m},
-                {"not-small-1","M",6.0m, 0.0m, 6.0m, 0.0m},
-                {"not-small-2","L",6.0m, 0.0m, 6.0m, 0.0m},
-            };
+                var b = new ShippingCostEntryBuilder();
+                b.WithProvider("MR");
+
+                return new TheoryData<string, ShippingCostEntry, decimal, decimal>
+                {
+                    {"discount-MR", b.WithSize("S").WithPricing(2.0m,0.0m).Build(), 1.5m, 0.5m},
+                    {"prior-discount", b.WithSize("S").WithPricing(1.0m, 1.0m).Build(), 13.0m, 1.0m},
+                    {"negative-discount", b.WithSize("S").WithPricing(4.0m, -1.0m).Build(), 1.5m, 1.5m},
+                    {"not-small-1", b.WithSize("L").WithPricing(6.0m, 0.0m).Build(), 6.0m, 0.0m},
+                    {"not-small-2", b.WithSize("M").WithPricing(6.0m, 0.0m).Build(), 6.0m, 0.0m},
+                };
+            }
+        }
 
         [Theory]
         [MemberData(nameof(PackageData))]
         public void DiscountsOnlySmallestItems(
             string desc,
-            string size,
-            decimal currentPrice,
-            decimal currentDiscount,
+            ShippingCostEntry shippingCostEntry,
             decimal expectedPrice,
             decimal expectedDiscount)
         {
             //Arrange
             var shippingEntriesWithCosts = new List<ShippingCostEntry>()
             {
-                new ShippingCostEntry(
-                    new ShippingEntry
-                    {
-                        Date = DateTime.Today,
-                        PackageSize = size,
-                        ShippingProvider = "MR"
-                    }, currentPrice, currentDiscount)
+                shippingCostEntry
             };
 
             //Act
