@@ -30,7 +30,7 @@ namespace ConsoleApp
 
             var processor = new FileBasedShippingCostCalculator(
                 new ShippingEntryMapper(" ", "yyyy-MM-dd"),
-                new ShippingCostCalculator(new TempNoDiscounts()),
+                new ShippingCostCalculator(new TempNoDiscounts(), Constants.CostReference),
                 OutputMethod);
             return processor;
         }

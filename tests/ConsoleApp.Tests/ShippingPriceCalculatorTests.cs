@@ -14,7 +14,7 @@ namespace ConsoleApp.Tests
 
         public ShippingPriceCalculatorTests()
         {
-            _sut = new ShippingCostCalculator(new ZeroDiscounter());
+            _sut = new ShippingCostCalculator(new ZeroDiscounter(), Constants.CostReference);
         }
 
         [Theory]
@@ -25,8 +25,8 @@ namespace ConsoleApp.Tests
         [InlineData("M", "MR", "3.00")]
         [InlineData("L", "MR", "4.00")]
         public void CalculatePrice_CalculatesCostsWithoutDiscount(
-            string packageSize, 
-            string shippingProvider, 
+            string packageSize,
+            string shippingProvider,
             string expectedCostString)
         {
             //Arrange

@@ -5,22 +5,11 @@ namespace Discounts.Discounters
 {
     public class SmallPackageLowestPriceDiscounter : IDiscounter
     {
-        private readonly Dictionary<(string, string), decimal> _costReference =
-            new Dictionary<(string, string), decimal>
-            {
-                { ("S","LP"), 1.50m},
-                { ("M","LP"), 4.90m},
-                { ("L","LP"), 6.90m},
-                { ("S","MR"), 2.00m},
-                { ("M","MR"), 3.00m},
-                { ("L","MR"), 4.00m}
-            };
+        private readonly decimal _minCost;
 
-        private decimal _minCost;
-
-        public SmallPackageLowestPriceDiscounter()
+        public SmallPackageLowestPriceDiscounter(Dictionary<(string, string), decimal> sizeAndProviderToCost)
         {
-            _minCost = _costReference.Where(x => x.Key.Item1 == "S").Select(x => x.Value).Min();
+            _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == "S").Select(x => x.Value).Min();
         }
 
         public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)

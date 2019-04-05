@@ -8,20 +8,12 @@ namespace Discounts
     {
         private readonly IDiscounter _discounter;
 
-        private readonly Dictionary<(string, string), decimal> _costReference =
-            new Dictionary<(string, string), decimal>
-            {
-                { ("S","LP"), 1.50m},
-                { ("M","LP"), 4.90m},
-                { ("L","LP"), 6.90m},
-                { ("S","MR"), 2.00m},
-                { ("M","MR"), 3.00m},
-                { ("L","MR"), 4.00m}
-            };
+        private readonly Dictionary<(string, string), decimal> _costReference;
 
-        public ShippingCostCalculator(IDiscounter discounter)
+        public ShippingCostCalculator(IDiscounter discounter, Dictionary<(string, string), decimal> sizeAndProviderToCost)
         {
             _discounter = discounter;
+            _costReference = sizeAndProviderToCost;
         }
 
         public IEnumerable<ShippingCostEntry> CalculatePrice(IEnumerable<ShippingEntry> shippingEntries)

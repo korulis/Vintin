@@ -9,6 +9,8 @@ namespace ConsoleApp.Tests
 {
     public class AcceptanceTests
     {
+        private static readonly Dictionary<(string, string), decimal> CostReference = Constants.CostReference;
+
         private const string InputFilePath = "input.txt";
         private const string OutputFilePath = "output.txt";
 
@@ -17,7 +19,7 @@ namespace ConsoleApp.Tests
             {
                 {"free-shipping-output.txt" , new CompleteDiscounts()},
                 {"greedy-shipping-output.txt" , new ZeroDiscounter()},
-                {"discounted-shipping-output.txt" , new SmallPackageLowestPriceDiscounter()},
+                {"discounted-shipping-output.txt" , new SmallPackageLowestPriceDiscounter(CostReference)},
             };
 
         [Theory]
@@ -46,7 +48,7 @@ namespace ConsoleApp.Tests
             const string separator = " ";
 
             var shippingEntryParser = new ShippingEntryMapper(separator, acceptableDateFormat);
-            var shippingCostCalculator = new ShippingCostCalculator(discounter);
+            var shippingCostCalculator = new ShippingCostCalculator(discounter, CostReference);
             void OutputMethod(IEnumerable<string> x) => File.WriteAllLines(OutputFilePath, x);
 
             var fileBasedShippingPriceCalculator = new FileBasedShippingCostCalculator(

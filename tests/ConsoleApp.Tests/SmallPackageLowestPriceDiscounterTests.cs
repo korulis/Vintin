@@ -9,11 +9,13 @@ namespace ConsoleApp.Tests
 {
     public class SmallPackageLowestPriceDiscounterTests
     {
+        private static readonly Dictionary<(string, string), decimal> CostReference = Constants.CostReference;
+
         private readonly SmallPackageLowestPriceDiscounter _sut;
 
         public SmallPackageLowestPriceDiscounterTests()
         {
-            _sut = new SmallPackageLowestPriceDiscounter();
+            _sut = new SmallPackageLowestPriceDiscounter(CostReference);
         }
 
         public static TheoryData<string, string, decimal, decimal, decimal, decimal> PackageData =>
