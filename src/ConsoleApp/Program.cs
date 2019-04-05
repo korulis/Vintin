@@ -15,7 +15,7 @@ namespace ConsoleApp
 
             processor.Process(inputFileName);
 
-            Console.ReadKey();
+            Console.Read();
         }
 
         private static FileBasedShippingCostCalculator PoorMansDi()
@@ -39,14 +39,6 @@ namespace ConsoleApp
                     Constants.CostReference),
                 OutputMethod);
             return processor;
-        }
-    }
-
-    internal class TempNoDiscounts : IDiscounter
-    {
-        public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
-        {
-            throw new NotImplementedException();
         }
     }
 }
