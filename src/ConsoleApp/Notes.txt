@@ -21,3 +21,8 @@ Some of the architecture notes.
 	unnecessary code complication.
 #selfnote. injecting pure data into class aint such a bad idea. For pure functions.(?)
 #I have decided that semantically (Price, Discount) = Cost = Price + Discount.
+#On Discounts.Constants class: 
+    Class for default constants related to the task that is being solved.
+    This should hypothetically either be extracted into its own project,
+    which would be referenced only by ConsoleApp and Tests project or
+    Be put in tests project for testing purposes and externalized as config for production purposes.
