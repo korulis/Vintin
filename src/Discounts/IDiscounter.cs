@@ -4,6 +4,6 @@ namespace Discounts
 {
     public interface IDiscounter
     {
-        IEnumerable<ProcessedShippingEntry> Discount(IEnumerable<ProcessedShippingEntry> shippingEntriesWithCosts);
+        IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries);
     }
 }

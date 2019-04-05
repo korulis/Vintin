@@ -14,21 +14,21 @@ namespace ConsoleApp.Tests
         public static TheoryData<string, IDiscounter> CalculatorData =>
             new TheoryData<string, IDiscounter>
             {
-                {"free-shipping-output.txt" , new FullDiscounts()},
+                {"free-shipping-output.txt" , new CompleteDiscounts()},
                 {"greedy-shipping-output.txt" , new NoDiscounts()},
                 {"discounted-shipping-output.txt" , new SmallPackageLowestPriceDiscounter()},
             };
 
         [Theory]
         [MemberData(nameof(CalculatorData))]
-        public void ShippingPriceCalculationTests(string expectedOutputFile, IDiscounter discounter)
+        public void ShippingCostCalculationTests(string expectedOutputFile, IDiscounter discounter)
         {
             //Arrange
             var expectedDiscountedLines = File.ReadLines(expectedOutputFile).ToArray();
-            var fileBasedShippingPriceCalculator = BuildFileBasedShippingPriceCalculator(discounter);
+            var fileBasedShippingCostCalculator = BuildFileBasedShippingCostCalculator(discounter);
 
             //Act
-            fileBasedShippingPriceCalculator.Process(InputFilePath);
+            fileBasedShippingCostCalculator.Process(InputFilePath);
 
             //Assert
             var actualDiscountedEntries = File.ReadLines(OutputFilePath).ToArray();
@@ -39,16 +39,16 @@ namespace ConsoleApp.Tests
             Assert.Equal(expectedDiscountedLines, actualDiscountedEntries);
         }
 
-        private static FileBasedShippingPriceCalculator BuildFileBasedShippingPriceCalculator(IDiscounter discounter)
+        private static FileBasedShippingCostCalculator BuildFileBasedShippingCostCalculator(IDiscounter discounter)
         {
             const string acceptableDateFormat = "yyyy-MM-dd";
             const string separator = " ";
 
             var shippingEntryParser = new ShippingEntryMapper(separator, acceptableDateFormat);
-            var shippingCostCalculator = new ShippingPriceCalculator(discounter);
+            var shippingCostCalculator = new ShippingCostCalculator(discounter);
             void OutputMethod(IEnumerable<string> x) => File.WriteAllLines(OutputFilePath, x);
 
-            var fileBasedShippingPriceCalculator = new FileBasedShippingPriceCalculator(
+            var fileBasedShippingPriceCalculator = new FileBasedShippingCostCalculator(
                 shippingEntryParser,
                 shippingCostCalculator,
                 OutputMethod);

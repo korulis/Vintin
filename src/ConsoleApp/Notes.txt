@@ -11,6 +11,7 @@ Implement custome deserializer and use it for file parsing.
 Force sequential execution for Acceptance tests.
 Additionally hanndle yyyymmdd input format.
 Maybe price list should be part of ShippingEntryWithCost member ?
+Parse AcceptableSizes and providers from the price list. Inject the price list.
 
 Some of the architecture notes.
 # Decided against async methods, because if I use async for reading the file, then I loose the Ienumerable<> interface,
@@ -18,3 +19,4 @@ Some of the architecture notes.
 	and no other processes/calculations of the program should be happening then. So all in all it would just be an 
 	unnecessary code complication.
 #selfnote. injecting pure data into class aint such a bad idea. For pure functions.(?)
+#I have decided that semantically (Price, Discount) = Cost = Price + Discount.

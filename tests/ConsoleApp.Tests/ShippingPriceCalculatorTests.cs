@@ -9,11 +9,11 @@ namespace ConsoleApp.Tests
 {
     public class ShippingPriceCalculatorTests
     {
-        private readonly ShippingPriceCalculator _sut;
+        private readonly ShippingCostCalculator _sut;
 
         public ShippingPriceCalculatorTests()
         {
-            _sut = new ShippingPriceCalculator(new NoDiscounts());
+            _sut = new ShippingCostCalculator(new NoDiscounts());
         }
 
         [Theory]
@@ -43,7 +43,7 @@ namespace ConsoleApp.Tests
             var actual = _sut.CalculatePrice(shippingEntries).ToList();
 
             //Assert
-            Assert.Equal(expectedCost, actual[0].ShippingCost);
+            Assert.Equal(expectedCost, actual[0].Price);
         }
 
         [Fact]

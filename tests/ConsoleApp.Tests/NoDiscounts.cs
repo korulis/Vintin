@@ -5,9 +5,9 @@ namespace ConsoleApp.Tests
 {
     public class NoDiscounts : IDiscounter
     {
-        public IEnumerable<ProcessedShippingEntry> Discount(IEnumerable<ProcessedShippingEntry> shippingEntriesWithCosts)
+        public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
         {
-            return shippingEntriesWithCosts;
+            return pricedShippingEntries;
         }
     }
 }

@@ -92,9 +92,9 @@ namespace ConsoleApp.Tests
             const string shippingProvider = "SeriousShippingProvider";
             const decimal shippingCost = 0.00m;
             var discount = Convert.ToDecimal(discountString, CultureInfo.InvariantCulture);
-            var input = new List<ProcessedShippingEntry>
+            var input = new List<ShippingCostEntry>
             {
-                new ProcessedShippingEntry(new ShippingEntry()
+                new ShippingCostEntry(new ShippingEntry()
                 {
                     Date = date,
                     PackageSize = packageSize,
@@ -121,15 +121,15 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_ReturnsListOfStrings_WithSameOrderingAsInput()
         {
             //Arrange
-            var input = new List<ProcessedShippingEntry>
+            var input = new List<ShippingCostEntry>
             {
-                new ProcessedShippingEntry(new ShippingEntry()
+                new ShippingCostEntry(new ShippingEntry()
                 {
                     Date = new DateTime(1999,1,1),
                     PackageSize = "S",
                     ShippingProvider = "ML"
                 }, 0.00m,0.00m),
-                new ProcessedShippingEntry(new ShippingEntry()
+                new ShippingCostEntry(new ShippingEntry()
                 {
                     Date = new DateTime(1998,1,1),
                     PackageSize = "S",
@@ -149,9 +149,9 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_MarksInvalidInputInTheOutput()
         {
             //Arrange
-            var input = new List<ProcessedShippingEntry>
+            var input = new List<ShippingCostEntry>
             {
-                new ProcessedShippingEntry(
+                new ShippingCostEntry(
                     ShippingEntry.Corrupt("This is some corrupt entry"),
                     0,
                     0

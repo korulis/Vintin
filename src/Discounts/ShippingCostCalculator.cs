@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Discounts
 {
-    public class ShippingPriceCalculator
+    public class ShippingCostCalculator
     {
         private readonly IDiscounter _discounter;
 
@@ -18,29 +18,29 @@ namespace Discounts
                 { ("L","MR"), 4.00m}
             };
 
-        public ShippingPriceCalculator(IDiscounter discounter)
+        public ShippingCostCalculator(IDiscounter discounter)
         {
             _discounter = discounter;
         }
 
-        public IEnumerable<ProcessedShippingEntry> CalculatePrice(IEnumerable<ShippingEntry> shippingEntries)
+        public IEnumerable<ShippingCostEntry> CalculatePrice(IEnumerable<ShippingEntry> shippingEntries)
         {
-            var shippingEntriesWithCosts = shippingEntries.Select(CalculateCost);
-            var processedShippingEntries = _discounter.Discount(shippingEntriesWithCosts);
-            return processedShippingEntries;
+            var shippingEntriesWithPrices = shippingEntries.Select(CalculateInitialPrice);
+            var pricedShippingEntries = _discounter.Discount(shippingEntriesWithPrices);
+            return pricedShippingEntries;
         }
 
-        public ProcessedShippingEntry CalculateCost(ShippingEntry shippingEntry)
+        public ShippingCostEntry CalculateInitialPrice(ShippingEntry shippingEntry)
         {
             if (shippingEntry.IsCorrupt)
             {
-                return new ProcessedShippingEntry(shippingEntry, 0, 0);
+                return new ShippingCostEntry(shippingEntry, 0, 0);
             }
 
             var shippingCost = _costReference[(shippingEntry.PackageSize, shippingEntry.ShippingProvider)];
 
 
-            var result = new ProcessedShippingEntry(shippingEntry, shippingCost, 0.00m);
+            var result = new ShippingCostEntry(shippingEntry, shippingCost, 0.00m);
             return result;
         }
 

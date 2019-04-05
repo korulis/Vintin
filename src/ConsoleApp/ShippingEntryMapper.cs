@@ -60,14 +60,14 @@ namespace ConsoleApp
             return result;
         }
 
-        public IEnumerable<string> FormatOutput(IEnumerable<ProcessedShippingEntry> discountedShippingEntries)
+        public IEnumerable<string> FormatOutput(IEnumerable<ShippingCostEntry> discountedShippingEntries)
         {
             return discountedShippingEntries.Select(FormatDiscounted);
         }
 
-        private string FormatDiscounted(ProcessedShippingEntry processed)
+        private string FormatDiscounted(ShippingCostEntry priced)
         {
-            var shippingEntry = processed.ShippingEntry;
+            var shippingEntry = priced.ShippingEntry;
             if (shippingEntry.IsCorrupt)
             {
                 return string.Join(
@@ -77,14 +77,14 @@ namespace ConsoleApp
             }
             else
             {
-                var processedDiscount = processed.Discount;
+                var discount = priced.Discount;
                 return string.Join(
                     _separator,
                     shippingEntry.Date.ToString(_dateFormat),
                     shippingEntry.PackageSize,
                     shippingEntry.ShippingProvider,
-                    processed.ShippingCost.ToString("F", CultureInfo.InvariantCulture),
-                    processedDiscount == 0 ? "-" : processedDiscount.ToString("F", CultureInfo.InvariantCulture));
+                    priced.Price.ToString("F", CultureInfo.InvariantCulture),
+                    discount == 0 ? "-" : discount.ToString("F", CultureInfo.InvariantCulture));
             }
         }
     }

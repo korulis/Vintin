@@ -5,19 +5,19 @@ using Discounts;
 
 namespace ConsoleApp
 {
-    public class FileBasedShippingPriceCalculator
+    public class FileBasedShippingCostCalculator
     {
         private readonly ShippingEntryMapper _shippingEntryMapper;
-        private readonly ShippingPriceCalculator _shippingPriceCalculator;
+        private readonly ShippingCostCalculator _shippingCostCalculator;
         private readonly Action<IEnumerable<string>> _outputMethod;
 
-        public FileBasedShippingPriceCalculator(
+        public FileBasedShippingCostCalculator(
             ShippingEntryMapper shippingEntryMapper,
-            ShippingPriceCalculator shippingPriceCalculator,
+            ShippingCostCalculator shippingCostCalculator,
             Action<IEnumerable<string>> outputMethod)
         {
             _shippingEntryMapper = shippingEntryMapper;
-            _shippingPriceCalculator = shippingPriceCalculator;
+            _shippingCostCalculator = shippingCostCalculator;
             _outputMethod = outputMethod;
         }
 
@@ -27,7 +27,7 @@ namespace ConsoleApp
 
             var shippingEntries = _shippingEntryMapper.ParseInput(shippingEntryLines);
 
-            var discountedShippingEntries = _shippingPriceCalculator.CalculatePrice(shippingEntries);
+            var discountedShippingEntries = _shippingCostCalculator.CalculatePrice(shippingEntries);
 
             var shippingCostsLines = _shippingEntryMapper.FormatOutput(discountedShippingEntries);
 

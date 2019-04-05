@@ -17,7 +17,7 @@ namespace ConsoleApp
             Console.ReadKey();
         }
 
-        private static FileBasedShippingPriceCalculator PoorMansDi()
+        private static FileBasedShippingCostCalculator PoorMansDi()
         {
             void OutputMethod(IEnumerable<string> x)
             {
@@ -27,9 +27,9 @@ namespace ConsoleApp
                 }
             }
 
-            var processor = new FileBasedShippingPriceCalculator(
+            var processor = new FileBasedShippingCostCalculator(
                 new ShippingEntryMapper(" ", "yyyy-MM-dd"),
-                new ShippingPriceCalculator(new TempNoDiscounts()),
+                new ShippingCostCalculator(new TempNoDiscounts()),
                 OutputMethod);
             return processor;
         }
@@ -37,7 +37,7 @@ namespace ConsoleApp
 
     internal class TempNoDiscounts : IDiscounter
     {
-        public IEnumerable<ProcessedShippingEntry> Discount(IEnumerable<ProcessedShippingEntry> shippingEntriesWithCosts)
+        public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
         {
             throw new NotImplementedException();
         }
