@@ -22,7 +22,7 @@
     <None Update="free-shipping-output.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="discouted-shipping-output.txt">
+    <None Update="discounted-shipping-output.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="greedy-shipping-output.txt">

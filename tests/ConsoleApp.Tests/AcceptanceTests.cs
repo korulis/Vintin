@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Discounts;
@@ -18,6 +16,7 @@ namespace ConsoleApp.Tests
             {
                 {"free-shipping-output.txt" , new FullDiscounts()},
                 {"greedy-shipping-output.txt" , new NoDiscounts()},
+                {"discounted-shipping-output.txt" , new SmallPackageLowestPriceDiscounter()},
             };
 
         [Theory]

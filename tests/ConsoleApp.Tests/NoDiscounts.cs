@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Discounts;
 
-namespace Discounts
+namespace ConsoleApp.Tests
 {
     public class NoDiscounts : IDiscounter
     {

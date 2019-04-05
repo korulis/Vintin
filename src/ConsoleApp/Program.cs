@@ -29,9 +29,17 @@ namespace ConsoleApp
 
             var processor = new FileBasedShippingPriceCalculator(
                 new ShippingEntryMapper(" ", "yyyy-MM-dd"),
-                new ShippingPriceCalculator(new NoDiscounts()),
+                new ShippingPriceCalculator(new TempNoDiscounts()),
                 OutputMethod);
             return processor;
+        }
+    }
+
+    internal class TempNoDiscounts : IDiscounter
+    {
+        public IEnumerable<ProcessedShippingEntry> Discount(IEnumerable<ProcessedShippingEntry> shippingEntriesWithCosts)
+        {
+            throw new NotImplementedException();
         }
     }
 }
