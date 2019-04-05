@@ -9,6 +9,7 @@ Use Monads to parse lines.
 Implement Linq to file parser for lazy loading.
 Implement custome deserializer and use it for file parsing.
 Force sequential execution for Acceptance tests.
+Additionally hanndle yyyymmdd input format.
 
 Some of the architecture notes.
 # Decided against async methods, because if I use async for reading the file, then I loose the Ienumerable<> interface,
