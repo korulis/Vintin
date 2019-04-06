@@ -20,7 +20,7 @@ namespace ConsoleApp
 
         private static FileBasedShippingCostCalculator PoorMansDi()
         {
-            void OutputMethod(IEnumerable<string> x)
+            void ConsoleOutputMethod(IEnumerable<string> x)
             {
                 foreach (var xi in x)
                 {
@@ -37,7 +37,7 @@ namespace ConsoleApp
                 new ShippingCostCalculator(
                     smallPackage, 
                     Constants.CostReference),
-                OutputMethod);
+                ConsoleOutputMethod);
             return processor;
         }
     }

@@ -1,20 +1,23 @@
-TODO:
-Validate separator and DateFormat.
-Fix file reading to be unix compatible.
-Use date time offset converted from France DateTime in ShippingEntry.Date.
-Use ShippingEntry.PackageSize as enum instead of string.
-Use ShippingEntry.ShippingProvider as enum.
-Protect ShippingEntry type better.
-Use Monads to parse lines.
-Implement Linq to file parser for lazy loading.
-Implement custome deserializer and use it for file parsing.
-Force sequential execution for Acceptance tests.
-Additionally hanndle yyyymmdd input format.
-Maybe price list should be part of ShippingEntryWithCost member ?
-Parse AcceptableSizes and providers from the price list. Inject the price list.
-Make ShippingCostEntry imutable - avoid brittleness.
-Use autoquality lib to compare entires in tests.
-Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
+TODO (priority, complexity) :
+1=1x1 Comment on architecture choises
+1=1x1 Reread requirements
+2=2x1 Force sequential execution for file based tests.
+2=2x1 Additionally hanndle yyyymmdd input format because it is part of ISO standard.
+2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
+2=1x2 Use autoquality lib to compare entires in tests.
+4=2x2 Use ShippingEntry.PackageSize as enum instead of string.
+4=2x2 Use ShippingEntry.ShippingProvider as enum.
+4=1x4 Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
+6=3x2 Validate separator and DateFormat.
+6=3x2 Make ShippingCostEntry imutable - avoid brittleness.
+8=2x4 Read Ruby guidelines
+8=2x4 Protect ShippingEntry type better.
+8=2x4 Use Monads to parse lines.
+20=4x5 Implement custom deserializer and use it for file parsing.
+REJECED Maybe price list should be part of ShippingEntryWithCost member ?
+REJECTED Implement Linq to file parser for lazy loading.
+REJECTED Use date time offset converted from France DateTime in ShippingEntry.Date.
+REJECTED Fix file reading to be unix compatible.
 
 Some of the architecture notes.
 # Decided against async methods, because if I use async for reading the file, then I loose the Ienumerable<> interface,
