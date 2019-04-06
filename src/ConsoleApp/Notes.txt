@@ -14,6 +14,7 @@ Maybe price list should be part of ShippingEntryWithCost member ?
 Parse AcceptableSizes and providers from the price list. Inject the price list.
 Make ShippingCostEntry imutable - avoid brittleness.
 Use autoquality lib to compare entires in tests.
+Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
 
 Some of the architecture notes.
 # Decided against async methods, because if I use async for reading the file, then I loose the Ienumerable<> interface,
