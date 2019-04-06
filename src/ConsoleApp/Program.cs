@@ -28,9 +28,15 @@ namespace ConsoleApp
                 }
             }
 
+            var tenLimit = new TenLimitDiscounter(new ZeroDiscounter());
+            var thirdPackage = new ThirdLpPackageDiscounter(tenLimit);
+            var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Constants.CostReference);
+
             var processor = new FileBasedShippingCostCalculator(
                 new ShippingEntryMapper(" ", "yyyy-MM-dd"),
-                new ShippingCostCalculator(new TempNoDiscounts(), Constants.CostReference),
+                new ShippingCostCalculator(
+                    smallPackage, 
+                    Constants.CostReference),
                 OutputMethod);
             return processor;
         }

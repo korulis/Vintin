@@ -30,3 +30,6 @@ Some of the architecture notes.
     Be put in tests project for testing purposes and externalized as config for production purposes.
 #ThirdLpLargePackageDiscounter assumes the data is orderred by date. This is because if I do not take this assumtion, this ir not 
 	single unique way to order the package entries, without taking further assumtions, because the entries might have duplicate dates.
+#Making all Discounters into Decorators enables them to do more powerful and complex discounts, 
+especially when matched with the idea of discount calculation context (which would safe some required data for among other things
+for performance optimisation reasons), but it obfuscted the level of importance of the discounters...

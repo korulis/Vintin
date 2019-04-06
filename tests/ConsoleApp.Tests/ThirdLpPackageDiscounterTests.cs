@@ -133,6 +133,57 @@ namespace ConsoleApp.Tests
                             b.OnDay(1).WithPricing(6.9m,0.0m).Build(),
                         }
                     },
+                    {
+                        "ignores-other-sizes-before",
+                        new List<ShippingCostEntry>
+                        {
+                            b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                        },
+                        new List<ShippingCostEntry>
+                        {
+                            b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(0.0m,6.9m).Build(),
+                        }
+                    },
+                    {
+                        "ignores-other-sizes-in-between",
+                        new List<ShippingCostEntry>
+                        {
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                        },
+                        new List<ShippingCostEntry>
+                        {
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(0.0m,6.9m).Build(),
+                        }
+                    },
+                    {
+                        "ignores-other-sizes-after",
+                        new List<ShippingCostEntry>
+                        {
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
+                        },
+                        new List<ShippingCostEntry>
+                        {
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(0.0m,6.9m).Build(),
+                            b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
+                        }
+                    },
                 };
             }
         }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Discounts.Discounters
@@ -17,13 +16,17 @@ namespace Discounts.Discounters
         public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
         {
             var enumerated = pricedShippingEntries.ToList();
-            var newEntries = enumerated.Select((x, i) => LimitDiscountsToTenPerMonth(x, enumerated.Take(i)));
+            var newEntries = enumerated.Select((x, i) => LimitDiscountsToTenPerMonth(x, i, enumerated));
             return _underlying.Discount(newEntries);
         }
 
-        private static ShippingCostEntry LimitDiscountsToTenPerMonth(ShippingCostEntry entry, IEnumerable<ShippingCostEntry> previousEntries)
+        private static ShippingCostEntry LimitDiscountsToTenPerMonth(
+            ShippingCostEntry entry,
+            int index,
+            IEnumerable<ShippingCostEntry> allEntries)
         {
             if (entry.ShippingEntry.IsCorrupt) return entry;
+            var previousEntries = allEntries.Take(index);
 
             var year = entry.ShippingEntry.Date.Year;
             var month = entry.ShippingEntry.Date.Month;
@@ -36,7 +39,10 @@ namespace Discounts.Discounters
                                         .Select(x => x.Discount)
                                         .Sum();
 
-            Debug.Assert(MaxMonthlyDiscount >= totalDiscountThisMonth);
+            if (ShouldBlockAnyFurtherDiscounting(totalDiscountThisMonth))
+            {
+                return new ShippingCostEntry(entry.ShippingEntry, entry.Price + entry.Discount, 0.0m);
+            };
 
             var maxAllowedDiscountForCurrentEntry = MaxMonthlyDiscount - totalDiscountThisMonth;
             if (maxAllowedDiscountForCurrentEntry >= discount)
@@ -47,6 +53,11 @@ namespace Discounts.Discounters
             var newDiscount = maxAllowedDiscountForCurrentEntry;
             var newPrice = price + discount - newDiscount;
             return new ShippingCostEntry(entry.ShippingEntry, newPrice, newDiscount);
+        }
+
+        private static bool ShouldBlockAnyFurtherDiscounting(decimal totalDiscountThisMonth)
+        {
+            return !(MaxMonthlyDiscount >= totalDiscountThisMonth);
         }
     }
 }

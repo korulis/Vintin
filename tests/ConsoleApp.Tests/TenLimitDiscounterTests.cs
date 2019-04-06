@@ -107,6 +107,21 @@ namespace ConsoleApp.Tests
                             b.OnMonth(7).OnDay(1).WithPricing(4.0m, 5.0m).Build(),
                         }
                     },
+                    {
+                        "several-blocks-same-month",
+                        new List<ShippingCostEntry>
+                        {
+                            b.WithPricing(1.0m, 8.0m).Build(),
+                            b.WithPricing(1.0m, 5.0m).Build(),
+                            b.WithPricing(1.0m, 12.0m).Build(),
+                        },
+                        new List<ShippingCostEntry>
+                        {
+                            b.WithPricing(1.0m, 8.0m).Build(),
+                            b.WithPricing(4.0m, 2.0m).Build(),
+                            b.WithPricing(13.0m, 0.0m).Build(),
+                        }
+                    },
                 };
             }
         }
