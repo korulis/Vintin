@@ -19,7 +19,7 @@ namespace ConsoleApp.Tests
             {
                 {"free-shipping-output.txt" , new CompleteDiscounts()},
                 {"greedy-shipping-output.txt" , new ZeroDiscounter()},
-                {"discounted-shipping-output.txt" , new SmallPackageLowestPriceDiscounter(CostReference)},
+                {"discounted-shipping-output.txt" , new SmallPackageLowestPriceDiscounter(new ZeroDiscounter(), CostReference)},
             };
 
         [Theory]

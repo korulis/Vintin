@@ -12,7 +12,7 @@ namespace ConsoleApp.Tests
 
         public TenLimitDiscounterTests()
         {
-            _sut = new TenLimitDiscounter();
+            _sut = new TenLimitDiscounter(new ZeroDiscounter());
         }
 
 

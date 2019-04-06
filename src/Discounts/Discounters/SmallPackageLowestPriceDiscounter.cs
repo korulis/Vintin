@@ -5,23 +5,28 @@ namespace Discounts.Discounters
 {
     public class SmallPackageLowestPriceDiscounter : IDiscounter
     {
+        private readonly IDiscounter _underlying;
         private readonly decimal _minCost;
+        private readonly string _discountedPackageSize;
 
-        public SmallPackageLowestPriceDiscounter(Dictionary<(string, string), decimal> sizeAndProviderToCost)
+        public SmallPackageLowestPriceDiscounter(IDiscounter underlying,Dictionary<(string, string), decimal> sizeAndProviderToCost)
         {
-            _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == "S").Select(x => x.Value).Min();
+            _underlying = underlying;
+            _discountedPackageSize = "S";
+            _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == _discountedPackageSize).Select(x => x.Value).Min();
         }
 
         public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
         {
-            return pricedShippingEntries.Select(MinimizeSmallPackagePrice);
+            var newEntries = pricedShippingEntries.Select(MinimizeSmallPackagePrice);
+            return _underlying.Discount(newEntries);
         }
 
         private ShippingCostEntry MinimizeSmallPackagePrice(ShippingCostEntry x)
         {
             if (x.ShippingEntry.IsCorrupt) return x;
 
-            if (x.ShippingEntry.PackageSize == "S")
+            if (x.ShippingEntry.PackageSize == _discountedPackageSize)
             {
                 var oldDiscount = x.Discount;
                 var oldPrice = x.Price;

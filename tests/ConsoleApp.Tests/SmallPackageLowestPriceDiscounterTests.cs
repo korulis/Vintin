@@ -15,7 +15,7 @@ namespace ConsoleApp.Tests
 
         public SmallPackageLowestPriceDiscounterTests()
         {
-            _sut = new SmallPackageLowestPriceDiscounter(CostReference);
+            _sut = new SmallPackageLowestPriceDiscounter(new ZeroDiscounter(), CostReference);
         }
 
         public static TheoryData<string, ShippingCostEntry, decimal, decimal> PackageData

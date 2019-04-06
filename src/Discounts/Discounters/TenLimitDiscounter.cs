@@ -6,13 +6,19 @@ namespace Discounts.Discounters
 {
     public class TenLimitDiscounter : IDiscounter
     {
+        private readonly IDiscounter _underlying;
         private const int MaxMonthlyDiscount = 10;
+
+        public TenLimitDiscounter(IDiscounter underlying)
+        {
+            _underlying = underlying;
+        }
 
         public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
         {
             var enumerated = pricedShippingEntries.ToList();
             var newEntries = enumerated.Select((x, i) => LimitDiscountsToTenPerMonth(x, enumerated.Take(i)));
-            return newEntries;
+            return _underlying.Discount(newEntries);
         }
 
         private static ShippingCostEntry LimitDiscountsToTenPerMonth(ShippingCostEntry entry, IEnumerable<ShippingCostEntry> previousEntries)

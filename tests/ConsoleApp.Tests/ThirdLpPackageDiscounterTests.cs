@@ -13,7 +13,7 @@ namespace ConsoleApp.Tests
 
         public ThirdLpPackageDiscounterTests()
         {
-            _sut = new ThirdLpPackageDiscounter();
+            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter());
         }
 
 

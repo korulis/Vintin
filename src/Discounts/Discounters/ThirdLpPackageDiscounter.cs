@@ -1,23 +1,28 @@
 ﻿
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 namespace Discounts.Discounters
 {
     public class ThirdLpPackageDiscounter : IDiscounter
     {
+        private readonly IDiscounter _underlying;
         private const string SpecialProvider = "LP";
         private const string SpecialSize = "L";
         private const int LuckyOrderNumber = 3;
 
         private static readonly decimal PackageCost = Constants.CostReference[(SpecialSize, SpecialProvider)];
 
+        public ThirdLpPackageDiscounter(IDiscounter underlying)
+        {
+            _underlying = underlying;
+        }
+
         public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
         {
             var enumerated = pricedShippingEntries.ToList();
             var shippingCostEntries = enumerated.Select((x, i) => DiscountLpLargeThirdPerMonth(x, enumerated.Take(i)));
-            return shippingCostEntries;
+            return _underlying.Discount(shippingCostEntries);
         }
 
         private static ShippingCostEntry DiscountLpLargeThirdPerMonth(
