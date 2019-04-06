@@ -27,3 +27,5 @@ Some of the architecture notes.
     This should hypothetically either be extracted into its own project,
     which would be referenced only by ConsoleApp and Tests project or
     Be put in tests project for testing purposes and externalized as config for production purposes.
+#ThirdLpLargePackageDiscounter assumes the data is orderred by date. This is because if I do not take this assumtion, this ir not 
+	single unique way to order the package entries, without taking further assumtions, because the entries might have duplicate dates.

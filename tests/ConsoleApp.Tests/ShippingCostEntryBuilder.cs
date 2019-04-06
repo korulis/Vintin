@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Discounts;
 
 namespace ConsoleApp.Tests
@@ -24,16 +25,16 @@ namespace ConsoleApp.Tests
 
         public ShippingCostEntryBuilder()
         {
-            _dateTime = new DateTime(2000, 1, 1);
+            _dateTime = new DateTime(2000, 6, 1);
             _packageSize = "L";
             _shippingProvider = "LP";
             _price = _costReference[(_packageSize, _shippingProvider)];
             _discount = 0.0m;
         }
 
-        public ShippingCostEntryBuilder AddDays(int days)
+        public ShippingCostEntryBuilder OnMonth(int month)
         {
-            _dateTime = _dateTime.AddDays(days);
+            _dateTime = new DateTime(_dateTime.Year, month, _dateTime.Day);
             return this;
         }
 

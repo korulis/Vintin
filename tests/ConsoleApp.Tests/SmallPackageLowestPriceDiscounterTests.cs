@@ -28,7 +28,7 @@ namespace ConsoleApp.Tests
                 return new TheoryData<string, ShippingCostEntry, decimal, decimal>
                 {
                     {"discount-MR", b.WithSize("S").WithPricing(2.0m,0.0m).Build(), 1.5m, 0.5m},
-                    {"prior-discount", b.WithSize("S").WithPricing(1.0m, 1.0m).Build(), 13.0m, 1.0m},
+                    {"prior-discount", b.WithSize("S").WithPricing(1.0m, 1.0m).Build(), 1.0m, 1.0m},
                     {"negative-discount", b.WithSize("S").WithPricing(4.0m, -1.0m).Build(), 1.5m, 1.5m},
                     {"not-small-1", b.WithSize("L").WithPricing(6.0m, 0.0m).Build(), 6.0m, 0.0m},
                     {"not-small-2", b.WithSize("M").WithPricing(6.0m, 0.0m).Build(), 6.0m, 0.0m},
