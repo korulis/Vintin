@@ -15,6 +15,7 @@ namespace ConsoleApp
 
             processor.Process(inputFileName);
 
+            Console.Write("Hit any key.");
             Console.Read();
         }
 
