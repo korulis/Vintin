@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Discounts
 {
-    public static class Constants
+    public static class Defaults
     {
         public static readonly Dictionary<(string, string), decimal> CostReference =
             new Dictionary<(string, string), decimal>
@@ -16,5 +16,6 @@ namespace Discounts
                 { ("L","MR"), 4.00m}
             };
 
+        public static string[] DateFormats => new[] {"yyyy-MM-dd", "yyyymmdd"};
     }
 }

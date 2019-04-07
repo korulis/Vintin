@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Discounts;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Discounts;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -10,12 +10,12 @@ namespace ConsoleApp.Tests
     public class ShipmentMapperTests
     {
         private const string Separator = " ";
-        private const string DateFormat = "yyyy-MM-dd";
+        private readonly string[] _dateFormats = { "yyyy-MM-dd", "yyyyMMdd" };
         private readonly ShipmentMapper _sut;
 
         public ShipmentMapperTests()
         {
-            _sut = new ShipmentMapper(Separator, DateFormat);
+            _sut = new ShipmentMapper(Separator, _dateFormats);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace ConsoleApp.Tests
         }
 
         [Theory]
-        [InlineData(true, "1999-03-30 S LP")]
+        [InlineData(true, "1999-03-30 S LP")] //base case
         [InlineData(true, "19990330 S LP")]
         [InlineData(true, "1999-03-30 M LP")]
         [InlineData(true, "1999-03-30 L LP")]
@@ -79,6 +79,21 @@ namespace ConsoleApp.Tests
 
             //Assert
             Assert.Equal(expectedValidData, !actual.IsCorrupt);
+        }
+
+        [Theory]
+        [InlineData("1999-03-30 S LP")]
+        [InlineData("19990330 S LP")]
+        public void ParseInput_CanParseDifferentDateFormats(string inputLine)
+        {
+            //Arrange
+            var input = new List<string> { inputLine };
+
+            //Act 
+            var actual = _sut.ParseInput(input).ToList()[0];
+
+            //Assert
+            Assert.Equal(new DateTime(1999, 03, 30), actual.Date);
         }
 
 
@@ -110,7 +125,7 @@ namespace ConsoleApp.Tests
             Assert.Equal(
                 string.Join(
                     Separator,
-                    date.ToString(DateFormat),
+                    date.ToString(_dateFormats[0]),
                     packageSize,
                     shippingProvider,
                     "0.00",

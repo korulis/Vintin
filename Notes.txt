@@ -31,7 +31,7 @@ Some of the architecture notes.
 	unnecessary code complication.
 # Selfnote. injecting pure data into class aint such a bad idea. For pure functions(?).
 # I have decided that semantically (Price, Discount) = Cost = Price + Discount.
-# On Discounts.Constants class: 
+# On Discounts.Constants(Defaults) class: 
     Class for default constants related to the task that is being solved.
     This should hypothetically either be extracted into its own project,
     which would be referenced only by ConsoleApp and Tests project or
@@ -46,7 +46,7 @@ Some of the architecture notes.
 # On project interdependency. If the projects are (once code is refactored):
 	CA = ConsoleApp
 	Discounts = D
-	Constants = C (hypothetical)
+	Constants(Defaults) = C (hypothetical)
 	ConsoleApp.Tests = CAT
 	Then the dependencies should be as follows:
 	CAT(CA, D, C), CA(D, C),and D and C are independent.

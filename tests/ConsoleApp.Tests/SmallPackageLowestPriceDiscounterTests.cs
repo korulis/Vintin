@@ -9,7 +9,7 @@ namespace ConsoleApp.Tests
 {
     public class SmallPackageLowestPriceDiscounterTests
     {
-        private static readonly Dictionary<(string, string), decimal> CostReference = Constants.CostReference;
+        private static readonly Dictionary<(string, string), decimal> CostReference = Defaults.CostReference;
 
         private readonly SmallPackageLowestPriceDiscounter _sut;
 

@@ -9,14 +9,14 @@ namespace ConsoleApp
     public class ShipmentMapper
     {
         private readonly string _separator;
-        private static string _dateFormat;
+        private static string[] _dateFormats;
         private static readonly string[] AcceptableSizes = { "S", "M", "L" };
         private static readonly string[] AcceptableProviders = { "MR", "LP" };
 
-        public ShipmentMapper(string separator, string dateFormat)
+        public ShipmentMapper(string separator, string[] dateFormats)
         {
             _separator = separator;
-            _dateFormat = dateFormat;
+            _dateFormats = dateFormats;
         }
 
         public IEnumerable<Shipment> ParseInput(IEnumerable<string> lines)
@@ -59,7 +59,7 @@ namespace ConsoleApp
         {
             var tryParseExact = DateTime.TryParseExact(
                 lineElements[0],
-                _dateFormat,
+                _dateFormats,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out date);
@@ -86,7 +86,7 @@ namespace ConsoleApp
                 var discount = priced.Discount;
                 return string.Join(
                     _separator,
-                    shipment.Date.ToString(_dateFormat),
+                    shipment.Date.ToString(_dateFormats[0]),
                     shipment.PackageSize,
                     shipment.ShippingProvider,
                     priced.Price.ToString("F", CultureInfo.InvariantCulture),

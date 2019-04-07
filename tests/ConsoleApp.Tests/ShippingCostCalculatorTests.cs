@@ -14,7 +14,7 @@ namespace ConsoleApp.Tests
 
         public ShippingCostCalculatorTests()
         {
-            _sut = new ShipmentCostCalculator(new ZeroDiscounter(), Constants.CostReference);
+            _sut = new ShipmentCostCalculator(new ZeroDiscounter(), Defaults.CostReference);
         }
 
         [Theory]

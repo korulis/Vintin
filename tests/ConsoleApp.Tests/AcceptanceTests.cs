@@ -9,7 +9,7 @@ namespace ConsoleApp.Tests
 {
     public class AcceptanceTests
     {
-        private static readonly Dictionary<(string, string), decimal> CostReference = Constants.CostReference;
+        private static readonly Dictionary<(string, string), decimal> CostReference = Defaults.CostReference;
 
         private const string InputFilePath = "input.txt";
         private const string OutputFilePath = "output.txt";
@@ -47,10 +47,10 @@ namespace ConsoleApp.Tests
 
         private static FileBasedShipmentProcessor BuildProcessor(IDiscounter discounter)
         {
-            const string acceptableDateFormat = "yyyy-MM-dd";
+            var acceptableDateFormats = Defaults.DateFormats;
             const string separator = " ";
 
-            var shipmentMapper = new ShipmentMapper(separator, acceptableDateFormat);
+            var shipmentMapper = new ShipmentMapper(separator, acceptableDateFormats);
             var shipmentCostCalculator = new ShipmentCostCalculator(discounter, CostReference);
             void OutputMethod(IEnumerable<string> x) => File.WriteAllLines(OutputFilePath, x);
 

@@ -6,7 +6,7 @@ namespace ConsoleApp.Tests
 {
     public class ShipmentCostBuilder
     {
-        private readonly Dictionary<(string, string), decimal> _costReference = Constants.CostReference;
+        private readonly Dictionary<(string, string), decimal> _costReference = Defaults.CostReference;
         private DateTime _dateTime;
         private string _packageSize;
         private string _shippingProvider;

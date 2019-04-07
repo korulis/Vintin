@@ -11,7 +11,7 @@ namespace Discounts.Discounters
         private const string SpecialSize = "L";
         private const int LuckyOrderNumber = 3;
 
-        private static readonly decimal PackageCost = Constants.CostReference[(SpecialSize, SpecialProvider)];
+        private static readonly decimal PackageCost = Defaults.CostReference[(SpecialSize, SpecialProvider)];
 
         public ThirdLpPackageDiscounter(IDiscounter underlying)
         {

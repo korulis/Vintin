@@ -31,13 +31,13 @@ namespace ConsoleApp
 
             var tenLimit = new TenLimitDiscounter(new ZeroDiscounter());
             var thirdPackage = new ThirdLpPackageDiscounter(tenLimit);
-            var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Constants.CostReference);
+            var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Defaults.CostReference);
 
             var processor = new FileBasedShipmentProcessor(
-                new ShipmentMapper(" ", "yyyy-MM-dd"),
+                new ShipmentMapper(" ",  Defaults.DateFormats),
                 new ShipmentCostCalculator(
                     smallPackage, 
-                    Constants.CostReference),
+                    Defaults.CostReference),
                 ConsoleOutputMethod);
             return processor;
         }
