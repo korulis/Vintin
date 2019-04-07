@@ -16,43 +16,43 @@ namespace ConsoleApp.Tests
         }
 
 
-        public static TheoryData<string, List<ShippingCostEntry>, List<ShippingCostEntry>> PackageData
+        public static TheoryData<string, List<ShipmentCost>, List<ShipmentCost>> PackageData
         {
             get
             {
-                var b = new ShippingCostEntryBuilder();
-                return new TheoryData<string, List<ShippingCostEntry>, List<ShippingCostEntry>>
+                var b = new ShipmentCostBuilder();
+                return new TheoryData<string, List<ShipmentCost>, List<ShipmentCost>>
                 {
                     {
                         "single-large-discount-fix",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(9.0m, 11.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(10.0m,10.0m).Build(),
                         }
                     },
                     {
                         "can-do-nothing",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(11.0m, 9.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(11.0m,9.0m).Build(),
                         }
                     },
                     {
                         "amend-the-second-discount",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(1.0m, 5.0m).Build(),
                             b.OnDay(1).WithPricing(1.0m, 7.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(1.0m, 5.0m).Build(),
                             b.OnDay(1).WithPricing(3.0m, 5.0m).Build(),
@@ -60,13 +60,13 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "with-previous-month",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(5).OnDay(1).WithPricing(1.0m, 5.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithPricing(1.0m, 3.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithPricing(1.0m, 8.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(5).OnDay(1).WithPricing(1.0m, 5.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithPricing(1.0m, 3.0m).Build(),
@@ -75,13 +75,13 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "with-upcoming-month",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithPricing(1.0m, 3.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithPricing(1.0m, 5.0m).Build(),
                             b.OnMonth(7).OnDay(1).WithPricing(1.0m, 8.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithPricing(1.0m, 3.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithPricing(1.0m, 5.0m).Build(),
@@ -90,7 +90,7 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "several-months",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(5).OnDay(1).WithPricing(1.0m, 8.0m).Build(),
                             b.OnMonth(5).OnDay(1).WithPricing(1.0m, 5.0m).Build(),
@@ -98,7 +98,7 @@ namespace ConsoleApp.Tests
                             b.OnMonth(7).OnDay(1).WithPricing(1.0m, 5.0m).Build(),
                             b.OnMonth(7).OnDay(1).WithPricing(1.0m, 8.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(5).OnDay(1).WithPricing(1.0m, 8.0m).Build(),
                             b.OnMonth(5).OnDay(1).WithPricing(4.0m, 2.0m).Build(),
@@ -109,13 +109,13 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "several-blocks-same-month",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.WithPricing(1.0m, 8.0m).Build(),
                             b.WithPricing(1.0m, 5.0m).Build(),
                             b.WithPricing(1.0m, 12.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.WithPricing(1.0m, 8.0m).Build(),
                             b.WithPricing(4.0m, 2.0m).Build(),
@@ -130,8 +130,8 @@ namespace ConsoleApp.Tests
         [MemberData(nameof(PackageData))]
         public void DiscountUpToTenPerMonth(
             string desc,
-            IEnumerable<ShippingCostEntry> inputEntries,
-            List<ShippingCostEntry> expected)
+            IEnumerable<ShipmentCost> inputEntries,
+            List<ShipmentCost> expected)
         {
             //Arrange
 

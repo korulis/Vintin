@@ -18,35 +18,35 @@ namespace Discounts.Discounters
             _underlying = underlying;
         }
 
-        public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
         {
-            var enumerated = pricedShippingEntries.ToList();
-            var shippingCostEntries = enumerated.Select((x, i) => DiscountLpLargeThirdPerMonth(x, i, enumerated));
-            return _underlying.Discount(shippingCostEntries);
+            var enumerated = pricedShipment.ToList();
+            var shipmentCosts = enumerated.Select((x, i) => DiscountLpLargeThirdPerMonth(x, i, enumerated));
+            return _underlying.Discount(shipmentCosts);
         }
 
-        private static ShippingCostEntry DiscountLpLargeThirdPerMonth(
-            ShippingCostEntry entry,
+        private static ShipmentCost DiscountLpLargeThirdPerMonth(
+            ShipmentCost entry,
             int index,
-            IEnumerable<ShippingCostEntry> allEntries)
+            IEnumerable<ShipmentCost> allEntries)
         {
-            if (entry.ShippingEntry.IsCorrupt) return entry;
+            if (entry.Shipment.IsCorrupt) return entry;
 
             var previousEntries = allEntries.Take(index);
-            var year = entry.ShippingEntry.Date.Year;
-            var month = entry.ShippingEntry.Date.Month;
+            var year = entry.Shipment.Date.Year;
+            var month = entry.Shipment.Date.Month;
 
             var wouldCurrentBeTheThird = previousEntries
-                .Count(x => x.ShippingEntry.Date.Year == year
-                            && x.ShippingEntry.Date.Month == month
-                            && x.ShippingEntry.ShippingProvider == SpecialProvider
-                            && x.ShippingEntry.PackageSize == SpecialSize) == LuckyOrderNumber - 1;
+                .Count(x => x.Shipment.Date.Year == year
+                            && x.Shipment.Date.Month == month
+                            && x.Shipment.ShippingProvider == SpecialProvider
+                            && x.Shipment.PackageSize == SpecialSize) == LuckyOrderNumber - 1;
 
             if (wouldCurrentBeTheThird
-                && entry.ShippingEntry.PackageSize == SpecialSize
-                && entry.ShippingEntry.ShippingProvider == SpecialProvider)
+                && entry.Shipment.PackageSize == SpecialSize
+                && entry.Shipment.ShippingProvider == SpecialProvider)
             {
-                return new ShippingCostEntry(entry.ShippingEntry, 0.0m, PackageCost);
+                return new ShipmentCost(entry.Shipment, 0.0m, PackageCost);
             }
             return entry;
         }

@@ -16,23 +16,23 @@ namespace Discounts.Discounters
             _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == _discountedPackageSize).Select(x => x.Value).Min();
         }
 
-        public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
         {
-            var newEntries = pricedShippingEntries.Select(MinimizeSmallPackagePrice);
+            var newEntries = pricedShipment.Select(MinimizeSmallPackagePrice);
             return _underlying.Discount(newEntries);
         }
 
-        private ShippingCostEntry MinimizeSmallPackagePrice(ShippingCostEntry x)
+        private ShipmentCost MinimizeSmallPackagePrice(ShipmentCost x)
         {
-            if (x.ShippingEntry.IsCorrupt) return x;
+            if (x.Shipment.IsCorrupt) return x;
 
-            if (x.ShippingEntry.PackageSize == _discountedPackageSize)
+            if (x.Shipment.PackageSize == _discountedPackageSize)
             {
                 var oldDiscount = x.Discount;
                 var oldPrice = x.Price;
                 var newPrice = oldPrice > _minCost ? _minCost : oldPrice;
                 var newDiscount = oldPrice - newPrice + oldDiscount;
-                return new ShippingCostEntry(x.ShippingEntry, newPrice, newDiscount);
+                return new ShipmentCost(x.Shipment, newPrice, newDiscount);
             }
 
             return x;

@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Discounts;
 
 namespace ConsoleApp.Tests
 {
-    public class ShippingCostEntryBuilder
+    public class ShipmentCostBuilder
     {
         private readonly Dictionary<(string, string), decimal> _costReference = Constants.CostReference;
         private DateTime _dateTime;
         private string _packageSize;
         private string _shippingProvider;
-        private ShippingEntry _shippingEntry;
+        private Shipment _shipment;
         private decimal _price;
         private decimal _discount;
 
-        public ShippingCostEntry Build()
+        public ShipmentCost Build()
         {
 
-            _shippingEntry = new ShippingEntry { Date = _dateTime, PackageSize = _packageSize, ShippingProvider = _shippingProvider };
-            var result = new ShippingCostEntry(_shippingEntry, _price, _discount);
+            _shipment = new Shipment { Date = _dateTime, PackageSize = _packageSize, ShippingProvider = _shippingProvider };
+            var result = new ShipmentCost(_shipment, _price, _discount);
             return result;
         }
 
-        public ShippingCostEntryBuilder()
+        public ShipmentCostBuilder()
         {
             _dateTime = new DateTime(2000, 6, 1);
             _packageSize = "L";
@@ -32,31 +31,31 @@ namespace ConsoleApp.Tests
             _discount = 0.0m;
         }
 
-        public ShippingCostEntryBuilder OnMonth(int month)
+        public ShipmentCostBuilder OnMonth(int month)
         {
             _dateTime = new DateTime(_dateTime.Year, month, _dateTime.Day);
             return this;
         }
 
-        public ShippingCostEntryBuilder OnDay(int day)
+        public ShipmentCostBuilder OnDay(int day)
         {
             _dateTime = new DateTime(_dateTime.Year, _dateTime.Month, day);
             return this;
         }
 
-        public ShippingCostEntryBuilder WithProvider(string provider)
+        public ShipmentCostBuilder WithProvider(string provider)
         {
             _shippingProvider = provider;
             return this;
         }
 
-        public ShippingCostEntryBuilder WithSize(string size)
+        public ShipmentCostBuilder WithSize(string size)
         {
             _packageSize = size;
             return this;
         }
 
-        public ShippingCostEntryBuilder WithPricing(decimal price, decimal discount)
+        public ShipmentCostBuilder WithPricing(decimal price, decimal discount)
         {
             _price = price;
             _discount = discount;

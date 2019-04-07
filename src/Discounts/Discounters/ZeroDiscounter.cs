@@ -4,9 +4,9 @@ namespace Discounts.Discounters
 {
     public class ZeroDiscounter : IDiscounter
     {
-        public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
         {
-            return pricedShippingEntries;
+            return pricedShipment;
         }
     }
 }

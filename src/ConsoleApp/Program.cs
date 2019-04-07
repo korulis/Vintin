@@ -19,7 +19,7 @@ namespace ConsoleApp
             Console.Read();
         }
 
-        private static FileBasedShippingCostCalculator PoorMansDi()
+        private static FileBasedShipmentProcessor PoorMansDi()
         {
             void ConsoleOutputMethod(IEnumerable<string> lines)
             {
@@ -33,9 +33,9 @@ namespace ConsoleApp
             var thirdPackage = new ThirdLpPackageDiscounter(tenLimit);
             var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Constants.CostReference);
 
-            var processor = new FileBasedShippingCostCalculator(
-                new ShippingEntryMapper(" ", "yyyy-MM-dd"),
-                new ShippingCostCalculator(
+            var processor = new FileBasedShipmentProcessor(
+                new ShipmentMapper(" ", "yyyy-MM-dd"),
+                new ShipmentCostCalculator(
                     smallPackage, 
                     Constants.CostReference),
                 ConsoleOutputMethod);

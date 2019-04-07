@@ -10,6 +10,7 @@ TODO (priority, complexity) :
 4=1x4 Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
 6=3x2 Validate separator and DateFormat.
 6=3x2 Make ShippingCostEntry imutable - avoid brittleness.
+4=2x4 Use composition instead of decorator if I can not find an example where I must use decorator.
 8=2x4 Read Ruby guidelines
 8=2x4 Protect ShippingEntry type better.
 8=2x4 Use Monads to parse lines.

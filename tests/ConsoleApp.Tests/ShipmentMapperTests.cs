@@ -7,15 +7,15 @@ using Xunit;
 
 namespace ConsoleApp.Tests
 {
-    public class ShippingEntryMapperTests
+    public class ShipmentMapperTests
     {
         private const string Separator = " ";
         private const string DateFormat = "yyyy-MM-dd";
-        private readonly ShippingEntryMapper _sut;
+        private readonly ShipmentMapper _sut;
 
-        public ShippingEntryMapperTests()
+        public ShipmentMapperTests()
         {
-            _sut = new ShippingEntryMapper(Separator, DateFormat);
+            _sut = new ShipmentMapper(Separator, DateFormat);
         }
 
         [Fact]
@@ -92,9 +92,9 @@ namespace ConsoleApp.Tests
             const string shippingProvider = "SeriousShippingProvider";
             const decimal shippingCost = 0.00m;
             var discount = Convert.ToDecimal(discountString, CultureInfo.InvariantCulture);
-            var input = new List<ShippingCostEntry>
+            var input = new List<ShipmentCost>
             {
-                new ShippingCostEntry(new ShippingEntry()
+                new ShipmentCost(new Shipment()
                 {
                     Date = date,
                     PackageSize = packageSize,
@@ -121,15 +121,15 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_ReturnsListOfStrings_WithSameOrderingAsInput()
         {
             //Arrange
-            var input = new List<ShippingCostEntry>
+            var input = new List<ShipmentCost>
             {
-                new ShippingCostEntry(new ShippingEntry()
+                new ShipmentCost(new Shipment()
                 {
                     Date = new DateTime(1999,1,1),
                     PackageSize = "S",
                     ShippingProvider = "ML"
                 }, 0.00m,0.00m),
-                new ShippingCostEntry(new ShippingEntry()
+                new ShipmentCost(new Shipment()
                 {
                     Date = new DateTime(1998,1,1),
                     PackageSize = "S",
@@ -149,10 +149,10 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_MarksInvalidInputInTheOutput()
         {
             //Arrange
-            var input = new List<ShippingCostEntry>
+            var input = new List<ShipmentCost>
             {
-                new ShippingCostEntry(
-                    ShippingEntry.Corrupt("This is some corrupt entry"),
+                new ShipmentCost(
+                    Shipment.Corrupt("This is some corrupt entry"),
                     0,
                     0
                 )};

@@ -17,23 +17,23 @@ namespace ConsoleApp.Tests
         }
 
 
-        public static TheoryData<string, List<ShippingCostEntry>, List<ShippingCostEntry>> PackageData
+        public static TheoryData<string, List<ShipmentCost>, List<ShipmentCost>> PackageData
         {
             get
             {
-                var b = new ShippingCostEntryBuilder();
+                var b = new ShipmentCostBuilder();
                 b.WithSize("L").WithProvider("LP");
-                return new TheoryData<string, List<ShippingCostEntry>, List<ShippingCostEntry>>
+                return new TheoryData<string, List<ShipmentCost>, List<ShipmentCost>>
                 {
                     {
                         "every-third-large",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(6.9m, 0.0m).Build(),
                             b.OnDay(2).Build(),
                             b.OnDay(3).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).Build(),
                             b.OnDay(2).Build(),
@@ -42,7 +42,7 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "..and-only-third-large",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(6.9m,0.0m).Build(),
                             b.OnDay(2).Build(),
@@ -51,7 +51,7 @@ namespace ConsoleApp.Tests
                             b.OnDay(5).Build(),
                             b.OnDay(6).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).Build(),
                             b.OnDay(2).Build(),
@@ -63,14 +63,14 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "..even-with-prior-months",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(5).OnDay(1).WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).Build(),
                             b.OnDay(2).Build(),
                             b.OnDay(3).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(5).OnDay(1).Build(),
                             b.OnMonth(6).OnDay(1).Build(),
@@ -80,14 +80,14 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "..or-months-after",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(6.9m,0.0m).Build(),
                             b.OnDay(2).Build(),
                             b.OnDay(3).Build(),
                             b.OnMonth(7).OnDay(1).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).Build(),
                             b.OnDay(2).Build(),
@@ -97,7 +97,7 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "..or-multiple-months",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithPricing(6.9m,0.0m).Build(),
                             b.OnDay(2).Build(),
@@ -106,7 +106,7 @@ namespace ConsoleApp.Tests
                             b.OnMonth(7).OnDay(2).Build(),
                             b.OnMonth(7).OnDay(3).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithPricing(6.9m,0.0m).Build(),
                             b.OnDay(2).Build(),
@@ -118,14 +118,14 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "..or-same-day",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithPricing(6.9m,0.0m).Build(),
                             b.OnDay(1).Build(),
                             b.OnDay(1).Build(),
                             b.OnDay(1).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnDay(1).WithPricing(6.9m,0.0m).Build(),
                             b.OnDay(1).Build(),
@@ -135,14 +135,14 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "ignores-other-sizes-before",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
@@ -152,14 +152,14 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "ignores-other-sizes-in-between",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
@@ -169,14 +169,14 @@ namespace ConsoleApp.Tests
                     },
                     {
                         "ignores-other-sizes-after",
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("M").WithPricing(4.9m,0.0m).Build(),
                         },
-                        new List<ShippingCostEntry>
+                        new List<ShipmentCost>
                         {
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
                             b.OnMonth(6).OnDay(1).WithSize("L").WithPricing(6.9m,0.0m).Build(),
@@ -192,8 +192,8 @@ namespace ConsoleApp.Tests
         [MemberData(nameof(PackageData))]
         public void DiscountLargeLpThirdPackage(
             string desc,
-            IEnumerable<ShippingCostEntry> inputEntries,
-            List<ShippingCostEntry> expected)
+            IEnumerable<ShipmentCost> inputEntries,
+            List<ShipmentCost> expected)
         {
             //Arrange
 

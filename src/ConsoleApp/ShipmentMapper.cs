@@ -6,31 +6,31 @@ using Discounts;
 
 namespace ConsoleApp
 {
-    public class ShippingEntryMapper
+    public class ShipmentMapper
     {
         private readonly string _separator;
         private static string _dateFormat;
         private static readonly string[] AcceptableSizes = { "S", "M", "L" };
         private static readonly string[] AcceptableProviders = { "MR", "LP" };
 
-        public ShippingEntryMapper(string separator, string dateFormat)
+        public ShipmentMapper(string separator, string dateFormat)
         {
             _separator = separator;
             _dateFormat = dateFormat;
         }
 
-        public IEnumerable<ShippingEntry> ParseInput(IEnumerable<string> lines)
+        public IEnumerable<Shipment> ParseInput(IEnumerable<string> lines)
         {
-            return lines.Select(ToShippingEntry);
+            return lines.Select(ToShipment);
         }
 
-        private ShippingEntry ToShippingEntry(string line)
+        private Shipment ToShipment(string line)
         {
             var lineElements = line.Split(_separator);
 
             if (lineElements.Length != 3)
             {
-                return ShippingEntry.Corrupt(line);
+                return Shipment.Corrupt(line);
             }
 
 
@@ -48,10 +48,10 @@ namespace ConsoleApp
                   && AcceptableProviders.Contains(provider)
                   && AcceptableSizes.Contains(size)))
             {
-                return ShippingEntry.Corrupt(line);
+                return Shipment.Corrupt(line);
             }
 
-            var result = new ShippingEntry
+            var result = new Shipment
             {
                 Date = date,
                 PackageSize = size,
@@ -60,19 +60,19 @@ namespace ConsoleApp
             return result;
         }
 
-        public IEnumerable<string> FormatOutput(IEnumerable<ShippingCostEntry> discountedShippingEntries)
+        public IEnumerable<string> FormatOutput(IEnumerable<ShipmentCost> discountedShipments)
         {
-            return discountedShippingEntries.Select(FormatDiscounted);
+            return discountedShipments.Select(FormatDiscounted);
         }
 
-        private string FormatDiscounted(ShippingCostEntry priced)
+        private string FormatDiscounted(ShipmentCost priced)
         {
-            var shippingEntry = priced.ShippingEntry;
-            if (shippingEntry.IsCorrupt)
+            var shipment = priced.Shipment;
+            if (shipment.IsCorrupt)
             {
                 return string.Join(
                     _separator,
-                    string.Join(_separator, shippingEntry.RawEntry),
+                    string.Join(_separator, shipment.RawEntry),
                     "Ignored");
             }
             else
@@ -80,9 +80,9 @@ namespace ConsoleApp
                 var discount = priced.Discount;
                 return string.Join(
                     _separator,
-                    shippingEntry.Date.ToString(_dateFormat),
-                    shippingEntry.PackageSize,
-                    shippingEntry.ShippingProvider,
+                    shipment.Date.ToString(_dateFormat),
+                    shipment.PackageSize,
+                    shipment.ShippingProvider,
                     priced.Price.ToString("F", CultureInfo.InvariantCulture),
                     discount == 0 ? "-" : discount.ToString("F", CultureInfo.InvariantCulture));
             }

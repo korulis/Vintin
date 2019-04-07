@@ -7,15 +7,15 @@ namespace ConsoleApp.Tests
 {
     internal class CompleteDiscounts : IDiscounter
     {
-        public IEnumerable<ShippingCostEntry> Discount(IEnumerable<ShippingCostEntry> pricedShippingEntries)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
         {
-            return pricedShippingEntries.Select(ProcessedShippingEntry);
+            return pricedShipment.Select(RenderShipmentFree);
         }
 
-        private static ShippingCostEntry ProcessedShippingEntry(ShippingCostEntry x)
+        private static ShipmentCost RenderShipmentFree(ShipmentCost x)
         {
-            var processedShippingEntry = new ShippingCostEntry(x.ShippingEntry, 0, 0);
-            return processedShippingEntry;
+            var freeShipment = new ShipmentCost(x.Shipment, 0, x.Price + x.Discount);
+            return freeShipment;
         }
     }
 }

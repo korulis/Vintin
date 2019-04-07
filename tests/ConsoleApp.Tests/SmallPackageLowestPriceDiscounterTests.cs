@@ -18,14 +18,14 @@ namespace ConsoleApp.Tests
             _sut = new SmallPackageLowestPriceDiscounter(new ZeroDiscounter(), CostReference);
         }
 
-        public static TheoryData<string, ShippingCostEntry, decimal, decimal> PackageData
+        public static TheoryData<string, ShipmentCost, decimal, decimal> PackageData
         {
             get
             {
-                var b = new ShippingCostEntryBuilder();
+                var b = new ShipmentCostBuilder();
                 b.WithProvider("MR");
 
-                return new TheoryData<string, ShippingCostEntry, decimal, decimal>
+                return new TheoryData<string, ShipmentCost, decimal, decimal>
                 {
                     {"discount-MR", b.WithSize("S").WithPricing(2.0m,0.0m).Build(), 1.5m, 0.5m},
                     {"prior-discount", b.WithSize("S").WithPricing(1.0m, 1.0m).Build(), 1.0m, 1.0m},
@@ -40,18 +40,18 @@ namespace ConsoleApp.Tests
         [MemberData(nameof(PackageData))]
         public void DiscountsOnlySmallestItems(
             string desc,
-            ShippingCostEntry shippingCostEntry,
+            ShipmentCost shipmentCost,
             decimal expectedPrice,
             decimal expectedDiscount)
         {
             //Arrange
-            var shippingEntriesWithCosts = new List<ShippingCostEntry>()
+            var shipmentCosts = new List<ShipmentCost>()
             {
-                shippingCostEntry
+                shipmentCost
             };
 
             //Act
-            var actual = _sut.Discount(shippingEntriesWithCosts).ToList()[0];
+            var actual = _sut.Discount(shipmentCosts).ToList()[0];
 
             //Assert
             Assert.Equal(expectedPrice, actual.Price);
@@ -62,18 +62,18 @@ namespace ConsoleApp.Tests
         public void DoesNotDiscountCorruptEntries()
         {
             //Arrange
-            var shippingEntry = ShippingEntry.Corrupt("raw entry");
-            shippingEntry.Date = DateTime.Today;
-            shippingEntry.PackageSize = "S";
-            shippingEntry.ShippingProvider = "MR";
-            var shippingEntriesWithCosts = new List<ShippingCostEntry>()
+            var shipment = Shipment.Corrupt("raw entry");
+            shipment.Date = DateTime.Today;
+            shipment.PackageSize = "S";
+            shipment.ShippingProvider = "MR";
+            var shipmentCosts = new List<ShipmentCost>()
             {
-                new ShippingCostEntry(
-                    shippingEntry, 2.0m, 0.0m)
+                new ShipmentCost(
+                    shipment, 2.0m, 0.0m)
             };
 
             //Act
-            var actual = _sut.Discount(shippingEntriesWithCosts).ToList()[0];
+            var actual = _sut.Discount(shipmentCosts).ToList()[0];
 
             //Assert
             Assert.Equal(2.0m, actual.Price);

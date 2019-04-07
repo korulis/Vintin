@@ -8,13 +8,13 @@ using Xunit;
 
 namespace ConsoleApp.Tests
 {
-    public class ShippingPriceCalculatorTests
+    public class ShippingCostCalculatorTests
     {
-        private readonly ShippingCostCalculator _sut;
+        private readonly ShipmentCostCalculator _sut;
 
-        public ShippingPriceCalculatorTests()
+        public ShippingCostCalculatorTests()
         {
-            _sut = new ShippingCostCalculator(new ZeroDiscounter(), Constants.CostReference);
+            _sut = new ShipmentCostCalculator(new ZeroDiscounter(), Constants.CostReference);
         }
 
         [Theory]
@@ -31,9 +31,9 @@ namespace ConsoleApp.Tests
         {
             //Arrange
             var expectedCost = Convert.ToDecimal(expectedCostString, CultureInfo.InvariantCulture);
-            var shippingEntries = new List<ShippingEntry>
+            var shippingEntries = new List<Shipment>
             {
-                new ShippingEntry
+                new Shipment
                 {
                     PackageSize = packageSize,
                     ShippingProvider = shippingProvider
@@ -51,16 +51,16 @@ namespace ConsoleApp.Tests
         public void CalculatePrice_ReturnsMarkedOutputIfInputIsCorrupt()
         {
             //Arrange
-            var shippingEntries = new List<ShippingEntry>
+            var shipments = new List<Shipment>
             {
-                ShippingEntry.Corrupt("entry text")
+                Shipment.Corrupt("entry text")
             };
 
             //Act
-            var actual = _sut.CalculatePrice(shippingEntries).ToList();
+            var actual = _sut.CalculatePrice(shipments).ToList();
 
             //Assert
-            Assert.True(actual[0].ShippingEntry.IsCorrupt);
+            Assert.True(actual[0].Shipment.IsCorrupt);
         }
     }
 }
