@@ -34,12 +34,7 @@ namespace ConsoleApp
             }
 
 
-            var isDatePresent = DateTime.TryParseExact(
-                lineElements[0],
-                _dateFormat,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out var date);
+            var isDatePresent = TryParseDate(lineElements, out var date);
 
             var size = lineElements[1];
             var provider = lineElements[2];
@@ -58,6 +53,17 @@ namespace ConsoleApp
                 ShippingProvider = provider
             };
             return result;
+        }
+
+        private static bool TryParseDate(string[] lineElements, out DateTime date)
+        {
+            var tryParseExact = DateTime.TryParseExact(
+                lineElements[0],
+                _dateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out date);
+            return tryParseExact;
         }
 
         public IEnumerable<string> FormatOutput(IEnumerable<ShipmentCost> discountedShipments)

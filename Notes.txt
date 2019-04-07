@@ -1,7 +1,5 @@
 TODO:
 priority = (urgency, complexity)
-1=1x1 Comment on architecture choices
-2=2x1 Force sequential execution for file based tests.
 2=2x1 Additionally handle yyyymmdd input format because it is part of ISO standard.
 2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
 2=1x2 Use autoquality lib to compare entires in tests. OR maybe make the DTOs into structs...
@@ -18,7 +16,9 @@ priority = (urgency, complexity)
 8=2x4 Use Monads to parse lines. Get rid of IsCorrupt property and use polymorphism instead of "ifs".
 20=4x5 Implement custom deserializer and use it for file parsing.
 20=2x10 Optimization. Implement a parser where that does not enumerate the entire collection when filtering according to date. This is possible because of the assumption that the data is date sorted.
+DONE 1=1x1 Comment on architecture choices
 DONE 1=1x1 Reread requirements
+REJECTED 2=2x1 Force sequential execution for file based tests.
 REJECTED Maybe price list should be part of ShippingEntryWithCost member ?
 REJECTED Implement Linq to file parser for lazy loading.
 REJECTED Use date time offset converted from France DateTime in ShippingEntry.Date.

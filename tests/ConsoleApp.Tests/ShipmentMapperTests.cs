@@ -58,6 +58,7 @@ namespace ConsoleApp.Tests
 
         [Theory]
         [InlineData(true, "1999-03-30 S LP")]
+        [InlineData(true, "19990330 S LP")]
         [InlineData(true, "1999-03-30 M LP")]
         [InlineData(true, "1999-03-30 L LP")]
         [InlineData(true, "1999-03-30 S MR")]
@@ -163,6 +164,5 @@ namespace ConsoleApp.Tests
             //Assert
             Assert.Contains("Ignored", actual);
         }
-
     }
 }
