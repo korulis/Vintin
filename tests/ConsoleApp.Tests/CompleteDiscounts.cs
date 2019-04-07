@@ -14,7 +14,7 @@ namespace ConsoleApp.Tests
 
         private static ShipmentCost RenderShipmentFree(ShipmentCost x)
         {
-            var freeShipment = new ShipmentCost(x.Shipment, 0, x.Price + x.Discount);
+            var freeShipment = new ShipmentCost(x.Shipment, 0, 0);
             return freeShipment;
         }
     }
