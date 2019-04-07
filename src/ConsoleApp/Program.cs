@@ -21,11 +21,11 @@ namespace ConsoleApp
 
         private static FileBasedShippingCostCalculator PoorMansDi()
         {
-            void ConsoleOutputMethod(IEnumerable<string> x)
+            void ConsoleOutputMethod(IEnumerable<string> lines)
             {
-                foreach (var xi in x)
+                foreach (var line in lines)
                 {
-                    Console.WriteLine(xi);
+                    Console.WriteLine(line);
                 }
             }
 

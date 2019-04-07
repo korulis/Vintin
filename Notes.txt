@@ -1,10 +1,10 @@
 TODO (priority, complexity) :
 1=1x1 Comment on architecture choises
-1=1x1 Reread requirements
 2=2x1 Force sequential execution for file based tests.
 2=2x1 Additionally hanndle yyyymmdd input format because it is part of ISO standard.
 2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
 2=1x2 Use autoquality lib to compare entires in tests.
+3=3X1 Validate input file name from args.
 4=2x2 Use ShippingEntry.PackageSize as enum instead of string.
 4=2x2 Use ShippingEntry.ShippingProvider as enum.
 4=1x4 Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
@@ -14,6 +14,7 @@ TODO (priority, complexity) :
 8=2x4 Protect ShippingEntry type better.
 8=2x4 Use Monads to parse lines.
 20=4x5 Implement custom deserializer and use it for file parsing.
+DONE 1=1x1 Reread requirements
 REJECED Maybe price list should be part of ShippingEntryWithCost member ?
 REJECTED Implement Linq to file parser for lazy loading.
 REJECTED Use date time offset converted from France DateTime in ShippingEntry.Date.
@@ -22,7 +23,7 @@ REJECTED Fix file reading to be unix compatible.
 Some of the architecture notes.
 # Decided against async methods, because if I use async for reading the file, then I loose the Ienumerable<> interface,
 	and if I use the async only on the output part of the method it does not save much, because this is the last step, 
-	and no other processes/calculations of the program should be happening then. So all in all it would just be an 
+	and no other paralel/alternatice and important processes/calculations should be happening then. So all in all it would just be an 
 	unnecessary code complication.
 #selfnote. injecting pure data into class aint such a bad idea. For pure functions.(?)
 #I have decided that semantically (Price, Discount) = Cost = Price + Discount.
