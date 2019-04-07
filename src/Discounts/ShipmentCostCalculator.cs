@@ -18,23 +18,23 @@ namespace Discounts
 
         public IEnumerable<ShipmentCost> CalculatePrice(IEnumerable<Shipment> shipments)
         {
-            var shipmentCosts = shipments.Select(CalculateCost);
-            var pricedShipments = _discounter.Discount(shipmentCosts);
+            var shipmentPrices = shipments.Select(CalculatePrice);
+            var pricedShipments = _discounter.Discount(shipmentPrices);
             return pricedShipments;
         }
 
-        public ShipmentCost CalculateCost(Shipment shipment)
+        public ShipmentCost CalculatePrice(Shipment shipment)
         {
             if (shipment.IsCorrupt)
             {
                 return new ShipmentCost(shipment, 0, 0);
             }
 
-            var shipmentCost = _costReference[(shipment.PackageSize, shipment.ShippingProvider)];
+            var cost = _costReference[(shipment.PackageSize, shipment.ShippingProvider)];
 
 
-            var result = new ShipmentCost(shipment, shipmentCost, 0.00m);
-            return result;
+            var shipmentWithPrice = new ShipmentCost(shipment, cost, 0.00m);
+            return shipmentWithPrice;
         }
 
     }

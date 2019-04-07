@@ -1,22 +1,25 @@
-TODO (priority, complexity) :
-1=1x1 Comment on architecture choises
+TODO:
+priority = (urgency, complexity)
+1=1x1 Comment on architecture choices
 2=2x1 Force sequential execution for file based tests.
-2=2x1 Additionally hanndle yyyymmdd input format because it is part of ISO standard.
+2=2x1 Additionally handle yyyymmdd input format because it is part of ISO standard.
 2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
-2=1x2 Use autoquality lib to compare entires in tests.
+2=1x2 Use autoquality lib to compare entires in tests. OR maybe make the DTOs into structs...
 3=3X1 Validate input file name from args.
+3=3x1 Revert the order of decorators, so the is a smaller chance of mistaking which decorator get a last word.
 4=2x2 Use ShippingEntry.PackageSize as enum instead of string.
 4=2x2 Use ShippingEntry.ShippingProvider as enum.
-4=1x4 Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
+4=1x4 Optimization. Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
 6=3x2 Validate separator and DateFormat.
-6=3x2 Make ShippingCostEntry imutable - avoid brittleness.
+6=3x2 Make ShippingCostEntry imutable - avoid brittleness. Protect ShippingEntry type better. Constructors.
 4=2x4 Use composition instead of decorator if I can not find an example where I must use decorator.
+8=4x2 Create A ShipmentCostCalculator dependency injection module
 8=2x4 Read Ruby guidelines
-8=2x4 Protect ShippingEntry type better.
-8=2x4 Use Monads to parse lines.
+8=2x4 Use Monads to parse lines. Get rid of IsCorrupt property and use polymorphism instead of "ifs".
 20=4x5 Implement custom deserializer and use it for file parsing.
+20=2x10 Optimization. Implement a parser where that does not enumerate the entire collection when filtering according to date. This is possible because of the assumption that the data is date sorted.
 DONE 1=1x1 Reread requirements
-REJECED Maybe price list should be part of ShippingEntryWithCost member ?
+REJECTED Maybe price list should be part of ShippingEntryWithCost member ?
 REJECTED Implement Linq to file parser for lazy loading.
 REJECTED Use date time offset converted from France DateTime in ShippingEntry.Date.
 REJECTED Fix file reading to be unix compatible.
@@ -26,15 +29,58 @@ Some of the architecture notes.
 	and if I use the async only on the output part of the method it does not save much, because this is the last step, 
 	and no other paralel/alternatice and important processes/calculations should be happening then. So all in all it would just be an 
 	unnecessary code complication.
-#selfnote. injecting pure data into class aint such a bad idea. For pure functions.(?)
-#I have decided that semantically (Price, Discount) = Cost = Price + Discount.
-#On Discounts.Constants class: 
+# Selfnote. injecting pure data into class aint such a bad idea. For pure functions(?).
+# I have decided that semantically (Price, Discount) = Cost = Price + Discount.
+# On Discounts.Constants class: 
     Class for default constants related to the task that is being solved.
     This should hypothetically either be extracted into its own project,
     which would be referenced only by ConsoleApp and Tests project or
     Be put in tests project for testing purposes and externalized as config for production purposes.
-#ThirdLpLargePackageDiscounter assumes the data is orderred by date. This is because if I do not take this assumtion, this ir not 
+# On order of data assumption:
+	ThirdLpLargePackageDiscounter assumes the data is orderred by date. This is because if I do not take this assumtion, this is not 
 	single unique way to order the package entries, without taking further assumtions, because the entries might have duplicate dates.
-#Making all Discounters into Decorators enables them to do more powerful and complex discounts, 
-especially when matched with the idea of discount calculation context (which would safe some required data for among other things
-for performance optimisation reasons), but it obfuscted the level of importance of the discounters...
+# On decorator patern:
+	Making all Discounters into decorators enables them to do more powerful and complex discounts, 
+	especially when matched with the idea of discount calculation context (which would save some required data for among other things
+	for performance optimisation reasons), but it obfuscated the order in which the discounters are applied...
+# On project interdependency. If the projects are (once code is refactored):
+	CA = ConsoleApp
+	Discounts = D
+	Constants = C (hypothetical)
+	ConsoleApp.Tests = CAT
+	Then the dependencies should be as follows:
+	CAT(CA, D, C), CA(D, C),and D and C are independent.
+# On why Discounts is separate from ConsoleApp.
+	Although the documentation specifically mentions that the input must be a file and the output - stdout,
+	I think this is not the core of the problem. The problem I am trying to solve here is discounting
+	shipments according to given rules to a certain data set. So the way the application is presented, be it console app
+	or web api or some stream, or the way the data is formated, be it CSV or JSON or XML, is not essential to the problem.
+	So the ConsoleApp would not necesarily lend its self to a production application, but Discounts should. If not that, well, 
+	then added benefit of having these pieces of code in separate project enforces good responsibility separation and
+	clear dependencies,	which otherwise would be only possible with a certain amount of discipline. 
+	Given, that sometimes some people go to the lengths	of creating entire new microservices for this reason, 
+	I think what I did is not such a big crime.
+# On protecting the app domain.
+	I specifically put some effort into protecting the problem domain, by introducing domain specifig DTOs. Instead of using 
+	tuples, although they are embeded in C# quite nicely now, or dictionaries I introduced these domain specific DTOs so that the 
+	the internal and external interface (contract) and class signatures better broadcast them selves to the code reader or maintainer.
+	I was deliberating if I should create the "ShipmentCostWithoutDiscount", but I felt it was not worth it.
+# Test project contents.
+	The tests project contains both the Acceptance (end-to-end, there are as many names as there are programmers,
+	I tend to use the naming I found in GOOS*) and Unit (I assum Unit != Class) tests. Usually I put these test categories into 
+	into separate project. But this time I decided against it due to small scale of the solution.
+# The code writing process / order of steps.
+	I strived (and in general strive) to write the code the way I saw it done in GOOS, which I believe some people call
+	outside-in TDD*. Which spells 1. write extremely small requirement but high scope test - walkin skeleton, which will force you 
+	to 2. write implementation that satifies the test. 3. Refactor 4. Retro actively write unit test to the refactored units.
+	5. start expanding the functionality of the current walking skeleton using the usual red-green-refactor cycle.
+	6. from time to time write another larger scope test from more functionality and step into the extended version for 
+	red-green-refactor style:
+	http://i.imgur.com/9WoJw1V.png
+# Why is ShipmentCost called so:
+	It is called so because Cost = Price + Discount and this value object appart from having shippment info has Price and Discount 
+	properties.
+
+
+GOOS* - book http://www.growing-object-oriented-software.com/
+outside-in TDD8 - https://blog.ploeh.dk/2013/03/04/outside-in-tdd-versus-ddd/ (coincidentally my first course about programming ;] )
