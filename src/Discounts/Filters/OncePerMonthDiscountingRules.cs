@@ -6,5 +6,10 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public void Update(ShipmentCost shipmentCost)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

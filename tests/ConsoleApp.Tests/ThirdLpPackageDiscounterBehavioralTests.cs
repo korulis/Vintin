@@ -55,22 +55,45 @@ namespace ConsoleApp.Tests
         public void Discount_AppliesDiscountAssignedByRules()
         {
             //Arrange
-            var firstShipment = new ShipmentCostBuilder().Build();
+            var shipment = new ShipmentCostBuilder().Build();
             var input = new List<ShipmentCost>
             {
-                firstShipment
+                shipment
             };
-            var shipmentUnderDiscount = _fixture.Freeze<Mock<ShipmentWithApplicableDiscount>>();
-            _discountRules.Setup(t => t.AssignDiscount(firstShipment))
-                .Returns(shipmentUnderDiscount.Object);
+            var shipmentWithApplicableDiscount = _fixture.Create<Mock<ShipmentWithApplicableDiscount>>();
+            _discountRules.Setup(t => t.AssignDiscount(shipment))
+                .Returns(shipmentWithApplicableDiscount.Object);
 
             //Act
             _sut.Discount(input);
 
             //Assert
-            shipmentUnderDiscount.Verify(t => t.Apply(), Times.Once);
+            shipmentWithApplicableDiscount.Verify(t => t.Apply(), Times.Once);
         }
 
+        [Fact]
+        public void Discount_UpdatesRulesUsingDiscountedShipment()
+        {
+            //Arrange
+            var shipment = new ShipmentCostBuilder().Build();
+            var input = new List<ShipmentCost>
+            {
+                shipment
+            };
+
+            var shipmentWithApplicableDiscount = _fixture.Create<Mock<ShipmentWithApplicableDiscount>>();
+            _discountRules.Setup(t => t.AssignDiscount(It.IsAny<ShipmentCost>()))
+                .Returns(shipmentWithApplicableDiscount.Object);
+            var expectedShipmentCost = _fixture.Create<ShipmentCost>();
+            shipmentWithApplicableDiscount.Setup(t => t.Apply()).Returns(expectedShipmentCost);
+
+            //Act
+            _sut.Discount(input);
+
+            //Assert
+            _discountRules.Verify(t => t.Update(expectedShipmentCost), Times.Once);
+
+        }
 
 
     }

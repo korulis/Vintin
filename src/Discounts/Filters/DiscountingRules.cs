@@ -6,5 +6,6 @@
     public interface DiscountingRules
     {
         ShipmentWithApplicableDiscount AssignDiscount(ShipmentCost shipmentCost);
+        void Update(ShipmentCost shipmentCost);
     }
 }
