@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Discounts.Rules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Discounts.Rules;
 
 namespace Discounts
 {
@@ -29,12 +29,14 @@ namespace Discounts
 
         public static class ThirdLpPackageEveryMonth
         {
-            public static Func<OncePerMonthDiscountingRules> TempOncePerMonth =
-                () => new OncePerMonthDiscountingRules(SpecialProvider, SpecialSize, LuckOrderNumber);
-
             public static string SpecialProvider = "LP";
             public static string SpecialSize = "L";
             public static int LuckOrderNumber = 3;
+        }
+
+        public static class TenMonthlyCap
+        {
+            public static int MonthlyCap = 10;
         }
     }
 }

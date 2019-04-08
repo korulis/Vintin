@@ -31,7 +31,11 @@ namespace ConsoleApp
                 }
             }
 
-            var tenLimit = new TenLimitDiscounter(new ZeroDiscounter());
+            var tenLimit = new TenLimitDiscounter(
+                new ZeroDiscounter(),
+                () => new MonthlyCapDiscountingRules(
+                    Defaults.TenMonthlyCap.MonthlyCap));
+
             var thirdPackage = new ThirdLpPackageDiscounter(
                 tenLimit, 
                 () => new OncePerMonthDiscountingRules(

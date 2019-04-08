@@ -2,6 +2,7 @@
 using Discounts;
 using System.Linq;
 using Discounts.Discounters;
+using Discounts.Rules;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -12,7 +13,12 @@ namespace ConsoleApp.Tests
 
         public ThirdLpPackageDiscounterTests()
         {
-            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter(), Defaults.ThirdLpPackageEveryMonth.TempOncePerMonth);
+            _sut = new ThirdLpPackageDiscounter(
+                new ZeroDiscounter(),
+                () => new OncePerMonthDiscountingRules(
+                    Defaults.ThirdLpPackageEveryMonth.SpecialProvider,
+                    Defaults.ThirdLpPackageEveryMonth.SpecialSize,
+                    Defaults.ThirdLpPackageEveryMonth.LuckOrderNumber));
         }
 
         public static TheoryData<string, List<ShipmentCost>, List<ShipmentCost>> PackageData

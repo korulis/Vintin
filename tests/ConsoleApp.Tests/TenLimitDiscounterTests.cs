@@ -2,6 +2,7 @@
 using System.Linq;
 using Discounts;
 using Discounts.Discounters;
+using Discounts.Rules;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -12,7 +13,10 @@ namespace ConsoleApp.Tests
 
         public TenLimitDiscounterTests()
         {
-            _sut = new TenLimitDiscounter(new ZeroDiscounter());
+            _sut = new TenLimitDiscounter(
+                new ZeroDiscounter(),
+                ()=>new MonthlyCapDiscountingRules(
+                    Defaults.TenMonthlyCap.MonthlyCap));
         }
 
 

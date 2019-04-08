@@ -1,5 +1,6 @@
 ﻿using Discounts;
 using Discounts.Discounters;
+using Discounts.Rules;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,8 +28,12 @@ namespace ConsoleApp.Tests
                     new SmallPackageLowestPriceDiscounter(
                         new ThirdLpPackageDiscounter(
                             new TenLimitDiscounter(
-                                new ZeroDiscounter()),
-                            Defaults.ThirdLpPackageEveryMonth.TempOncePerMonth),
+                                new ZeroDiscounter(),
+                                ()=>new MonthlyCapDiscountingRules(Defaults.TenMonthlyCap.MonthlyCap)),
+                            ()=>new OncePerMonthDiscountingRules(
+                                Defaults.ThirdLpPackageEveryMonth.SpecialProvider,
+                                Defaults.ThirdLpPackageEveryMonth.SpecialSize,
+                                Defaults.ThirdLpPackageEveryMonth.LuckOrderNumber)),
                         CostReference)},
             };
 
