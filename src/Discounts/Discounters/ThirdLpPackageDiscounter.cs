@@ -24,8 +24,14 @@ namespace Discounts.Discounters
         {
             var rules = _discountingRulesSpawner();
             var asdf = pricedShipments
-                .Select(x => rules.AssignDiscount(x))
-                .Select(x => x.Apply())
+                .Select(x =>
+                {
+                    return rules.AssignDiscount(x);
+                })
+                .Select(x =>
+                {
+                    return x.Apply();
+                })
                 .ToList();
 
 

@@ -10,6 +10,7 @@ priority = (urgency, complexity)
 8=2x4 Read Ruby guidelines
 8=4x2 Use ShippingEntry.PackageSize and ShippingProvider  as enum instead of string.
 8=2x4 Use Monads to parse lines. Get rid of IsCorrupt property and use polymorphism instead of "ifs".
+9=3x3 Find Autofixture.Automoq for .net core, use it to make test more succinct.
 10=1x10 Make all the corresponding elements from Defauls class configurable.
 20=4x5 Implement custom deserializer and use it for file parsing.
 20=2x10 Optimization. Implement a parser where that does not enumerate the entire collection when filtering according to date. This is possible because of the assumption that the data is date sorted.

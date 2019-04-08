@@ -3,6 +3,7 @@ using Discounts.Discounters;
 using Moq;
 using System.Collections.Generic;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Discounts.Filters;
 using Xunit;
 
@@ -12,15 +13,25 @@ namespace ConsoleApp.Tests
     {
         private readonly ThirdLpPackageDiscounter _sut;
         private readonly Mock<DiscountingRules> _discountRules;
-        private readonly Fixture _fixture;
+        private readonly IFixture _fixture;
+        private readonly Mock<ShipmentWithApplicableDiscount> _shipmentUnderDiscount;
 
         public ThirdLpPackageDiscounterBehavioralTests()
         {
-            _fixture = new Fixture();
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _discountRules = new Mock<DiscountingRules>();
+            _shipmentUnderDiscount = _fixture.Freeze<Mock<ShipmentWithApplicableDiscount>>();
+            _shipmentUnderDiscount.Setup(t => t.Apply())
+                .Returns(() => _fixture.Create<ShipmentCost>());
+
+            _discountRules = _fixture.Freeze<Mock<DiscountingRules>>();
+            _discountRules.Setup(x => x.AssignDiscount(It.IsAny<ShipmentCost>()))
+                .Returns(_shipmentUnderDiscount.Object);
+
+           
+
+
             var underlyingDiscounter = new Mock<Discounter>();
-
             underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<ShipmentCost>>()))
                 .Returns<IEnumerable<ShipmentCost>>(x => x);
 
@@ -50,20 +61,22 @@ namespace ConsoleApp.Tests
         {
             //Arrange
             var firstShipment = new ShipmentCostBuilder().Build();
-            var firstShipmentUnderDiscount = new Mock<ShipmentWithApplicableDiscount>();
             var input = new List<ShipmentCost>
             {
                 firstShipment
             };
             _discountRules.Setup(t => t.AssignDiscount(firstShipment))
-                .Returns(firstShipmentUnderDiscount.Object);
+                .Returns(_shipmentUnderDiscount.Object);
+            var shipmentCost = _fixture.Create<ShipmentCost>();
+            _shipmentUnderDiscount.Setup(t => t.Apply())
+                .Returns(shipmentCost);
 
 
             //Act
             _sut.Discount(input);
 
             //Assert
-            firstShipmentUnderDiscount.Verify(t => t.Apply(), Times.Once);
+            _shipmentUnderDiscount.Verify(t => t.Apply(), Times.Once);
         }
 
     }
