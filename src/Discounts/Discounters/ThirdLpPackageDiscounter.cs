@@ -23,7 +23,10 @@ namespace Discounts.Discounters
         public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
             var rules = _discountingRulesSpawner();
-            var asdf = pricedShipments.Select(x => rules.AssignDiscount(x)).ToList();
+            var asdf = pricedShipments
+                .Select(x => rules.AssignDiscount(x))
+                .Select(x => x.Apply())
+                .ToList();
 
 
             var enumerated = pricedShipments.ToList();
