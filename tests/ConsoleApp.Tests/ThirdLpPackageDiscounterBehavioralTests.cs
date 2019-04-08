@@ -9,16 +9,17 @@ namespace ConsoleApp.Tests
     public class ThirdLpPackageDiscounterBehavioralTests
     {
         private readonly ThirdLpPackageDiscounter _sut;
-        private readonly Mock<IDiscounter> _underlyingDiscounter;
         private readonly Mock<IFilter> _filter;
 
         public ThirdLpPackageDiscounterBehavioralTests()
         {
+            _filter = new Mock<IFilter>();
+            var underlyingDiscounter = new Mock<IDiscounter>();
 
-            _underlyingDiscounter = new Mock<IDiscounter>();
-            _underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<ShipmentCost>>()))
+            underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<ShipmentCost>>()))
                 .Returns<IEnumerable<ShipmentCost>>(x => x);
-            _sut = new ThirdLpPackageDiscounter(_underlyingDiscounter.Object);
+
+            _sut = new ThirdLpPackageDiscounter(underlyingDiscounter.Object);
         }
 
         [Fact]
@@ -40,7 +41,6 @@ namespace ConsoleApp.Tests
 
             //Assert
             firstShipmentUnderDiscount.Verify(t=>t.Apply(), Times.Once);
-
         }
 
     }
@@ -60,12 +60,15 @@ namespace ConsoleApp.Tests
         }
     }
 
-    internal interface IFilter
+    /// <summary>
+    /// Assigns a discount to be applied based on its internal rules.
+    /// </summary>
+    public interface IFilter
     {
         ApplicableDiscount Apply(ShipmentCost shipmentCost);
     }
 
-    internal interface ApplicableDiscount
+    public interface ApplicableDiscount
     {
         ShipmentCost Apply();
     }
