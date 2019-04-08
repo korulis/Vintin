@@ -4,7 +4,7 @@ using Moq;
 using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using Discounts.Filters;
+using Discounts.Rules;
 using Xunit;
 
 namespace ConsoleApp.Tests

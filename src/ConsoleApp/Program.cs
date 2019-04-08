@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection.Metadata;
 using Discounts;
 using Discounts.Discounters;
-using Discounts.Filters;
+using Discounts.Rules;
 
 namespace ConsoleApp
 {

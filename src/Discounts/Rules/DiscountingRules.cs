@@ -1,4 +1,4 @@
-﻿namespace Discounts.Filters
+﻿namespace Discounts.Rules
 {
     /// <summary>
     /// Assigns a discount to be applied based on its internal rules.

@@ -1,10 +1,10 @@
-﻿namespace Discounts.Filters
+﻿namespace Discounts.Rules
 {
-    public class ShipmentWithNoDiscount : ShipmentWithApplicableDiscount
+    public class ShipmentWithNoAdditionalDiscount : ShipmentWithApplicableDiscount
     {
         private readonly ShipmentCost _shipmentCost;
 
-        public ShipmentWithNoDiscount(ShipmentCost shipmentCost)
+        public ShipmentWithNoAdditionalDiscount(ShipmentCost shipmentCost)
         {
             _shipmentCost = shipmentCost;
         }

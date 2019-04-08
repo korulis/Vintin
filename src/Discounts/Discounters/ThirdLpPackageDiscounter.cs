@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Discounts.Filters;
+using Discounts.Rules;
 
 namespace Discounts.Discounters
 {

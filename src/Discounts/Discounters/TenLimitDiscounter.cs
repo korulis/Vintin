@@ -1,63 +1,37 @@
-﻿using System.Collections.Generic;
+﻿
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Discounts.Rules;
 
 namespace Discounts.Discounters
 {
     public class TenLimitDiscounter : Discounter
     {
         private readonly Discounter _underlying;
-        private const int MaxMonthlyDiscount = 10;
+        private readonly Func<DiscountingRules> _discountingRulesSpawner;
 
-        public TenLimitDiscounter(Discounter underlying)
+        public TenLimitDiscounter(Discounter underlying, Func<DiscountingRules> discountingRulesSpawner)
         {
             _underlying = underlying;
+            _discountingRulesSpawner = discountingRulesSpawner;
         }
 
         public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
-            var enumerated = pricedShipments.ToList();
-            var newEntries = enumerated.Select((x, i) => LimitDiscountsToTenPerMonth(x, i, enumerated));
-            return _underlying.Discount(newEntries);
-        }
+            var rules = _discountingRulesSpawner();
+            var shipmentCosts = pricedShipments
+                .Select(x => rules.AssignDiscount(x))
+                .Select(x => x.Apply())
+                .Select(x=>
+                {
+                    rules.Update(x);
+                    return x;
+                })
+                .ToList();
 
-        private static ShipmentCost LimitDiscountsToTenPerMonth(
-            ShipmentCost entry,
-            int index,
-            IEnumerable<ShipmentCost> allEntries)
-        {
-            if (entry.Shipment.IsCorrupt) return entry;
-            var previousEntries = allEntries.Take(index);
 
-            var year = entry.Shipment.Date.Year;
-            var month = entry.Shipment.Date.Month;
-            var discount = entry.Discount;
-            var price = entry.Price;
-
-            var totalDiscountThisMonth = previousEntries
-                                        .Where(x => x.Shipment.Date.Year == year
-                                                    && x.Shipment.Date.Month == month)
-                                        .Select(x => x.Discount)
-                                        .Sum();
-
-            if (ShouldBlockAnyFurtherDiscounting(totalDiscountThisMonth))
-            {
-                return new ShipmentCost(entry.Shipment, entry.Price + entry.Discount, 0.0m);
-            };
-
-            var maxAllowedDiscountForCurrentEntry = MaxMonthlyDiscount - totalDiscountThisMonth;
-            if (maxAllowedDiscountForCurrentEntry >= discount)
-            {
-                return entry;
-            }
-
-            var newDiscount = maxAllowedDiscountForCurrentEntry;
-            var newPrice = price + discount - newDiscount;
-            return new ShipmentCost(entry.Shipment, newPrice, newDiscount);
-        }
-
-        private static bool ShouldBlockAnyFurtherDiscounting(decimal totalDiscountThisMonth)
-        {
-            return !(MaxMonthlyDiscount >= totalDiscountThisMonth);
+            return _underlying.Discount(shipmentCosts);
         }
     }
 }

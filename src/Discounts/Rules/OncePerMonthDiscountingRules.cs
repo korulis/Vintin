@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Discounts.Filters
+namespace Discounts.Rules
 {
     public class OncePerMonthDiscountingRules : DiscountingRules
     {
@@ -22,7 +22,7 @@ namespace Discounts.Filters
         {
             if (shipmentCost.Shipment.IsCorrupt)
             {
-                return new ShipmentWithFullDiscount(shipmentCost);
+                return new DiscountForCorruptShipment(shipmentCost);
             }
 
             var shipment = shipmentCost.Shipment;
@@ -36,7 +36,7 @@ namespace Discounts.Filters
                 return new ShipmentWithFullDiscount(shipmentCost);
             }
 
-            return new ShipmentWithNoDiscount(shipmentCost);
+            return new ShipmentWithNoAdditionalDiscount(shipmentCost);
         }
 
         public void Update(ShipmentCost shipmentCost)

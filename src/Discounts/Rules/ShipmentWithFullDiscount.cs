@@ -1,4 +1,4 @@
-﻿namespace Discounts.Filters
+﻿namespace Discounts.Rules
 {
     public class ShipmentWithFullDiscount : ShipmentWithApplicableDiscount
     {

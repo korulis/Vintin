@@ -2,7 +2,6 @@
 using Discounts;
 using System.Linq;
 using Discounts.Discounters;
-using Discounts.Filters;
 using Xunit;
 
 namespace ConsoleApp.Tests
