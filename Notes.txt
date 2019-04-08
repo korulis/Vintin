@@ -1,6 +1,5 @@
 TODO:
 priority = (urgency, complexity)
-2=1x2 Use some autoEquality lib to compare entires in tests. OR maybe make the DTOs into structs...
 3=3x1 Revert the order of decorators, so there is a smaller chance of mistaking which decorator gets the last word.
 4=1x4 Optimization. Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
 6=3X2 Validate input file name from args.
@@ -18,6 +17,7 @@ DONE 1=1x1 Comment on architecture choices
 DONE 1=1x1 Reread requirements
 DONE 2=2x1 Additionally handle yyyymmdd input format because it is part of ISO standard. http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a003169814.htm
 DONE 2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
+DONE 2=1x2 Use some autoEquality lib to compare entires in tests. OR maybe make the DTOs into structs...
 REJECTED 2=2x1 Force sequential execution for file based tests.
 REJECTED Maybe price list should be part of ShippingEntryWithCost member ?
 REJECTED Implement Linq to file parser for lazy loading.
