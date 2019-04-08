@@ -1,7 +1,7 @@
-﻿using Discounts;
-using Discounts.Discounters;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Discounts;
 using System.Linq;
+using Discounts.Discounters;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -12,7 +12,6 @@ namespace ConsoleApp.Tests
 
         public ThirdLpPackageDiscounterTests()
         {
-            var costReference = Defaults.CostReference;
             _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter());
         }
 
