@@ -12,17 +12,5 @@
             Price = price;
             Discount = discount;
         }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is ShipmentCost other)
-            {
-                return Shipment.Equals(other.Shipment)
-                       && Price == other.Price
-                       && Discount == other.Discount;
-            }
-
-            return base.Equals(obj);
-        }
     }
 }

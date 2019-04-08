@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Discounts;
+﻿using Discounts;
 using Discounts.Discounters;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -200,13 +200,7 @@ namespace ConsoleApp.Tests
             var actual = _sut.Discount(inputEntries).ToList();
 
             //Assert
-            for (int i = 0; i < actual.Count; i++)
-            {
-                Assert.Equal(expected[i], actual[i]);
-            }
-
-            Assert.Equal(expected, actual);
+            TestAssert.Equal(expected, actual, desc);
         }
-
     }
 }

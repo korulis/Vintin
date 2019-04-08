@@ -139,13 +139,7 @@ namespace ConsoleApp.Tests
             var actual = _sut.Discount(inputEntries).ToList();
 
             //Assert
-            for (int i = 0; i < actual.Count; i++)
-            {
-                Assert.Equal(expected[i], actual[i]);
-            }
-
-            Assert.Equal(expected, actual);
+            TestAssert.Equal(expected, actual, desc);
         }
-
     }
 }
