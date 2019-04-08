@@ -13,7 +13,7 @@ namespace ConsoleApp.Tests
         public ThirdLpPackageDiscounterTests()
         {
             var costReference = Defaults.CostReference;
-            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter(), costReference);
+            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter());
         }
 
         public static TheoryData<string, List<ShipmentCost>, List<ShipmentCost>> PackageData

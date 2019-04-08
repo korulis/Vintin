@@ -26,8 +26,7 @@ namespace ConsoleApp.Tests
                 {"discounted-shipping-output.txt" ,
                     new SmallPackageLowestPriceDiscounter(
                         new ThirdLpPackageDiscounter(
-                            new TenLimitDiscounter(new ZeroDiscounter()),
-                            CostReference),
+                            new TenLimitDiscounter(new ZeroDiscounter())),
                         CostReference)},
             };
 
