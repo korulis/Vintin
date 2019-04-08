@@ -1,17 +1,17 @@
 TODO:
 priority = (urgency, complexity)
 2=1x2 Use some autoEquality lib to compare entires in tests. OR maybe make the DTOs into structs...
-3=3X1 Validate input file name from args.
 3=3x1 Revert the order of decorators, so there is a smaller chance of mistaking which decorator gets the last word.
-4=2x2 Use ShippingEntry.PackageSize as enum instead of string.
-4=2x2 Use ShippingEntry.ShippingProvider as enum.
 4=1x4 Optimization. Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
+6=3X2 Validate input file name from args.
 6=3x2 Validate separator and DateFormat.
 6=3x2 Make ShippingCostEntry imutable - avoid brittleness. Protect ShippingEntry type better. Constructors.
 4=2x4 Use composition instead of decorator if I can not find an example where I must use decorator.
 8=4x2 Create A ShipmentCostCalculator dependency injection module
 8=2x4 Read Ruby guidelines
+8=4x2 Use ShippingEntry.PackageSize and ShippingProvider  as enum instead of string.
 8=2x4 Use Monads to parse lines. Get rid of IsCorrupt property and use polymorphism instead of "ifs".
+10=1x10 Make all the corresponding elements from Defauls class configurable.
 20=4x5 Implement custom deserializer and use it for file parsing.
 20=2x10 Optimization. Implement a parser where that does not enumerate the entire collection when filtering according to date. This is possible because of the assumption that the data is date sorted.
 DONE 1=1x1 Comment on architecture choices
