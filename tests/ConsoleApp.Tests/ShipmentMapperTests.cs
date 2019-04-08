@@ -9,14 +9,17 @@ namespace ConsoleApp.Tests
 {
     public class ShipmentMapperTests
     {
-        private const string Separator = " ";
-        private readonly string[] _dateFormats = { "yyyy-MM-dd", "yyyyMMdd" };
+        private const string Separator = Defaults.Separator;
+        private static readonly string[] DateFormats = Defaults.DateFormats;
+        private static readonly string[] AcceptableSizes = Defaults.PackageSizes;
+        private static readonly string[] AcceptableProviders = Defaults.ShippingProviders;
         private readonly ShipmentMapper _sut;
 
         public ShipmentMapperTests()
         {
-            _sut = new ShipmentMapper(Separator, _dateFormats);
+            _sut = new ShipmentMapper(Separator, DateFormats, AcceptableProviders, AcceptableSizes);
         }
+
 
         [Fact]
         public void ParseInput_ParsesStringLines()
@@ -34,7 +37,6 @@ namespace ConsoleApp.Tests
             Assert.Equal(new DateTime(1999, 3, 31), actual.Date);
             Assert.Equal("S", actual.PackageSize);
             Assert.Equal("LP", actual.ShippingProvider);
-
         }
 
         [Fact]
@@ -125,7 +127,7 @@ namespace ConsoleApp.Tests
             Assert.Equal(
                 string.Join(
                     Separator,
-                    date.ToString(_dateFormats[0]),
+                    date.ToString(DateFormats[0]),
                     packageSize,
                     shippingProvider,
                     "0.00",

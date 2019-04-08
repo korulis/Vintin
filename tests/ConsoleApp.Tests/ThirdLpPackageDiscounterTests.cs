@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Discounts;
 using Discounts.Discounters;
@@ -13,9 +12,9 @@ namespace ConsoleApp.Tests
 
         public ThirdLpPackageDiscounterTests()
         {
-            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter());
+            var costReference = Defaults.CostReference;
+            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter(), costReference);
         }
-
 
         public static TheoryData<string, List<ShipmentCost>, List<ShipmentCost>> PackageData
         {

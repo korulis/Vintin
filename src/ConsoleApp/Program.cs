@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using Discounts;
 using Discounts.Discounters;
 
@@ -30,11 +31,15 @@ namespace ConsoleApp
             }
 
             var tenLimit = new TenLimitDiscounter(new ZeroDiscounter());
-            var thirdPackage = new ThirdLpPackageDiscounter(tenLimit);
+            var thirdPackage = new ThirdLpPackageDiscounter(tenLimit,Defaults.CostReference);
             var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Defaults.CostReference);
 
             var processor = new FileBasedShipmentProcessor(
-                new ShipmentMapper(" ",  Defaults.DateFormats),
+                new ShipmentMapper(
+                    Defaults.Separator,  
+                    Defaults.DateFormats, 
+                    Defaults.ShippingProviders,
+                    Defaults.PackageSizes),
                 new ShipmentCostCalculator(
                     smallPackage, 
                     Defaults.CostReference),

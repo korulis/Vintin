@@ -6,16 +6,18 @@ namespace Discounts.Discounters
 {
     public class ThirdLpPackageDiscounter : IDiscounter
     {
-        private readonly IDiscounter _underlying;
         private const string SpecialProvider = "LP";
         private const string SpecialSize = "L";
+        private readonly decimal _packageCost;
         private const int LuckyOrderNumber = 3;
+        private readonly IDiscounter _underlying;
 
-        private static readonly decimal PackageCost = Defaults.CostReference[(SpecialSize, SpecialProvider)];
-
-        public ThirdLpPackageDiscounter(IDiscounter underlying)
+        public ThirdLpPackageDiscounter(
+            IDiscounter underlying, 
+            IReadOnlyDictionary<(string, string), decimal> sizeAndProviderToCost)
         {
             _underlying = underlying;
+            _packageCost = sizeAndProviderToCost[(SpecialSize, SpecialProvider)];
         }
 
         public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
@@ -25,7 +27,7 @@ namespace Discounts.Discounters
             return _underlying.Discount(shipmentCosts);
         }
 
-        private static ShipmentCost DiscountLpLargeThirdPerMonth(
+        private ShipmentCost DiscountLpLargeThirdPerMonth(
             ShipmentCost entry,
             int index,
             IEnumerable<ShipmentCost> allEntries)
@@ -46,9 +48,14 @@ namespace Discounts.Discounters
                 && entry.Shipment.PackageSize == SpecialSize
                 && entry.Shipment.ShippingProvider == SpecialProvider)
             {
-                return new ShipmentCost(entry.Shipment, 0.0m, PackageCost);
+                return FreeShipment(entry, _packageCost);
             }
             return entry;
+        }
+
+        private static ShipmentCost FreeShipment(ShipmentCost entry, decimal packageCost)
+        {
+            return new ShipmentCost(entry.Shipment, 0.0m, packageCost);
         }
     }
 }

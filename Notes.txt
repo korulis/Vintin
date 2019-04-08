@@ -1,10 +1,8 @@
 TODO:
 priority = (urgency, complexity)
-2=2x1 Additionally handle yyyymmdd input format because it is part of ISO standard.
-2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
-2=1x2 Use autoquality lib to compare entires in tests. OR maybe make the DTOs into structs...
+2=1x2 Use some autoEquality lib to compare entires in tests. OR maybe make the DTOs into structs...
 3=3X1 Validate input file name from args.
-3=3x1 Revert the order of decorators, so the is a smaller chance of mistaking which decorator get a last word.
+3=3x1 Revert the order of decorators, so there is a smaller chance of mistaking which decorator gets the last word.
 4=2x2 Use ShippingEntry.PackageSize as enum instead of string.
 4=2x2 Use ShippingEntry.ShippingProvider as enum.
 4=1x4 Optimization. Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
@@ -18,6 +16,8 @@ priority = (urgency, complexity)
 20=2x10 Optimization. Implement a parser where that does not enumerate the entire collection when filtering according to date. This is possible because of the assumption that the data is date sorted.
 DONE 1=1x1 Comment on architecture choices
 DONE 1=1x1 Reread requirements
+DONE 2=2x1 Additionally handle yyyymmdd input format because it is part of ISO standard. http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a003169814.htm
+DONE 2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
 REJECTED 2=2x1 Force sequential execution for file based tests.
 REJECTED Maybe price list should be part of ShippingEntryWithCost member ?
 REJECTED Implement Linq to file parser for lazy loading.
@@ -83,4 +83,4 @@ Some of the architecture notes.
 
 
 GOOS* - book http://www.growing-object-oriented-software.com/
-outside-in TDD8 - https://blog.ploeh.dk/2013/03/04/outside-in-tdd-versus-ddd/ (coincidentally my first course about programming ;] )
+outside-in TDD* - https://blog.ploeh.dk/2013/03/04/outside-in-tdd-versus-ddd/ (coincidentally my first course about programming ;] )

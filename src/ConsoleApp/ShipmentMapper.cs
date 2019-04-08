@@ -10,13 +10,16 @@ namespace ConsoleApp
     {
         private readonly string _separator;
         private static string[] _dateFormats;
-        private static readonly string[] AcceptableSizes = { "S", "M", "L" };
-        private static readonly string[] AcceptableProviders = { "MR", "LP" };
+        private readonly string[] _acceptableProviders;
+        private readonly string[] _acceptableSizes;
 
-        public ShipmentMapper(string separator, string[] dateFormats)
+        public ShipmentMapper(string separator, string[] dateFormats, string[] acceptableProviders, string[] acceptableSizes)
         {
+
             _separator = separator;
             _dateFormats = dateFormats;
+            _acceptableProviders = acceptableProviders;
+            _acceptableSizes = acceptableSizes;
         }
 
         public IEnumerable<Shipment> ParseInput(IEnumerable<string> lines)
@@ -40,8 +43,8 @@ namespace ConsoleApp
             var provider = lineElements[2];
 
             if (!(isDatePresent
-                  && AcceptableProviders.Contains(provider)
-                  && AcceptableSizes.Contains(size)))
+                  && _acceptableProviders.Contains(provider)
+                  && _acceptableSizes.Contains(size)))
             {
                 return Shipment.Corrupt(line);
             }

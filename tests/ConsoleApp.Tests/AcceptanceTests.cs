@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Discounts;
+using Discounts.Discounters;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Discounts;
-using Discounts.Discounters;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -10,8 +10,12 @@ namespace ConsoleApp.Tests
     public class AcceptanceTests
     {
         private static readonly Dictionary<(string, string), decimal> CostReference = Defaults.CostReference;
-
-        private const string InputFilePath = "input.txt";
+        private static readonly string[] AcceptableDateFormats = Defaults.DateFormats;
+        private static readonly string[] AcceptableProviders = Defaults.ShippingProviders;
+        private static readonly string[] AcceptableSizes = Defaults.PackageSizes;
+        private const string Separator = Defaults.Separator;
+        
+        private const string InputFilePath = Defaults.InputFilePath;
         private const string OutputFilePath = "output.txt";
 
         public static TheoryData<string, IDiscounter> CalculatorData =>
@@ -22,7 +26,9 @@ namespace ConsoleApp.Tests
                 {"discounted-shipping-output.txt" ,
                     new SmallPackageLowestPriceDiscounter(
                         new ThirdLpPackageDiscounter(
-                            new TenLimitDiscounter(new ZeroDiscounter())), CostReference)},
+                            new TenLimitDiscounter(new ZeroDiscounter()),
+                            CostReference),
+                        CostReference)},
             };
 
         [Theory]
@@ -47,10 +53,12 @@ namespace ConsoleApp.Tests
 
         private static FileBasedShipmentProcessor BuildProcessor(IDiscounter discounter)
         {
-            var acceptableDateFormats = Defaults.DateFormats;
-            const string separator = " ";
 
-            var shipmentMapper = new ShipmentMapper(separator, acceptableDateFormats);
+            var shipmentMapper = new ShipmentMapper(
+                Separator,
+                AcceptableDateFormats,
+                AcceptableProviders,
+                AcceptableSizes);
             var shipmentCostCalculator = new ShipmentCostCalculator(discounter, CostReference);
             void OutputMethod(IEnumerable<string> x) => File.WriteAllLines(OutputFilePath, x);
 
