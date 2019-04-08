@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Discounts.Filters;
@@ -11,18 +12,18 @@ namespace Discounts.Discounters
         private const string SpecialSize = "L";
         private const int LuckyOrderNumber = 3;
         private readonly Discounter _underlying;
-        private readonly DiscountingRules _discountingRules;
+        private readonly Func<DiscountingRules> _discountingRulesSpawner;
 
-        public ThirdLpPackageDiscounter(Discounter underlying, DiscountingRules discountingRules)
+        public ThirdLpPackageDiscounter(Discounter underlying, Func<DiscountingRules> discountingRulesSpawner)
         {
             _underlying = underlying;
-            _discountingRules = discountingRules;
+            _discountingRulesSpawner = discountingRulesSpawner;
         }
 
-        //TODO: inject discountingRules factory in order to make it safe to call this function more the once per instance.
         public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
-            var asdf = pricedShipments.Select(x => _discountingRules.AssignDiscount(x)).ToList();
+            var rules = _discountingRulesSpawner();
+            var asdf = pricedShipments.Select(x => rules.AssignDiscount(x)).ToList();
 
 
             var enumerated = pricedShipments.ToList();

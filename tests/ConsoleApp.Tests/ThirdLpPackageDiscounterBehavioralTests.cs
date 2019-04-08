@@ -24,7 +24,7 @@ namespace ConsoleApp.Tests
             underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<ShipmentCost>>()))
                 .Returns<IEnumerable<ShipmentCost>>(x => x);
 
-            _sut = new ThirdLpPackageDiscounter(underlyingDiscounter.Object, _discountRules.Object);
+            _sut = new ThirdLpPackageDiscounter(underlyingDiscounter.Object,  () => _discountRules.Object);
         }
 
         [Fact]
