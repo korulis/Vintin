@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection.Metadata;
 using Discounts;
 using Discounts.Discounters;
+using Discounts.Filters;
 
 namespace ConsoleApp
 {
@@ -31,7 +32,12 @@ namespace ConsoleApp
             }
 
             var tenLimit = new TenLimitDiscounter(new ZeroDiscounter());
-            var thirdPackage = new ThirdLpPackageDiscounter(tenLimit, Defaults.TempOncePerMonth);
+            var thirdPackage = new ThirdLpPackageDiscounter(
+                tenLimit, 
+                () => new OncePerMonthDiscountingRules(
+                    Defaults.ThirdLpPackageEveryMonth.SpecialProvider,
+                    Defaults.ThirdLpPackageEveryMonth.SpecialSize,
+                    Defaults.ThirdLpPackageEveryMonth.LuckOrderNumber));
             var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Defaults.CostReference);
 
             var processor = new FileBasedShipmentProcessor(

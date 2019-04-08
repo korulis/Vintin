@@ -28,7 +28,7 @@ namespace ConsoleApp.Tests
                         new ThirdLpPackageDiscounter(
                             new TenLimitDiscounter(
                                 new ZeroDiscounter()),
-                            Defaults.TempOncePerMonth),
+                            Defaults.ThirdLpPackageEveryMonth.TempOncePerMonth),
                         CostReference)},
             };
 

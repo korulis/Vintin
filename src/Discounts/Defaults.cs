@@ -19,11 +19,22 @@ namespace Discounts
             };
 
         public static string[] DateFormats = { "yyyy-MM-dd", "yyyyMMdd" };
+
         public static string[] ShippingProviders => CostReference.Keys.Select(x => x.Item2).Distinct().ToArray();
         public static string[] PackageSizes => CostReference.Keys.Select(x => x.Item1).Distinct().ToArray();
-        public static Func<DiscountingRules> TempOncePerMonth = () => new OncePerMonthDiscountingRules();
 
         public const string InputFilePath = "input.txt";
         public const string Separator = " ";
+
+
+        public static class ThirdLpPackageEveryMonth
+        {
+            public static Func<OncePerMonthDiscountingRules> TempOncePerMonth =
+                () => new OncePerMonthDiscountingRules(SpecialProvider, SpecialSize, LuckOrderNumber);
+
+            public static string SpecialProvider = "LP";
+            public static string SpecialSize = "L";
+            public static int LuckOrderNumber = 3;
+        }
     }
 }

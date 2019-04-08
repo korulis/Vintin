@@ -5,10 +5,18 @@ namespace Discounts.Filters
 {
     public class OncePerMonthDiscountingRules : DiscountingRules
     {
-        private readonly Dictionary<DateTime, int> _precedingEntries = new Dictionary<DateTime, int>();
-        private const string SpecialProvider = "LP";
-        private const string SpecialSize = "L";
-        private const int LuckyOrderNumber = 3;
+        private readonly string _specialProvider;
+        private readonly string _specialSize;
+        private readonly int _luckOrderNumber;
+
+        private readonly Dictionary<DateTime, int> _context = new Dictionary<DateTime, int>();
+
+        public OncePerMonthDiscountingRules(string specialProvider, string specialSize, int luckOrderNumber)
+        {
+            _specialProvider = specialProvider;
+            _specialSize = specialSize;
+            _luckOrderNumber = luckOrderNumber;
+        }
 
         public ShipmentWithApplicableDiscount AssignDiscount(ShipmentCost shipmentCost)
         {
@@ -17,9 +25,13 @@ namespace Discounts.Filters
                 return new ShipmentWithFullDiscount(shipmentCost);
             }
 
+            var shipment = shipmentCost.Shipment;
             var month = Month(shipmentCost.Shipment);
 
-            if (_precedingEntries.TryGetValue(month, out var count) && count == LuckyOrderNumber - 1)
+            if (_context.TryGetValue(month, out var count) 
+                && shipment.PackageSize == _specialSize
+                && shipment.ShippingProvider == _specialProvider
+                && count == _luckOrderNumber - 1)
             {
                 return new ShipmentWithFullDiscount(shipmentCost);
             }
@@ -31,17 +43,18 @@ namespace Discounts.Filters
         {
             var shipment = shipmentCost.Shipment;
             if (shipment.IsCorrupt) return;
-            if (shipment.PackageSize != SpecialSize) return; ;
-            if (shipment.ShippingProvider != SpecialProvider) return;
+            if (shipment.PackageSize != _specialSize) return; ;
+            if (shipment.ShippingProvider != _specialProvider) return;
+
 
             var month = Month(shipment);
-            if (_precedingEntries.ContainsKey(month))
+            if (_context.ContainsKey(month))
             {
-                _precedingEntries[month]++;
+                _context[month]++;
             }
             else
             {
-                _precedingEntries.Add(month, 1);
+                _context.Add(month, 1);
             }
         }
 

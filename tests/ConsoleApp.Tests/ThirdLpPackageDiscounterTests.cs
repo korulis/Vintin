@@ -13,7 +13,7 @@ namespace ConsoleApp.Tests
 
         public ThirdLpPackageDiscounterTests()
         {
-            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter(), Defaults.TempOncePerMonth);
+            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter(), Defaults.ThirdLpPackageEveryMonth.TempOncePerMonth);
         }
 
         public static TheoryData<string, List<ShipmentCost>, List<ShipmentCost>> PackageData
