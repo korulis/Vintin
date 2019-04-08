@@ -32,6 +32,11 @@ namespace Discounts.Discounters
                 {
                     return x.Apply();
                 })
+                .Select(x=>
+                {
+                    rules.Update(x);
+                    return x;
+                })
                 .ToList();
 
 
