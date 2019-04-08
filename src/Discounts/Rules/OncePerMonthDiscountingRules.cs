@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Discounts.ApplicableDiscounts;
 
 namespace Discounts.Rules
 {

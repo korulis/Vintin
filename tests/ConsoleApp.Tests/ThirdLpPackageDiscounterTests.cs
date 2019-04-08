@@ -9,11 +9,11 @@ namespace ConsoleApp.Tests
 {
     public class ThirdLpPackageDiscounterTests
     {
-        private readonly ThirdLpPackageDiscounter _sut;
+        private readonly RuleBasedDiscounter _sut;
 
         public ThirdLpPackageDiscounterTests()
         {
-            _sut = new ThirdLpPackageDiscounter(
+            _sut = new RuleBasedDiscounter(
                 new ZeroDiscounter(),
                 () => new OncePerMonthDiscountingRules(
                     Defaults.ThirdLpPackageEveryMonth.SpecialProvider,

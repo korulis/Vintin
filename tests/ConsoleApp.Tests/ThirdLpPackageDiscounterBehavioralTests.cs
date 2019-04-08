@@ -4,6 +4,7 @@ using Moq;
 using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using Discounts.ApplicableDiscounts;
 using Discounts.Rules;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace ConsoleApp.Tests
 {
     public class ThirdLpPackageDiscounterBehavioralTests
     {
-        private readonly ThirdLpPackageDiscounter _sut;
+        private readonly RuleBasedDiscounter _sut;
         private readonly Mock<DiscountingRules> _discountRules;
         private readonly IFixture _fixture;
 
@@ -31,7 +32,7 @@ namespace ConsoleApp.Tests
             underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<ShipmentCost>>()))
                 .Returns<IEnumerable<ShipmentCost>>(x => x);
 
-            _sut = new ThirdLpPackageDiscounter(underlyingDiscounter.Object,  () => _discountRules.Object);
+            _sut = new RuleBasedDiscounter(underlyingDiscounter.Object,  () => _discountRules.Object);
         }
 
         [Fact]

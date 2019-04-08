@@ -1,4 +1,4 @@
-﻿namespace Discounts.Rules
+﻿namespace Discounts.ApplicableDiscounts
 {
     public class ShipmentWithDiminishedDiscount : ShipmentWithApplicableDiscount
     {

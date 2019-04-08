@@ -1,10 +1,10 @@
-﻿namespace Discounts.Rules
+﻿namespace Discounts.ApplicableDiscounts
 {
-    public class ShipmentWithNoAdditionalDiscount : ShipmentWithApplicableDiscount
+    public class ShipmentWithFullDiscount : ShipmentWithApplicableDiscount
     {
         private readonly ShipmentCost _shipmentCost;
 
-        public ShipmentWithNoAdditionalDiscount(ShipmentCost shipmentCost)
+        public ShipmentWithFullDiscount(ShipmentCost shipmentCost)
         {
             _shipmentCost = shipmentCost;
         }
@@ -15,7 +15,8 @@
             {
                 return _shipmentCost;
             }
-            return new ShipmentCost(_shipmentCost.Shipment, _shipmentCost.Price, _shipmentCost.Discount);
+
+            return new ShipmentCost(_shipmentCost.Shipment, 0, _shipmentCost.Discount + _shipmentCost.Price);
         }
     }
 }

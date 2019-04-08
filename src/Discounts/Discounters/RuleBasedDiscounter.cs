@@ -6,12 +6,12 @@ using Discounts.Rules;
 
 namespace Discounts.Discounters
 {
-    public class ThirdLpPackageDiscounter : Discounter
+    public class RuleBasedDiscounter : Discounter
     {
         private readonly Discounter _underlying;
         private readonly Func<DiscountingRules> _discountingRulesSpawner;
 
-        public ThirdLpPackageDiscounter(Discounter underlying, Func<DiscountingRules> discountingRulesSpawner)
+        public RuleBasedDiscounter(Discounter underlying, Func<DiscountingRules> discountingRulesSpawner)
         {
             _underlying = underlying;
             _discountingRulesSpawner = discountingRulesSpawner;
