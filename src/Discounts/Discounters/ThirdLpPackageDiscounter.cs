@@ -1,24 +1,31 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using Discounts.Filters;
 
 namespace Discounts.Discounters
 {
-    public class ThirdLpPackageDiscounter : IDiscounter
+    public class ThirdLpPackageDiscounter : Discounter
     {
         private const string SpecialProvider = "LP";
         private const string SpecialSize = "L";
         private const int LuckyOrderNumber = 3;
-        private readonly IDiscounter _underlying;
+        private readonly Discounter _underlying;
+        private readonly DiscountingRules _discountingRules;
 
-        public ThirdLpPackageDiscounter(IDiscounter underlying)
+        public ThirdLpPackageDiscounter(Discounter underlying, DiscountingRules discountingRules)
         {
             _underlying = underlying;
+            _discountingRules = discountingRules;
         }
 
-        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
+        //TODO: inject discountingRules factory in order to make it safe to call this function more the once per instance.
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
-            var enumerated = pricedShipment.ToList();
+            var asdf = pricedShipments.Select(x => _discountingRules.AssignDiscount(x)).ToList();
+
+
+            var enumerated = pricedShipments.ToList();
             var shipmentCosts = enumerated.Select((x, i) => DiscountLpLargeThirdPerMonth(x, i, enumerated));
             return _underlying.Discount(shipmentCosts);
         }

@@ -6,11 +6,11 @@ namespace Discounts
 {
     public class ShipmentCostCalculator
     {
-        private readonly IDiscounter _discounter;
+        private readonly Discounter _discounter;
 
         private readonly Dictionary<(string, string), decimal> _costReference;
 
-        public ShipmentCostCalculator(IDiscounter discounter, Dictionary<(string, string), decimal> sizeAndProviderToCost)
+        public ShipmentCostCalculator(Discounter discounter, Dictionary<(string, string), decimal> sizeAndProviderToCost)
         {
             _discounter = discounter;
             _costReference = sizeAndProviderToCost;

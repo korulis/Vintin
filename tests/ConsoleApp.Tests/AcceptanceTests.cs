@@ -14,25 +14,27 @@ namespace ConsoleApp.Tests
         private static readonly string[] AcceptableProviders = Defaults.ShippingProviders;
         private static readonly string[] AcceptableSizes = Defaults.PackageSizes;
         private const string Separator = Defaults.Separator;
-        
+
         private const string InputFilePath = Defaults.InputFilePath;
         private const string OutputFilePath = "output.txt";
 
-        public static TheoryData<string, IDiscounter> CalculatorData =>
-            new TheoryData<string, IDiscounter>
+        public static TheoryData<string, Discounter> CalculatorData =>
+            new TheoryData<string, Discounter>
             {
                 {"free-shipping-output.txt" , new CompleteDiscounts()},
                 {"greedy-shipping-output.txt" , new ZeroDiscounter()},
                 {"discounted-shipping-output.txt" ,
                     new SmallPackageLowestPriceDiscounter(
                         new ThirdLpPackageDiscounter(
-                            new TenLimitDiscounter(new ZeroDiscounter())),
+                            new TenLimitDiscounter(
+                                new ZeroDiscounter()),
+                            Defaults.TempOncePerMonth),
                         CostReference)},
             };
 
         [Theory]
         [MemberData(nameof(CalculatorData))]
-        public void ShipmentCostCalculationTests(string expectedOutputFile, IDiscounter discounter)
+        public void ShipmentCostCalculationTests(string expectedOutputFile, Discounter discounter)
         {
             //Arrange
             var expectedDiscountedLines = File.ReadLines(expectedOutputFile).ToArray();
@@ -50,7 +52,7 @@ namespace ConsoleApp.Tests
             Assert.Equal(expectedDiscountedLines, actualDiscountedEntries);
         }
 
-        private static FileBasedShipmentProcessor BuildProcessor(IDiscounter discounter)
+        private static FileBasedShipmentProcessor BuildProcessor(Discounter discounter)
         {
 
             var shipmentMapper = new ShipmentMapper(

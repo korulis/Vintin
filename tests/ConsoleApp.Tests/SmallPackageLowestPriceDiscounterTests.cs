@@ -45,7 +45,7 @@ namespace ConsoleApp.Tests
             decimal expectedDiscount)
         {
             //Arrange
-            var shipmentCosts = new List<ShipmentCost>()
+            var shipmentCosts = new List<ShipmentCost>
             {
                 shipmentCost
             };

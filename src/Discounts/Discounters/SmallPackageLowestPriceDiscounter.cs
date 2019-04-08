@@ -3,22 +3,22 @@ using System.Linq;
 
 namespace Discounts.Discounters
 {
-    public class SmallPackageLowestPriceDiscounter : IDiscounter
+    public class SmallPackageLowestPriceDiscounter : Discounter
     {
-        private readonly IDiscounter _underlying;
+        private readonly Discounter _underlying;
         private readonly decimal _minCost;
         private readonly string _discountedPackageSize;
 
-        public SmallPackageLowestPriceDiscounter(IDiscounter underlying,Dictionary<(string, string), decimal> sizeAndProviderToCost)
+        public SmallPackageLowestPriceDiscounter(Discounter underlying,Dictionary<(string, string), decimal> sizeAndProviderToCost)
         {
             _underlying = underlying;
             _discountedPackageSize = "S";
             _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == _discountedPackageSize).Select(x => x.Value).Min();
         }
 
-        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
-            var newEntries = pricedShipment.Select(MinimizeSmallPackagePrice);
+            var newEntries = pricedShipments.Select(MinimizeSmallPackagePrice);
             return _underlying.Discount(newEntries);
         }
 

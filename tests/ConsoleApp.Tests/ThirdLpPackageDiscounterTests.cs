@@ -2,6 +2,7 @@
 using Discounts;
 using System.Linq;
 using Discounts.Discounters;
+using Discounts.Filters;
 using Xunit;
 
 namespace ConsoleApp.Tests
@@ -12,7 +13,7 @@ namespace ConsoleApp.Tests
 
         public ThirdLpPackageDiscounterTests()
         {
-            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter());
+            _sut = new ThirdLpPackageDiscounter(new ZeroDiscounter(), Defaults.TempOncePerMonth);
         }
 
         public static TheoryData<string, List<ShipmentCost>, List<ShipmentCost>> PackageData

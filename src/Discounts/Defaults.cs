@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Discounts.Filters;
 
 namespace Discounts
 {
@@ -19,6 +20,8 @@ namespace Discounts
         public static string[] DateFormats = { "yyyy-MM-dd", "yyyyMMdd" };
         public static string[] ShippingProviders => CostReference.Keys.Select(x => x.Item2).Distinct().ToArray();
         public static string[] PackageSizes => CostReference.Keys.Select(x => x.Item1).Distinct().ToArray();
+        public static DiscountingRules TempOncePerMonth = new OncePerMonthDiscountingRules();
+
         public const string InputFilePath = "input.txt";
         public const string Separator = " ";
     }

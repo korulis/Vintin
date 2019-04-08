@@ -3,19 +3,19 @@ using System.Linq;
 
 namespace Discounts.Discounters
 {
-    public class TenLimitDiscounter : IDiscounter
+    public class TenLimitDiscounter : Discounter
     {
-        private readonly IDiscounter _underlying;
+        private readonly Discounter _underlying;
         private const int MaxMonthlyDiscount = 10;
 
-        public TenLimitDiscounter(IDiscounter underlying)
+        public TenLimitDiscounter(Discounter underlying)
         {
             _underlying = underlying;
         }
 
-        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
-            var enumerated = pricedShipment.ToList();
+            var enumerated = pricedShipments.ToList();
             var newEntries = enumerated.Select((x, i) => LimitDiscountsToTenPerMonth(x, i, enumerated));
             return _underlying.Discount(newEntries);
         }

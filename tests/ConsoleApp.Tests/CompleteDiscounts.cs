@@ -5,11 +5,11 @@ using Discounts.Discounters;
 
 namespace ConsoleApp.Tests
 {
-    internal class CompleteDiscounts : IDiscounter
+    internal class CompleteDiscounts : Discounter
     {
-        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
-            return pricedShipment.Select(RenderShipmentFree);
+            return pricedShipments.Select(RenderShipmentFree);
         }
 
         private static ShipmentCost RenderShipmentFree(ShipmentCost x)

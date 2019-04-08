@@ -2,11 +2,11 @@
 
 namespace Discounts.Discounters
 {
-    public class ZeroDiscounter : IDiscounter
+    public class ZeroDiscounter : Discounter
     {
-        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipment)
+        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
         {
-            return pricedShipment;
+            return pricedShipments;
         }
     }
 }
