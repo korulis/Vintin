@@ -23,13 +23,11 @@ namespace Discounts.Discounters
             var shipmentCosts = pricedShipments
                 .Select(x => rules.AssignDiscount(x))
                 .Select(x => x.Apply())
-                .Select(x=>
+                .Select(x =>
                 {
                     rules.Update(x);
                     return x;
-                })
-                .ToList();
-
+                });
 
             return _underlying.Discount(shipmentCosts);
         }

@@ -2,6 +2,7 @@
 using Discounts.Discounters;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Discounts.ApplicableDiscounts;
@@ -42,7 +43,7 @@ namespace ConsoleApp.Tests
             var shipmentsCosts = _fixture.Create<List<ShipmentCost>>();
 
             //Act
-            _sut.Discount(shipmentsCosts);
+            _sut.Discount(shipmentsCosts).ToList();
 
             //Assert
             foreach (var shipmentsCost in shipmentsCosts)
@@ -66,7 +67,7 @@ namespace ConsoleApp.Tests
                 .Returns(shipmentWithApplicableDiscount.Object);
 
             //Act
-            _sut.Discount(input);
+            _sut.Discount(input).ToList();
 
             //Assert
             shipmentWithApplicableDiscount.Verify(t => t.Apply(), Times.Once);
@@ -89,7 +90,7 @@ namespace ConsoleApp.Tests
             shipmentWithApplicableDiscount.Setup(t => t.Apply()).Returns(expectedShipmentCost);
 
             //Act
-            _sut.Discount(input);
+            _sut.Discount(input).ToList();
 
             //Assert
             _discountRules.Verify(t => t.Update(expectedShipmentCost), Times.Once);
