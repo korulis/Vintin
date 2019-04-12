@@ -1,29 +1,59 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Discounts
 {
-    public class Shipment
+    public class Shipment : IShipment
     {
-        public string RawEntry { get; }
-        public bool IsCorrupt { get; }
+        private readonly string _separator;
+        private readonly string[] _dateFormats;
         public DateTime Date { get; set; }
         public string PackageSize { get; set; }
         public string ShippingProvider { get; set; }
 
-        public Shipment()
+        public Shipment(DateTime date, string package, string shippingProvider, string separator, string[] dateFormats)
         {
-            IsCorrupt = false;
+            _separator = separator;
+            _dateFormats = dateFormats;
+            Date = date;
+            PackageSize = package;
+            ShippingProvider = shippingProvider;
         }
 
-        private Shipment(string rawEntry, bool isCorrupt)
+        public string Format()
         {
-            RawEntry = rawEntry;
-            IsCorrupt = isCorrupt;
-        }
-
-        public static Shipment Corrupt(string lineElements)
-        {
-            return new Shipment(lineElements, true);
+            var result = string.Join(
+                _separator,
+                Date.ToString(_dateFormats[0]),
+                PackageSize,
+                ShippingProvider);
+            return result;
         }
     }
+
+    public interface IShipment
+    {
+        string Format();
+    }
+
+    public class CorruptShipment : IShipment
+    {
+        private readonly string _separator;
+        private readonly string _entry;
+
+        public CorruptShipment(string entry, string separator)
+        {
+            _separator = separator;
+            _entry = entry;
+        }
+
+        public string Format()
+        {
+            return string.Join(
+                _separator,
+                string.Join(_separator, _entry),
+                "Ignored");
+        }
+    }
+
 }

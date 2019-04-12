@@ -51,9 +51,9 @@ namespace ConsoleApp.Tests
         public void CalculatePrice_ReturnsMarkedOutputIfInputIsCorrupt()
         {
             //Arrange
-            var shipments = new List<Shipment>
+            var shipments = new List<IShipment>
             {
-                Shipment.Corrupt("entry text")
+                new CorruptShipment("entry text")
             };
 
             //Act

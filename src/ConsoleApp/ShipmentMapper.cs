@@ -22,18 +22,18 @@ namespace ConsoleApp
             _acceptableSizes = acceptableSizes;
         }
 
-        public IEnumerable<Shipment> ParseInput(IEnumerable<string> lines)
+        public IEnumerable<IShipment> ParseInput(IEnumerable<string> lines)
         {
             return lines.Select(ToShipment);
         }
 
-        private Shipment ToShipment(string line)
+        private IShipment ToShipment(string line)
         {
             var lineElements = line.Split(_separator);
 
             if (lineElements.Length != 3)
             {
-                return Shipment.Corrupt(line);
+                return new CorruptShipment(line, _separator);
             }
 
 
@@ -46,10 +46,10 @@ namespace ConsoleApp
                   && _acceptableProviders.Contains(provider)
                   && _acceptableSizes.Contains(size)))
             {
-                return Shipment.Corrupt(line);
+                return new CorruptShipment(line, _separator);
             }
 
-            var result = new Shipment
+            var result = new Shipment(date,size,provider,_separator,_dateFormats)
             {
                 Date = date,
                 PackageSize = size,
@@ -74,27 +74,11 @@ namespace ConsoleApp
             return discountedShipments.Select(FormatDiscounted);
         }
 
-        private string FormatDiscounted(ShipmentCost priced)
+        private static string FormatDiscounted(ShipmentCost discounted)
         {
-            var shipment = priced.Shipment;
-            if (shipment.IsCorrupt)
-            {
-                return string.Join(
-                    _separator,
-                    string.Join(_separator, shipment.RawEntry),
-                    "Ignored");
-            }
-            else
-            {
-                var discount = priced.Discount;
-                return string.Join(
-                    _separator,
-                    shipment.Date.ToString(_dateFormats[0]),
-                    shipment.PackageSize,
-                    shipment.ShippingProvider,
-                    priced.Price.ToString("F", CultureInfo.InvariantCulture),
-                    discount == 0 ? "-" : discount.ToString("F", CultureInfo.InvariantCulture));
-            }
+            var shipment = discounted.Shipment;
+            return shipment.Format();
         }
+
     }
 }
