@@ -1,12 +1,9 @@
 TODO:
 priority = (urgency, complexity)
-3=3x1 Revert the order of decorators, so there is a smaller chance of mistaking which decorator gets the last word.
 4=2x2 change up the order in which discounts are applied and rules are updated in ruleBasedDiscountCalculator
-4=1x4 Optimization. Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
 6=3X2 Validate input file name from args.
 6=3x2 Validate separator and DateFormat.
 6=3x2 Make ShippingCostEntry imutable - avoid brittleness. Protect ShippingEntry type better. Constructors.
-4=2x4 Use composition instead of decorator if I can not find an example where I must use decorator.
 8=4x2 Create A ShipmentCostCalculator dependency injection module
 8=2x4 Read Ruby guidelines
 8=4x2 Use ShippingEntry.PackageSize and ShippingProvider  as enum instead of string.
@@ -20,6 +17,8 @@ DONE 1=1x1 Reread requirements
 DONE 2=2x1 Additionally handle yyyymmdd input format because it is part of ISO standard. http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a003169814.htm
 DONE 2=2x1 Parse AcceptableSizes and providers from the price list. Inject the price list.
 DONE 2=1x2 Use some autoEquality lib to compare entires in tests. OR maybe make the DTOs into structs...
+DONE 4=1x4 Optimization. Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
+REJECTED 4=2x4 Use composition instead of decorator if I can not find an example where I must use decorator.
 REJECTED 2=2x1 Force sequential execution for file based tests.
 REJECTED Maybe price list should be part of ShippingEntryWithCost member ?
 REJECTED Implement Linq to file parser for lazy loading.
