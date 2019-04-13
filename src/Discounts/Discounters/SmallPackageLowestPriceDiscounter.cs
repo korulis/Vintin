@@ -9,34 +9,42 @@ namespace Discounts.Discounters
         private readonly decimal _minCost;
         private readonly string _discountedPackageSize;
 
-        public SmallPackageLowestPriceDiscounter(Discounter underlying,Dictionary<(string, string), decimal> sizeAndProviderToCost)
+        public SmallPackageLowestPriceDiscounter(Discounter underlying, Dictionary<(string, string), decimal> sizeAndProviderToCost)
         {
             _underlying = underlying;
             _discountedPackageSize = "S";
             _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == _discountedPackageSize).Select(x => x.Value).Min();
         }
 
-        public IEnumerable<ShipmentCost<IShipment>> Discount(IEnumerable<ShipmentCost<IShipment>> pricedShipments)
+        public IEnumerable<IShipmentCost<IShipment>> Discount(IEnumerable<IShipmentCost<IShipment>> pricedShipments)
         {
             var newEntries = pricedShipments.Select(MinimizeSmallPackagePrice);
             return _underlying.Discount(newEntries);
         }
 
-        private ShipmentCost<IShipment> MinimizeSmallPackagePrice(ShipmentCost<IShipment> x)
+        private IShipmentCost<IShipment> MinimizeSmallPackagePrice(IShipmentCost<IShipment> x)
         {
-            if (x.Shipment.IsCorrupt) return x;
-
-            if (x.Shipment.PackageSize == _discountedPackageSize)
+            if (x is CorruptShipmentCost)
             {
-                var oldDiscount = x.Discount;
-                var oldPrice = x.Price;
-                var newPrice = oldPrice > _minCost ? _minCost : oldPrice;
-                var newDiscount = oldPrice - newPrice + oldDiscount;
-                return new ShipmentCost<IShipment>(x.Shipment, newPrice, newDiscount);
+                return x;
+            }
+
+            if (x is GoodShipmentCost g)
+            {
+                if (g.Shipment.PackageSize == _discountedPackageSize)
+                {
+                    var oldDiscount = g.Discount;
+                    var oldPrice = g.Price;
+                    var newPrice = oldPrice > _minCost ? _minCost : oldPrice;
+                    var newDiscount = oldPrice - newPrice + oldDiscount;
+                    return new GoodShipmentCost(g.Shipment, newPrice, newDiscount);
+                }
+
+                return x;
             }
 
             return x;
-
         }
+
     }
 }

@@ -69,12 +69,12 @@ namespace ConsoleApp
             return tryParseExact;
         }
 
-        public IEnumerable<string> FormatOutput(IEnumerable<ShipmentCost> discountedShipments)
+        public IEnumerable<string> FormatOutput(IEnumerable<IShipmentCost<IShipment>> discountedShipments)
         {
             return discountedShipments.Select(FormatDiscounted);
         }
 
-        private static string FormatDiscounted(ShipmentCost discounted)
+        private static string FormatDiscounted(IShipmentCost<IShipment> discounted)
         {
             var shipment = discounted.Shipment;
             return shipment.Format();

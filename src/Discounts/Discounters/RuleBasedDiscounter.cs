@@ -17,7 +17,7 @@ namespace Discounts.Discounters
             _discountingRulesSpawner = discountingRulesSpawner;
         }
 
-        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
+        public IEnumerable<IShipmentCost<IShipment>> Discount(IEnumerable<IShipmentCost<IShipment>> pricedShipments)
         {
             var rules = _discountingRulesSpawner();
             var shipmentCosts = pricedShipments

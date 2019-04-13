@@ -2,16 +2,16 @@
 {
     public class ShipmentWithFullDiscount : ShipmentWithApplicableDiscount
     {
-        private readonly ShipmentCost _shipmentCost;
+        private readonly GoodShipmentCost _goodShipmentCost;
 
-        public ShipmentWithFullDiscount(ShipmentCost shipmentCost)
+        public ShipmentWithFullDiscount(GoodShipmentCost goodShipmentCost)
         {
-            _shipmentCost = shipmentCost;
+            _goodShipmentCost = goodShipmentCost;
         }
 
-        public ShipmentCost Apply()
+        public IShipmentCost<IShipment> Apply()
         {
-            return new ShipmentCost(_shipmentCost.Shipment, 0, _shipmentCost.Discount + _shipmentCost.Price);
+            return new GoodShipmentCost(_goodShipmentCost.Shipment, 0, _goodShipmentCost.Discount + _goodShipmentCost.Price);
         }
     }
 }

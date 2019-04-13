@@ -2,16 +2,16 @@
 {
     public class DiscountForCorruptShipment : ShipmentWithApplicableDiscount
     {
-        private readonly ShipmentCost _shipmentCost;
+        private readonly IShipmentCost<IShipment> _goodShipmentCost;
 
-        public DiscountForCorruptShipment(ShipmentCost shipmentCost)
+        public DiscountForCorruptShipment(IShipmentCost<IShipment> goodShipmentCost)
         {
-            _shipmentCost = shipmentCost;
+            _goodShipmentCost = goodShipmentCost;
         }
 
-        public ShipmentCost Apply()
+        public IShipmentCost<IShipment> Apply()
         {
-            return _shipmentCost;
+            return _goodShipmentCost;
         }
     }
 }

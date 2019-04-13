@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Discounts.Discounters;
 
@@ -16,16 +17,26 @@ namespace Discounts
             _costReference = sizeAndProviderToCost;
         }
 
-        public IEnumerable<ShipmentCost<IShipment>> CalculatePrice(IEnumerable<IShipment> shipments)
+        public IEnumerable<IShipmentCost<IShipment>> CalculatePrice(IEnumerable<IShipment> shipments)
         {
             var shipmentPrices = shipments.Select(CalculatePrice);
             var pricedShipments = _discounter.Discount(shipmentPrices);
             return pricedShipments;
         }
 
-        public ShipmentCost<IShipment> CalculatePrice(IShipment shipment)
+        public IShipmentCost<IShipment> CalculatePrice(IShipment shipment)
         {
-            return new ShipmentCost<IShipment>(shipment, _costReference);
+            if (shipment is CorruptShipment c)
+            {
+                return new CorruptShipmentCost(c);
+            }
+
+            if (shipment is Shipment g)
+            {
+                return new GoodShipmentCost(g, _costReference);
+            }
+
+            throw new NotImplementedException();
         }
 
     }

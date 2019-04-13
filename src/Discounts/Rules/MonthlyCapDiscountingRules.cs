@@ -15,17 +15,17 @@ namespace Discounts.Rules
             _monthlyCap = monthlyCap;
         }
 
-        public ShipmentWithApplicableDiscount AssignDiscount(ShipmentCost shipmentCost)
+        public ShipmentWithApplicableDiscount AssignDiscount(IShipmentCost<IShipment> shipmentCost)
         {
-            var shipment = shipmentCost.Shipment;
-            if (shipment.IsCorrupt)
+            if (shipmentCost is CorruptShipmentCost corruptShipmentCost)
             {
-                return new DiscountForCorruptShipment(shipmentCost);
+                return new DiscountForCorruptShipment(corruptShipmentCost);
             }
-            else
+            else if (shipmentCost is GoodShipmentCost goodShipmentCost)
             {
+                var shipment = goodShipmentCost.Shipment;
 
-                var incomingDiscount = shipmentCost.Discount;
+                var incomingDiscount = goodShipmentCost.Discount;
                 var month = Month(shipment);
 
                 var oldTotalDiscount = GetCreateDiscount(month);
@@ -40,14 +40,16 @@ namespace Discounts.Rules
 
                 if (_monthlyCap >= incomingDiscount + oldTotalDiscount)
                 {
-                    return new ShipmentWithNoAdditionalDiscount(shipmentCost);
+                    return new ShipmentWithNoAdditionalDiscount(goodShipmentCost);
                 }
                 else
                 {
                     var newTargetDiscount = _monthlyCap - oldTotalDiscount;
-                    return new ShipmentWithDiminishedDiscount(shipmentCost, newTargetDiscount);
+                    return new ShipmentWithDiminishedDiscount(goodShipmentCost, newTargetDiscount);
                 }
             }
+
+            throw new NotImplementedException();
         }
 
         private decimal GetCreateDiscount(DateTime month)
@@ -66,37 +68,43 @@ namespace Discounts.Rules
             return oldTotalDiscount;
         }
 
-        public void Update(ShipmentCost shipmentCost)
+        public void Update(IShipmentCost<IShipment> shipmentCost)
         {
-            var shipment = shipmentCost.Shipment;
-            if (shipment.IsCorrupt) return;
-
-            var incomingDiscount = shipmentCost.Discount;
-            var month = Month(shipment);
-            decimal oldTotalDiscount;
-            if (_context.ContainsKey(month))
+            if (shipmentCost is CorruptShipmentCost)
             {
-                oldTotalDiscount = _context[month];
-            }
-            else
-            {
-                _context.Add(month, 0);
-                oldTotalDiscount = 0;
+                return;
             }
 
-            if (ShouldBlockAnyFurtherDiscounting(oldTotalDiscount))
+            if (shipmentCost is GoodShipmentCost g)
             {
-                var newnewTotalDiscount = _monthlyCap;
-                throw new Exception("ups");
-            };
 
-            if (_monthlyCap >= incomingDiscount + oldTotalDiscount)
-            {
-                _context[month] = oldTotalDiscount + incomingDiscount;
-            }
-            else
-            {
-                _context[month] = _monthlyCap;
+                var incomingDiscount = g.Discount;
+                var month = Month(g.Shipment);
+                decimal oldTotalDiscount;
+                if (_context.ContainsKey(month))
+                {
+                    oldTotalDiscount = _context[month];
+                }
+                else
+                {
+                    _context.Add(month, 0);
+                    oldTotalDiscount = 0;
+                }
+
+                if (ShouldBlockAnyFurtherDiscounting(oldTotalDiscount))
+                {
+                    var newnewTotalDiscount = _monthlyCap;
+                    throw new Exception("ups");
+                };
+
+                if (_monthlyCap >= incomingDiscount + oldTotalDiscount)
+                {
+                    _context[month] = oldTotalDiscount + incomingDiscount;
+                }
+                else
+                {
+                    _context[month] = _monthlyCap;
+                }
             }
         }
 

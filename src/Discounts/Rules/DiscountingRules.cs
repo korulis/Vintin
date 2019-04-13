@@ -7,7 +7,7 @@ namespace Discounts.Rules
     /// </summary>
     public interface DiscountingRules
     {
-        ShipmentWithApplicableDiscount AssignDiscount(ShipmentCost shipmentCost);
-        void Update(ShipmentCost shipmentCost);
+        ShipmentWithApplicableDiscount AssignDiscount(IShipmentCost<IShipment> shipmentCost);
+        void Update(IShipmentCost<IShipment> shipmentCost);
     }
 }

@@ -2,18 +2,18 @@
 {
     public class ShipmentWithDiminishedDiscount : ShipmentWithApplicableDiscount
     {
-        private readonly ShipmentCost _shipmentCost;
+        private readonly GoodShipmentCost _goodShipmentCost;
         private readonly decimal _targetDiscount;
 
-        public ShipmentWithDiminishedDiscount(ShipmentCost shipmentCost, decimal targetDiscount)
+        public ShipmentWithDiminishedDiscount(GoodShipmentCost goodShipmentCost, decimal targetDiscount)
         {
-            _shipmentCost = shipmentCost;
+            _goodShipmentCost = goodShipmentCost;
             _targetDiscount = targetDiscount;
         }
 
-        public ShipmentCost Apply()
+        public IShipmentCost<IShipment> Apply()
         {
-            return new ShipmentCost(_shipmentCost.Shipment, _shipmentCost.Price + _shipmentCost.Discount - _targetDiscount, _targetDiscount);
+            return new GoodShipmentCost(_goodShipmentCost.Shipment, _goodShipmentCost.Price + _goodShipmentCost.Discount - _targetDiscount, _targetDiscount);
         }
     }
 }

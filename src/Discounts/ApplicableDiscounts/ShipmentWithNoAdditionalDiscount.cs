@@ -1,21 +1,30 @@
-﻿namespace Discounts.ApplicableDiscounts
+﻿using System;
+
+namespace Discounts.ApplicableDiscounts
 {
     public class ShipmentWithNoAdditionalDiscount : ShipmentWithApplicableDiscount
     {
-        private readonly ShipmentCost _shipmentCost;
+        private readonly IShipmentCost<IShipment> _shipmentCost;
 
-        public ShipmentWithNoAdditionalDiscount(ShipmentCost shipmentCost)
+        public ShipmentWithNoAdditionalDiscount(IShipmentCost<IShipment> shipmentCost)
         {
             _shipmentCost = shipmentCost;
         }
 
-        public ShipmentCost Apply()
+        public IShipmentCost<IShipment> Apply()
         {
-            if (_shipmentCost.Shipment.IsCorrupt)
+            if (_shipmentCost is CorruptShipmentCost)
             {
                 return _shipmentCost;
             }
-            return new ShipmentCost(_shipmentCost.Shipment, _shipmentCost.Price, _shipmentCost.Discount);
+            else if (_shipmentCost is GoodShipmentCost goodShipmentCost)
+            {
+                return new GoodShipmentCost(
+                    goodShipmentCost.Shipment,
+                    goodShipmentCost.Price,
+                    goodShipmentCost.Discount);
+            }
+            throw new NotImplementedException();
         }
     }
 }

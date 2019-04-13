@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Discounts.ApplicableDiscounts;
+using System;
 using System.Collections.Generic;
-using Discounts.ApplicableDiscounts;
 
 namespace Discounts.Rules
 {
@@ -19,43 +19,55 @@ namespace Discounts.Rules
             _luckOrderNumber = luckOrderNumber;
         }
 
-        public ShipmentWithApplicableDiscount AssignDiscount(ShipmentCost shipmentCost)
+        public ShipmentWithApplicableDiscount AssignDiscount(IShipmentCost<IShipment> shipmentCost)
         {
-            if (shipmentCost.Shipment.IsCorrupt)
+
+            if (shipmentCost is CorruptShipmentCost)
             {
                 return new DiscountForCorruptShipment(shipmentCost);
             }
-
-            var shipment = shipmentCost.Shipment;
-            var month = Month(shipmentCost.Shipment);
-
-            if (_context.TryGetValue(month, out var count) 
-                && shipment.PackageSize == _specialSize
-                && shipment.ShippingProvider == _specialProvider
-                && count == _luckOrderNumber - 1)
+            else if (shipmentCost is GoodShipmentCost goodShipmentCost)
             {
-                return new ShipmentWithFullDiscount(shipmentCost);
-            }
+                var shipment = goodShipmentCost.Shipment;
+                var month = Month(goodShipmentCost.Shipment);
 
-            return new ShipmentWithNoAdditionalDiscount(shipmentCost);
+                if (_context.TryGetValue(month, out var count)
+                    && shipment.PackageSize == _specialSize
+                    && shipment.ShippingProvider == _specialProvider
+                    && count == _luckOrderNumber - 1)
+                {
+                    return new ShipmentWithFullDiscount(goodShipmentCost);
+                }
+
+                return new ShipmentWithNoAdditionalDiscount(goodShipmentCost);
+            }
+            throw new NotImplementedException();
         }
 
-        public void Update(ShipmentCost shipmentCost)
+        public void Update(IShipmentCost<IShipment> shipmentCost)
         {
-            var shipment = shipmentCost.Shipment;
-            if (shipment.IsCorrupt) return;
-            if (shipment.PackageSize != _specialSize) return; ;
-            if (shipment.ShippingProvider != _specialProvider) return;
-
-
-            var month = Month(shipment);
-            if (_context.ContainsKey(month))
+            if (shipmentCost is CorruptShipmentCost)
             {
-                _context[month]++;
+                return;
             }
-            else
+
+            if (shipmentCost is GoodShipmentCost goodShipmentCost)
             {
-                _context.Add(month, 1);
+                var shipment = goodShipmentCost.Shipment;
+                if (shipment.PackageSize != _specialSize) return;
+                ;
+                if (shipment.ShippingProvider != _specialProvider) return;
+
+
+                var month = Month(shipment);
+                if (_context.ContainsKey(month))
+                {
+                    _context[month]++;
+                }
+                else
+                {
+                    _context.Add(month, 1);
+                }
             }
         }
 

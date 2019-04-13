@@ -2,6 +2,6 @@
 {
     public interface ShipmentWithApplicableDiscount
     {
-        ShipmentCost Apply();
+        IShipmentCost<IShipment> Apply();
     }
 }

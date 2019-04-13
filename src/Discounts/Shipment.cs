@@ -18,7 +18,6 @@ namespace Discounts
             Date = date;
             PackageSize = package;
             ShippingProvider = shippingProvider;
-            IsCorrupt = false;
         }
 
         public string Format()
@@ -36,14 +35,12 @@ namespace Discounts
             return costReference[(PackageSize, ShippingProvider)];
         }
 
-        public bool IsCorrupt { get; set; }
     }
 
     public interface IShipment
     {
         string Format();
         decimal GetCost(Dictionary<(string, string), decimal> costReference);
-        bool IsCorrupt { get; set; }
     }
 
     public class CorruptShipment : IShipment
@@ -55,7 +52,6 @@ namespace Discounts
         {
             _separator = separator;
             _entry = entry;
-            IsCorrupt = true;
         }
 
         public string Format()
@@ -71,7 +67,6 @@ namespace Discounts
             return 0;
         }
 
-        public bool IsCorrupt { get; set; }
     }
 
 }
