@@ -16,13 +16,13 @@ namespace Discounts.Discounters
             _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == _discountedPackageSize).Select(x => x.Value).Min();
         }
 
-        public IEnumerable<ShipmentCost> Discount(IEnumerable<ShipmentCost> pricedShipments)
+        public IEnumerable<ShipmentCost<IShipment>> Discount(IEnumerable<ShipmentCost<IShipment>> pricedShipments)
         {
             var newEntries = pricedShipments.Select(MinimizeSmallPackagePrice);
             return _underlying.Discount(newEntries);
         }
 
-        private ShipmentCost MinimizeSmallPackagePrice(ShipmentCost x)
+        private ShipmentCost<IShipment> MinimizeSmallPackagePrice(ShipmentCost<IShipment> x)
         {
             if (x.Shipment.IsCorrupt) return x;
 
@@ -32,7 +32,7 @@ namespace Discounts.Discounters
                 var oldPrice = x.Price;
                 var newPrice = oldPrice > _minCost ? _minCost : oldPrice;
                 var newDiscount = oldPrice - newPrice + oldDiscount;
-                return new ShipmentCost(x.Shipment, newPrice, newDiscount);
+                return new ShipmentCost<IShipment>(x.Shipment, newPrice, newDiscount);
             }
 
             return x;

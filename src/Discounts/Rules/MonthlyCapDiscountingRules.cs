@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Discounts.ApplicableDiscounts;
+using System;
 using System.Collections.Generic;
-using Discounts.ApplicableDiscounts;
 
 namespace Discounts.Rules
 {
@@ -18,27 +18,35 @@ namespace Discounts.Rules
         public ShipmentWithApplicableDiscount AssignDiscount(ShipmentCost shipmentCost)
         {
             var shipment = shipmentCost.Shipment;
-            if (shipment.IsCorrupt) return new DiscountForCorruptShipment(shipmentCost);
-
-            var incomingDiscount = shipmentCost.Discount;
-            var month = Month(shipment);
-
-            var oldTotalDiscount = GetCreateDiscount(month);
-
-            if (ShouldBlockAnyFurtherDiscounting(oldTotalDiscount))
+            if (shipment.IsCorrupt)
             {
-                var newnewTotalDiscount = _monthlyCap;
-                throw new Exception("ups");
-            };
-
-            if (_monthlyCap >= incomingDiscount + oldTotalDiscount)
-            {
-                return new ShipmentWithNoAdditionalDiscount(shipmentCost);
+                return new DiscountForCorruptShipment(shipmentCost);
             }
             else
             {
-                var newTargetDiscount = _monthlyCap - oldTotalDiscount;
-                return new ShipmentWithDiminishedDiscount(shipmentCost, newTargetDiscount);
+
+                var incomingDiscount = shipmentCost.Discount;
+                var month = Month(shipment);
+
+                var oldTotalDiscount = GetCreateDiscount(month);
+
+                if (ShouldBlockAnyFurtherDiscounting(oldTotalDiscount))
+                {
+                    var newnewTotalDiscount = _monthlyCap;
+                    throw new Exception("ups");
+                }
+
+                ;
+
+                if (_monthlyCap >= incomingDiscount + oldTotalDiscount)
+                {
+                    return new ShipmentWithNoAdditionalDiscount(shipmentCost);
+                }
+                else
+                {
+                    var newTargetDiscount = _monthlyCap - oldTotalDiscount;
+                    return new ShipmentWithDiminishedDiscount(shipmentCost, newTargetDiscount);
+                }
             }
         }
 

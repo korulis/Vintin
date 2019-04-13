@@ -3,36 +3,26 @@ using System.Globalization;
 
 namespace Discounts
 {
-    public class ShipmentCost
+    public class ShipmentCost<TShipment> where TShipment: IShipment
     {
-        public IShipment Shipment { get; }
+        public TShipment Shipment { get; }
         public decimal Price { get; }
         public decimal Discount { get; }
 
-        public ShipmentCost(IShipment shipment, decimal price, decimal discount)
+        public ShipmentCost(TShipment shipment, decimal price, decimal discount)
         {
             Shipment = shipment;
             Price = price;
             Discount = discount;
         }
 
-        public ShipmentCost(IShipment shipment, Dictionary<(string, string), decimal> costReference)
-        {
-            if (shipment is CorruptShipment)
-            {
-                return new ShipmentCost(shipment, 0, 0);
-            }
-
-            var cost = costReference[(shipment.PackageSize, shipment.ShippingProvider)];
-
-
-            var shipmentWithPrice = new ShipmentCost(shipment, cost, 0.00m);
-            return shipmentWithPrice;
-        }
+        public ShipmentCost(TShipment shipment, Dictionary<(string, string), decimal> costReference)
+            : this(shipment, shipment.GetCost(costReference), 0.0m)
+        { }
 
         public string Format(string separator, List<string> dateFormats)
         {
-            var formattedShipment = Shipment.Format(separator, dateFormats);
+            var formattedShipment = Shipment.Format();
 
             var format = string.Join(
                 separator,

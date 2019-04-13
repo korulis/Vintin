@@ -16,16 +16,16 @@ namespace Discounts
             _costReference = sizeAndProviderToCost;
         }
 
-        public IEnumerable<ShipmentCost> CalculatePrice(IEnumerable<IShipment> shipments)
+        public IEnumerable<ShipmentCost<IShipment>> CalculatePrice(IEnumerable<IShipment> shipments)
         {
             var shipmentPrices = shipments.Select(CalculatePrice);
             var pricedShipments = _discounter.Discount(shipmentPrices);
             return pricedShipments;
         }
 
-        public ShipmentCost CalculatePrice(IShipment shipment)
+        public ShipmentCost<IShipment> CalculatePrice(IShipment shipment)
         {
-            return new ShipmentCost(shipment, _costReference);
+            return new ShipmentCost<IShipment>(shipment, _costReference);
         }
 
     }

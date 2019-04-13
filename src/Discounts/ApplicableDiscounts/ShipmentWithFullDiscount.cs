@@ -11,11 +11,6 @@
 
         public ShipmentCost Apply()
         {
-            if (_shipmentCost.Shipment.IsCorrupt)
-            {
-                return _shipmentCost;
-            }
-
             return new ShipmentCost(_shipmentCost.Shipment, 0, _shipmentCost.Discount + _shipmentCost.Price);
         }
     }
