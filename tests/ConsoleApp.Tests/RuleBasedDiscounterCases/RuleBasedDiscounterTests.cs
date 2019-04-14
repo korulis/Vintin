@@ -13,7 +13,7 @@ namespace ConsoleApp.Tests.RuleBasedDiscounterCases
 {
     public class RuleBasedDiscounterTests
     {
-        private readonly Discounts.Discounters.RuleBasedDiscounter _sut;
+        private readonly RuleBasedDiscounter _sut;
         private readonly Mock<DiscountingRules> _discountRules;
         private readonly IFixture _fixture;
 
@@ -38,7 +38,7 @@ namespace ConsoleApp.Tests.RuleBasedDiscounterCases
             underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<IShipmentCost<IShipment>>>()))
                 .Returns<IEnumerable<IShipmentCost<IShipment>>>(x => x);
 
-            _sut = new Discounts.Discounters.RuleBasedDiscounter(
+            _sut = new RuleBasedDiscounter(
                 underlyingDiscounter.Object,
                 () => _discountRules.Object);
         }
