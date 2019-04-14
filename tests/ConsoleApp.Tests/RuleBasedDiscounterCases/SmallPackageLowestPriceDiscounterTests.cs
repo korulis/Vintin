@@ -4,7 +4,7 @@ using Discounts;
 using Discounts.Discounters;
 using Xunit;
 
-namespace ConsoleApp.Tests.RuleBasedDiscounter
+namespace ConsoleApp.Tests.RuleBasedDiscounterCases
 {
     public class SmallPackageLowestPriceDiscounterTests
     {

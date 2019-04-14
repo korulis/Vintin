@@ -5,7 +5,7 @@ using Discounts.Discounters;
 using Discounts.Rules;
 using Xunit;
 
-namespace ConsoleApp.Tests.RuleBasedDiscounter
+namespace ConsoleApp.Tests.RuleBasedDiscounterCases
 {
     public class ThirdLpPackageDiscounterTests
     {

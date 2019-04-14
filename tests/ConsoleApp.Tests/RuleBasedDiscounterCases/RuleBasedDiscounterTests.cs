@@ -9,7 +9,7 @@ using Discounts.Rules;
 using Moq;
 using Xunit;
 
-namespace ConsoleApp.Tests.RuleBasedDiscounter
+namespace ConsoleApp.Tests.RuleBasedDiscounterCases
 {
     public class RuleBasedDiscounterTests
     {
