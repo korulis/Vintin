@@ -24,7 +24,7 @@ namespace Discounts.Discounters
 
         private IShipmentCost<IShipment> MinimizeSmallPackagePrice(IShipmentCost<IShipment> x)
         {
-            if (x is CorruptShipmentCost)
+            if (x is IgnoredShipmentCost)
             {
                 return x;
             }

@@ -33,18 +33,14 @@ namespace ConsoleApp.Tests
             var expectedCost = Convert.ToDecimal(expectedCostString, CultureInfo.InvariantCulture);
             var shippingEntries = new List<Shipment>
             {
-                new Shipment
-                {
-                    PackageSize = packageSize,
-                    ShippingProvider = shippingProvider
-                }
+                new Shipment(DateTime.Today, packageSize, shippingProvider, Defaults.Separator, Defaults.DateFormats)
             };
 
             //Act
-            var actual = _sut.CalculatePrice(shippingEntries).ToList();
+            var actual = _sut.CalculatePrice(shippingEntries).ToList()[0] as GoodShipmentCost;
 
             //Assert
-            Assert.Equal(expectedCost, actual[0].Price);
+            Assert.Equal(expectedCost, actual.Price);
         }
 
         [Fact]
@@ -53,14 +49,15 @@ namespace ConsoleApp.Tests
             //Arrange
             var shipments = new List<IShipment>
             {
-                new CorruptShipment("entry text")
+                new IgnoredShipment("entry text")
             };
 
             //Act
             var actual = _sut.CalculatePrice(shipments).ToList();
 
             //Assert
-            Assert.True(actual[0].Shipment.IsCorrupt);
+
+            Assert.True(actual[0] is IgnoredShipmentCost);
         }
     }
 }

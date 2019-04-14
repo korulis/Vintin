@@ -31,9 +31,11 @@ namespace ConsoleApp.Tests
             };
 
             //Act 
-            var actual = _sut.ParseInput(input).ToList()[0];
+            var a = _sut.ParseInput(input).ToList()[0];
 
             //Assert
+            Assert.True(a is Shipment);
+            var actual = (Shipment)a;
             Assert.Equal(new DateTime(1999, 3, 31), actual.Date);
             Assert.Equal("S", actual.PackageSize);
             Assert.Equal("LP", actual.ShippingProvider);
@@ -50,9 +52,11 @@ namespace ConsoleApp.Tests
             };
 
             //Act 
-            var actual = _sut.ParseInput(input).ToList();
+            var result = _sut.ParseInput(input).ToList();
 
             //Assert
+            var actual = result.Select(x => x is Shipment s ? s : null).ToList();
+
             Assert.Equal(2, actual.Count);
             Assert.Equal(new DateTime(1999, 3, 31), actual[0].Date);
             Assert.Equal(new DateTime(1999, 3, 30), actual[1].Date);
@@ -80,7 +84,7 @@ namespace ConsoleApp.Tests
             var actual = _sut.ParseInput(input).ToList()[0];
 
             //Assert
-            Assert.Equal(expectedValidData, !actual.IsCorrupt);
+            Assert.Equal(expectedValidData, actual is Shipment);
         }
 
         [Theory]
@@ -92,10 +96,10 @@ namespace ConsoleApp.Tests
             var input = new List<string> { inputLine };
 
             //Act 
-            var actual = _sut.ParseInput(input).ToList()[0];
+            var actual = _sut.ParseInput(input).ToList()[0] as Shipment;
 
             //Assert
-            Assert.Equal(new DateTime(1999, 03, 30), actual.Date);
+            Assert.Equal(new DateTime(1999, 03, 30), actual?.Date);
         }
 
 
@@ -110,14 +114,17 @@ namespace ConsoleApp.Tests
             const string shippingProvider = "SeriousShippingProvider";
             const decimal shippingCost = 0.00m;
             var discount = Convert.ToDecimal(discountString, CultureInfo.InvariantCulture);
-            var input = new List<ShipmentCost>
+            var input = new List<GoodShipmentCost>
             {
-                new ShipmentCost(new Shipment()
-                {
-                    Date = date,
-                    PackageSize = packageSize,
-                    ShippingProvider = shippingProvider
-                }, shippingCost, discount)
+                new GoodShipmentCost(
+                    new Shipment(
+                        date,
+                        packageSize,
+                        shippingProvider,
+                        Separator,
+                        DateFormats),
+                    shippingCost,
+                    discount)
             };
 
             //Act 
@@ -139,20 +146,26 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_ReturnsListOfStrings_WithSameOrderingAsInput()
         {
             //Arrange
-            var input = new List<ShipmentCost>
+            var input = new List<GoodShipmentCost>
             {
-                new ShipmentCost(new Shipment()
-                {
-                    Date = new DateTime(1999,1,1),
-                    PackageSize = "S",
-                    ShippingProvider = "ML"
-                }, 0.00m,0.00m),
-                new ShipmentCost(new Shipment()
-                {
-                    Date = new DateTime(1998,1,1),
-                    PackageSize = "S",
-                    ShippingProvider = "ML"
-                }, 0.00m,0.00m),
+                new GoodShipmentCost(
+                    new Shipment(
+                        new DateTime(1999,1,1),
+                        "S",
+                        "ML",
+                        Separator,
+                        DateFormats),
+                    0.00m,
+                    0.00m),
+                new GoodShipmentCost(
+                    new Shipment(
+                        new DateTime(1998,1,1),
+                        "S",
+                        "ML",
+                        Separator,
+                        DateFormats),
+                    0.00m,
+                    0.00m),
             };
 
             //Act 
@@ -167,13 +180,11 @@ namespace ConsoleApp.Tests
         public void FormatDiscounted_MarksInvalidInputInTheOutput()
         {
             //Arrange
-            var input = new List<ShipmentCost>
+            var input = new List<IShipmentCost<IShipment>>
             {
-                new ShipmentCost(
-                    Shipment.Corrupt("This is some corrupt entry"),
-                    0,
-                    0
-                )};
+                new IgnoredShipmentCost(
+                    new IgnoredShipment("This is some corrupt entry"))
+                };
 
             //Act 
             var actual = _sut.FormatOutput(input).ToList()[0];

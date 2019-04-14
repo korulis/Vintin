@@ -6,7 +6,10 @@ namespace ConsoleApp.Tests
 {
     public class TestAssert
     {
-        public static void Equal(IReadOnlyList<ShipmentCost> expected, IReadOnlyList<ShipmentCost> actual, string desc = "")
+        public static void Equal(
+            IReadOnlyList<IShipmentCost<IShipment>> expected, 
+            IReadOnlyList<IShipmentCost<IShipment>> actual, 
+            string desc = "")
         {
             for (var i = 0; i < actual.Count; i++)
             {

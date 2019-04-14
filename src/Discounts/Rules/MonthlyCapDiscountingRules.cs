@@ -17,7 +17,7 @@ namespace Discounts.Rules
 
         public ShipmentWithApplicableDiscount AssignDiscount(IShipmentCost<IShipment> shipmentCost)
         {
-            if (shipmentCost is CorruptShipmentCost corruptShipmentCost)
+            if (shipmentCost is IgnoredShipmentCost corruptShipmentCost)
             {
                 return new DiscountForCorruptShipment(corruptShipmentCost);
             }
@@ -70,7 +70,7 @@ namespace Discounts.Rules
 
         public void Update(IShipmentCost<IShipment> shipmentCost)
         {
-            if (shipmentCost is CorruptShipmentCost)
+            if (shipmentCost is IgnoredShipmentCost)
             {
                 return;
             }

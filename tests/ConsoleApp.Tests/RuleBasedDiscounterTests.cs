@@ -11,27 +11,27 @@ using Xunit;
 
 namespace ConsoleApp.Tests
 {
-    public class ThirdLpPackageDiscounterBehavioralTests
+    public class RuleBasedDiscounterTests
     {
         private readonly RuleBasedDiscounter _sut;
         private readonly Mock<DiscountingRules> _discountRules;
         private readonly IFixture _fixture;
 
-        public ThirdLpPackageDiscounterBehavioralTests()
+        public RuleBasedDiscounterTests()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var shipmentUnderDiscount = _fixture.Freeze<Mock<ShipmentWithApplicableDiscount>>();
             shipmentUnderDiscount.Setup(t => t.Apply())
-                .Returns(() => _fixture.Create<ShipmentCost>());
+                .Returns(() => _fixture.Create<GoodShipmentCost>());
 
             _discountRules = _fixture.Freeze<Mock<DiscountingRules>>();
-            _discountRules.Setup(x => x.AssignDiscount(It.IsAny<ShipmentCost>()))
+            _discountRules.Setup(x => x.AssignDiscount(It.IsAny<GoodShipmentCost>()))
                 .Returns(shipmentUnderDiscount.Object);
            
             var underlyingDiscounter = new Mock<Discounter>();
-            underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<ShipmentCost>>()))
-                .Returns<IEnumerable<ShipmentCost>>(x => x);
+            underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<GoodShipmentCost>>()))
+                .Returns<IEnumerable<GoodShipmentCost>>(x => x);
 
             _sut = new RuleBasedDiscounter(underlyingDiscounter.Object,  () => _discountRules.Object);
         }
@@ -40,7 +40,7 @@ namespace ConsoleApp.Tests
         public void Discount_AssignsDiscountToShipments()
         {
             //Arrange
-            var shipmentsCosts = _fixture.Create<List<ShipmentCost>>();
+            var shipmentsCosts = _fixture.Create<List<GoodShipmentCost>>();
 
             //Act
             _sut.Discount(shipmentsCosts).ToList();
@@ -58,7 +58,7 @@ namespace ConsoleApp.Tests
         {
             //Arrange
             var shipment = new ShipmentCostBuilder().Build();
-            var input = new List<ShipmentCost>
+            var input = new List<GoodShipmentCost>
             {
                 shipment
             };
@@ -78,15 +78,15 @@ namespace ConsoleApp.Tests
         {
             //Arrange
             var shipment = new ShipmentCostBuilder().Build();
-            var input = new List<ShipmentCost>
+            var input = new List<GoodShipmentCost>
             {
                 shipment
             };
 
             var shipmentWithApplicableDiscount = _fixture.Create<Mock<ShipmentWithApplicableDiscount>>();
-            _discountRules.Setup(t => t.AssignDiscount(It.IsAny<ShipmentCost>()))
+            _discountRules.Setup(t => t.AssignDiscount(It.IsAny<GoodShipmentCost>()))
                 .Returns(shipmentWithApplicableDiscount.Object);
-            var expectedShipmentCost = _fixture.Create<ShipmentCost>();
+            var expectedShipmentCost = _fixture.Create<GoodShipmentCost>();
             shipmentWithApplicableDiscount.Setup(t => t.Apply()).Returns(expectedShipmentCost);
 
             //Act

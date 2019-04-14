@@ -26,9 +26,9 @@ namespace Discounts
 
         public IShipmentCost<IShipment> CalculatePrice(IShipment shipment)
         {
-            if (shipment is CorruptShipment c)
+            if (shipment is IgnoredShipment c)
             {
-                return new CorruptShipmentCost(c);
+                return new IgnoredShipmentCost(c);
             }
 
             if (shipment is Shipment g)

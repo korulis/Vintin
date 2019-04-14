@@ -40,33 +40,21 @@ namespace Discounts
     public interface IShipment
     {
         string Format();
-        decimal GetCost(Dictionary<(string, string), decimal> costReference);
     }
 
-    public class CorruptShipment : IShipment
+    public class IgnoredShipment : IShipment
     {
-        private readonly string _separator;
         private readonly string _entry;
 
-        public CorruptShipment(string entry, string separator)
+        public IgnoredShipment(string entry)
         {
-            _separator = separator;
             _entry = entry;
         }
 
         public string Format()
         {
-            return string.Join(
-                _separator,
-                string.Join(_separator, _entry),
-                "Ignored");
+            return _entry;
         }
-
-        public decimal GetCost(Dictionary<(string, string), decimal> costReference)
-        {
-            return 0;
-        }
-
     }
 
 }

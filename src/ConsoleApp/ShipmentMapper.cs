@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Discounts;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Discounts;
 
 namespace ConsoleApp
 {
@@ -13,7 +13,11 @@ namespace ConsoleApp
         private readonly string[] _acceptableProviders;
         private readonly string[] _acceptableSizes;
 
-        public ShipmentMapper(string separator, string[] dateFormats, string[] acceptableProviders, string[] acceptableSizes)
+        public ShipmentMapper(
+            string separator,
+            string[] dateFormats,
+            string[] acceptableProviders,
+            string[] acceptableSizes)
         {
 
             _separator = separator;
@@ -33,7 +37,7 @@ namespace ConsoleApp
 
             if (lineElements.Length != 3)
             {
-                return new CorruptShipment(line, _separator);
+                return new IgnoredShipment(line);
             }
 
 
@@ -46,10 +50,10 @@ namespace ConsoleApp
                   && _acceptableProviders.Contains(provider)
                   && _acceptableSizes.Contains(size)))
             {
-                return new CorruptShipment(line, _separator);
+                return new IgnoredShipment(line);
             }
 
-            var result = new Shipment(date,size,provider,_separator,_dateFormats)
+            var result = new Shipment(date, size, provider, _separator, _dateFormats)
             {
                 Date = date,
                 PackageSize = size,
@@ -74,10 +78,9 @@ namespace ConsoleApp
             return discountedShipments.Select(FormatDiscounted);
         }
 
-        private static string FormatDiscounted(IShipmentCost<IShipment> discounted)
+        private string FormatDiscounted(IShipmentCost<IShipment> discounted)
         {
-            var shipment = discounted.Shipment;
-            return shipment.Format();
+            return discounted.Format(_separator);
         }
 
     }

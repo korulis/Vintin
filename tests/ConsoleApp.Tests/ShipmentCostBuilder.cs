@@ -14,11 +14,11 @@ namespace ConsoleApp.Tests
         private decimal _price;
         private decimal _discount;
 
-        public ShipmentCost Build()
+        public GoodShipmentCost Build()
         {
 
-            _shipment = new Shipment { Date = _dateTime, PackageSize = _packageSize, ShippingProvider = _shippingProvider };
-            var result = new ShipmentCost(_shipment, _price, _discount);
+            _shipment = new Shipment(_dateTime, _packageSize , _shippingProvider, Defaults.Separator, Defaults.DateFormats);
+            var result = new GoodShipmentCost(_shipment, _price, _discount);
             return result;
         }
 

@@ -13,7 +13,7 @@ namespace Discounts.ApplicableDiscounts
 
         public IShipmentCost<IShipment> Apply()
         {
-            if (_shipmentCost is CorruptShipmentCost)
+            if (_shipmentCost is IgnoredShipmentCost)
             {
                 return _shipmentCost;
             }

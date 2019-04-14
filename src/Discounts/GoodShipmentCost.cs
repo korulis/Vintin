@@ -3,22 +3,6 @@ using System.Globalization;
 
 namespace Discounts
 {
-    public interface IShipmentCost<out TShipment> where TShipment : IShipment
-    {
-        TShipment Shipment { get; }
-
-    }
-
-    public class CorruptShipmentCost : IShipmentCost<CorruptShipment>
-    {
-        public CorruptShipmentCost(CorruptShipment shipment)
-        {
-            Shipment = shipment;
-        }
-
-        public CorruptShipment Shipment { get; }
-    }
-
     public class GoodShipmentCost : IShipmentCost<Shipment>
     {
         public Shipment Shipment { get; }
@@ -35,7 +19,7 @@ namespace Discounts
         public GoodShipmentCost(Shipment shipment, Dictionary<(string, string), decimal> costReference)
             : this(shipment, shipment.GetCost(costReference), 0.0m) { }
 
-        public string Format(string separator, List<string> dateFormats)
+        public string Format(string separator)
         {
             var formattedShipment = Shipment.Format();
 
