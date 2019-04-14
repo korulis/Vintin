@@ -1,5 +1,6 @@
 TODO:
 priority = (urgency, complexity)
+put decimals formatting near other default rules, like pricing etcs.
 oldTotalDiscount => outstanding discount
 4=2x2 change up the order in which discounts are applied and rules are updated in ruleBasedDiscountCalculator
 6=3X2 Validate input file name from args.
