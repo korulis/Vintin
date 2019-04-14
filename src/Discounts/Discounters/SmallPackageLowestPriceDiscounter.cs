@@ -9,10 +9,13 @@ namespace Discounts.Discounters
         private readonly decimal _minCost;
         private readonly string _discountedPackageSize;
 
-        public SmallPackageLowestPriceDiscounter(Discounter underlying, Dictionary<(string, string), decimal> sizeAndProviderToCost)
+        public SmallPackageLowestPriceDiscounter(
+            Discounter underlying,
+            Dictionary<(string, string), decimal> sizeAndProviderToCost,
+            string targetSize)
         {
             _underlying = underlying;
-            _discountedPackageSize = "S";
+            _discountedPackageSize = targetSize;
             _minCost = sizeAndProviderToCost.Where(x => x.Key.Item1 == _discountedPackageSize).Select(x => x.Value).Min();
         }
 

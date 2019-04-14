@@ -1,20 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Discounts;
+﻿using Discounts;
 using Discounts.Discounters;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ConsoleApp.Tests.RuleBasedDiscounterCases
 {
     public class SmallPackageLowestPriceDiscounterTests
     {
-        private static readonly Dictionary<(string, string), decimal> CostReference = Defaults.CostReference;
+        private static readonly Dictionary<(string, string), decimal> CostReference = Defaults.SmallPackageLowestPrice.CostReference;
+        private static readonly string TargetSize = Defaults.SmallPackageLowestPrice.TargetSize;
 
         private readonly SmallPackageLowestPriceDiscounter _sut;
 
         public SmallPackageLowestPriceDiscounterTests()
         {
-            _sut = new SmallPackageLowestPriceDiscounter(new ZeroDiscounter(), CostReference);
+            _sut = new SmallPackageLowestPriceDiscounter(
+                new ZeroDiscounter(),
+                CostReference,
+                TargetSize);
         }
 
         public static TheoryData<string, GoodShipmentCost, decimal, decimal> PackageData
@@ -54,7 +58,7 @@ namespace ConsoleApp.Tests.RuleBasedDiscounterCases
 
             //Assert
             Assert.True(result is GoodShipmentCost);
-            var actual = (GoodShipmentCost) result; 
+            var actual = (GoodShipmentCost)result;
             Assert.Equal(expectedPrice, actual.Price);
             Assert.Equal(expectedDiscount, actual.Discount);
         }
@@ -75,5 +79,5 @@ namespace ConsoleApp.Tests.RuleBasedDiscounterCases
             //Assert
             Assert.True(actual is IgnoredShipmentCost);
         }
-}
+    }
 }

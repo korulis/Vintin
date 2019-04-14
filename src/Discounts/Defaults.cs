@@ -1,6 +1,4 @@
-﻿using Discounts.Rules;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Discounts
@@ -37,6 +35,12 @@ namespace Discounts
         public static class TenMonthlyCap
         {
             public static int MonthlyCap = 10;
+        }
+
+        public static class SmallPackageLowestPrice
+        {
+            public static string TargetSize = "S";
+            public static Dictionary<(string, string), decimal> CostReference = Defaults.CostReference;
         }
     }
 }

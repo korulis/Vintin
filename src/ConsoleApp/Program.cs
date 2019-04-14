@@ -42,7 +42,11 @@ namespace ConsoleApp
                     Defaults.ThirdLpPackageEveryMonth.SpecialProvider,
                     Defaults.ThirdLpPackageEveryMonth.SpecialSize,
                     Defaults.ThirdLpPackageEveryMonth.LuckOrderNumber));
-            var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Defaults.CostReference);
+            var smallPackage = new SmallPackageLowestPriceDiscounter(
+                thirdPackage, 
+                Defaults.SmallPackageLowestPrice.CostReference,
+                Defaults.SmallPackageLowestPrice.TargetSize
+            );
 
             var processor = new FileBasedShipmentProcessor(
                 new ShipmentMapper(

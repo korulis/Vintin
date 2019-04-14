@@ -34,7 +34,8 @@ namespace ConsoleApp.Tests
                                 Defaults.ThirdLpPackageEveryMonth.SpecialProvider,
                                 Defaults.ThirdLpPackageEveryMonth.SpecialSize,
                                 Defaults.ThirdLpPackageEveryMonth.LuckOrderNumber)),
-                        CostReference)},
+                        Defaults.SmallPackageLowestPrice.CostReference,
+                        Defaults.SmallPackageLowestPrice.TargetSize)},
             };
 
         [Theory]
