@@ -22,9 +22,9 @@ namespace Discounts.Rules
         public ShipmentWithApplicableDiscount AssignDiscount(IShipmentCost<IShipment> shipmentCost)
         {
 
-            if (shipmentCost is IgnoredShipmentCost)
+            if (shipmentCost is IgnoredShipmentCost i)
             {
-                return new DiscountForCorruptShipment(shipmentCost);
+                return new DiscountForIgnoredShipment(i);
             }
             else if (shipmentCost is GoodShipmentCost goodShipmentCost)
             {

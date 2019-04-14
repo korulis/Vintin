@@ -13,7 +13,10 @@
 
         public IShipmentCost<IShipment> Apply()
         {
-            return new GoodShipmentCost(_goodShipmentCost.Shipment, _goodShipmentCost.Price + _goodShipmentCost.Discount - _targetDiscount, _targetDiscount);
+            var goodShipmentCost = new GoodShipmentCost(
+                _goodShipmentCost.Shipment,
+                _goodShipmentCost.Price + _goodShipmentCost.Discount - _targetDiscount, _targetDiscount);
+            return goodShipmentCost;
         }
     }
 }

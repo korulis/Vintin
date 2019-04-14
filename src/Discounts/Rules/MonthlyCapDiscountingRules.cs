@@ -19,7 +19,7 @@ namespace Discounts.Rules
         {
             if (shipmentCost is IgnoredShipmentCost corruptShipmentCost)
             {
-                return new DiscountForCorruptShipment(corruptShipmentCost);
+                return new DiscountForIgnoredShipment(corruptShipmentCost);
             }
             else if (shipmentCost is GoodShipmentCost goodShipmentCost)
             {
