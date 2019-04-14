@@ -12,5 +12,10 @@
         {
             return Shipment.Format() + separator + "Ignored";
         }
+
+        public IShipmentCost<IgnoredShipment> MinimizeCostForSize(decimal minCost ,string targetSize)
+        {
+            return this;
+        }
     }
 }

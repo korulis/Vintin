@@ -31,5 +31,17 @@ namespace Discounts
             return format;
         }
 
+        public IShipmentCost<Shipment> MinimizeCostForSize(decimal minCost, string targetSize)
+        {
+            if (Shipment.PackageSize == targetSize)
+            {
+                var oldDiscount = Discount;
+                var oldPrice = Price;
+                var newPrice = oldPrice > minCost ? minCost : oldPrice;
+                var newDiscount = oldPrice - newPrice + oldDiscount;
+                return new GoodShipmentCost(Shipment, newPrice, newDiscount);
+            }
+            return this;
+        }
     }
 }

@@ -4,5 +4,6 @@
     {
         TShipment Shipment { get; }
         string Format(string separator);
+        IShipmentCost<TShipment> MinimizeCostForSize(decimal minCost, string targetSize);
     }
 }

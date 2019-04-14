@@ -27,26 +27,7 @@ namespace Discounts.Discounters
 
         private IShipmentCost<IShipment> MinimizeSmallPackagePrice(IShipmentCost<IShipment> x)
         {
-            if (x is IgnoredShipmentCost)
-            {
-                return x;
-            }
-
-            if (x is GoodShipmentCost g)
-            {
-                if (g.Shipment.PackageSize == _discountedPackageSize)
-                {
-                    var oldDiscount = g.Discount;
-                    var oldPrice = g.Price;
-                    var newPrice = oldPrice > _minCost ? _minCost : oldPrice;
-                    var newDiscount = oldPrice - newPrice + oldDiscount;
-                    return new GoodShipmentCost(g.Shipment, newPrice, newDiscount);
-                }
-
-                return x;
-            }
-
-            return x;
+            return x.MinimizeCostForSize(_minCost, _discountedPackageSize);
         }
 
     }
