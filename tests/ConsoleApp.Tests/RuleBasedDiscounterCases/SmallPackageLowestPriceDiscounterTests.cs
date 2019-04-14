@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Discounts;
 using Discounts.Discounters;
 using Xunit;
 
-namespace ConsoleApp.Tests
+namespace ConsoleApp.Tests.RuleBasedDiscounter
 {
     public class SmallPackageLowestPriceDiscounterTests
     {
@@ -63,24 +62,18 @@ namespace ConsoleApp.Tests
         [Fact]
         public void DoesNotDiscountCorruptEntries()
         {
-            Assert.False(true);
-            ////Arrange
-            //var shipment = Shipment.Corrupt("raw entry");
-            //shipment.Date = DateTime.Today;
-            //shipment.PackageSize = "S";
-            //shipment.ShippingProvider = "MR";
-            //var shipmentCosts = new List<GoodShipmentCost>()
-            //{
-            //    new GoodShipmentCost(
-            //        shipment, 2.0m, 0.0m)
-            //};
+            //Arrange
+            var shipment = new IgnoredShipment("raw entry");
+            var shipmentCosts = new List<IgnoredShipmentCost>()
+            {
+                new IgnoredShipmentCost(shipment)
+            };
 
-            ////Act
-            //var actual = _sut.Discount(shipmentCosts).ToList()[0];
+            //Act
+            var actual = _sut.Discount(shipmentCosts).ToList()[0];
 
-            ////Assert
-            //Assert.Equal(2.0m, actual.Price);
-            //Assert.Equal(0.0m, actual.Discount);
+            //Assert
+            Assert.True(actual is IgnoredShipmentCost);
         }
-    }
+}
 }

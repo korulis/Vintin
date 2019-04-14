@@ -1,39 +1,46 @@
-﻿using Discounts;
-using Discounts.Discounters;
-using Moq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using Discounts;
 using Discounts.ApplicableDiscounts;
+using Discounts.Discounters;
 using Discounts.Rules;
+using Moq;
 using Xunit;
 
-namespace ConsoleApp.Tests
+namespace ConsoleApp.Tests.RuleBasedDiscounter
 {
     public class RuleBasedDiscounterTests
     {
-        private readonly RuleBasedDiscounter _sut;
+        private readonly Discounts.Discounters.RuleBasedDiscounter _sut;
         private readonly Mock<DiscountingRules> _discountRules;
         private readonly IFixture _fixture;
 
         public RuleBasedDiscounterTests()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _fixture.Customize<Shipment>(c => c
+                .With(x => x.PackageSize, "S")
+                .With(x => x.ShippingProvider, "LP"));
+            _fixture.Customize<Dictionary<(string, string), decimal>>(c => c.
+                FromFactory(() => Defaults.CostReference));
 
             var shipmentUnderDiscount = _fixture.Freeze<Mock<ShipmentWithApplicableDiscount>>();
             shipmentUnderDiscount.Setup(t => t.Apply())
                 .Returns(() => _fixture.Create<GoodShipmentCost>());
 
             _discountRules = _fixture.Freeze<Mock<DiscountingRules>>();
-            _discountRules.Setup(x => x.AssignDiscount(It.IsAny<GoodShipmentCost>()))
+            _discountRules.Setup(x => x.AssignDiscount(It.IsAny<IShipmentCost<IShipment>>()))
                 .Returns(shipmentUnderDiscount.Object);
            
             var underlyingDiscounter = new Mock<Discounter>();
-            underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<GoodShipmentCost>>()))
-                .Returns<IEnumerable<GoodShipmentCost>>(x => x);
+            underlyingDiscounter.Setup(t => t.Discount(It.IsAny<IEnumerable<IShipmentCost<IShipment>>>()))
+                .Returns<IEnumerable<IShipmentCost<IShipment>>>(x => x);
 
-            _sut = new RuleBasedDiscounter(underlyingDiscounter.Object,  () => _discountRules.Object);
+            _sut = new Discounts.Discounters.RuleBasedDiscounter(
+                underlyingDiscounter.Object,
+                () => _discountRules.Object);
         }
 
         [Fact]

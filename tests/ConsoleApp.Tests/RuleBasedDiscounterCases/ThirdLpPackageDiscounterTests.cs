@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
-using Discounts;
 using System.Linq;
+using Discounts;
 using Discounts.Discounters;
 using Discounts.Rules;
 using Xunit;
 
-namespace ConsoleApp.Tests
+namespace ConsoleApp.Tests.RuleBasedDiscounter
 {
     public class ThirdLpPackageDiscounterTests
     {
-        private readonly RuleBasedDiscounter _sut;
+        private readonly Discounts.Discounters.RuleBasedDiscounter _sut;
 
         public ThirdLpPackageDiscounterTests()
         {
-            _sut = new RuleBasedDiscounter(
+            _sut = new Discounts.Discounters.RuleBasedDiscounter(
                 new ZeroDiscounter(),
                 () => new OncePerMonthDiscountingRules(
                     Defaults.ThirdLpPackageEveryMonth.SpecialProvider,

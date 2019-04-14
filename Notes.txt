@@ -1,5 +1,6 @@
 TODO:
 priority = (urgency, complexity)
+Either use or dont ISth interface naming convention.
 Find a way to do better Interface Segregation on IShipmentCost and IShipment.
 sort out what happens if IShipmentCost is not covariant.
 put decimals formatting near other default rules, like pricing etcs.

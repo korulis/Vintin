@@ -26,8 +26,8 @@ namespace ConsoleApp.Tests
                 {"greedy-shipping-output.txt" , new ZeroDiscounter()},
                 {"discounted-shipping-output.txt" ,
                     new SmallPackageLowestPriceDiscounter(
-                        new RuleBasedDiscounter(
-                            new RuleBasedDiscounter(
+                        new Discounts.Discounters.RuleBasedDiscounter(
+                            new Discounts.Discounters.RuleBasedDiscounter(
                                 new ZeroDiscounter(),
                                 ()=>new MonthlyCapDiscountingRules(Defaults.TenMonthlyCap.MonthlyCap)),
                             ()=>new OncePerMonthDiscountingRules(

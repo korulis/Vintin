@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Discounts.ApplicableDiscounts;
 using Discounts.Rules;
 
 namespace Discounts.Discounters
@@ -21,7 +22,7 @@ namespace Discounts.Discounters
         {
             var rules = _discountingRulesSpawner();
             var shipmentCosts = pricedShipments
-                .Select(x => rules.AssignDiscount(x))
+                .Select(x => AssignDiscount(rules, x))
                 .Select(x => x.Apply())
                 .Select(x =>
                 {
@@ -30,6 +31,12 @@ namespace Discounts.Discounters
                 });
 
             return _underlying.Discount(shipmentCosts);
+        }
+
+        private static ShipmentWithApplicableDiscount AssignDiscount(DiscountingRules rules, IShipmentCost<IShipment> x)
+        {
+            var shipmentWithApplicableDiscount = rules.AssignDiscount(x);
+            return shipmentWithApplicableDiscount;
         }
     }
 }

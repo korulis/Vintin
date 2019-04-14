@@ -9,11 +9,11 @@ namespace ConsoleApp.Tests
 {
     public class TenLimitDiscounterTests
     {
-        private readonly RuleBasedDiscounter _sut;
+        private readonly Discounts.Discounters.RuleBasedDiscounter _sut;
 
         public TenLimitDiscounterTests()
         {
-            _sut = new RuleBasedDiscounter(
+            _sut = new Discounts.Discounters.RuleBasedDiscounter(
                 new ZeroDiscounter(),
                 ()=>new MonthlyCapDiscountingRules(
                     Defaults.TenMonthlyCap.MonthlyCap));
