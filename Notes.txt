@@ -1,5 +1,6 @@
 TODO:
 priority = (urgency, complexity)
+sort out what happens if IShipmentCost is not covariant.
 put decimals formatting near other default rules, like pricing etcs.
 oldTotalDiscount => outstanding discount
 4=2x2 change up the order in which discounts are applied and rules are updated in ruleBasedDiscountCalculator
