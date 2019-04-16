@@ -1,5 +1,6 @@
 TODO:
 priority = (urgency, complexity)
+2=2x1 change class layout.
 3=3x1 Revert the order of decorators, so there is a smaller chance of mistaking which decorator gets the last word.
 4=2x2 change up the order in which discounts are applied and rules are updated in ruleBasedDiscountCalculator
 4=1x4 Optimization. Gather meta data about the discountings so far and pass it around instead of reenumerating the same arrays
