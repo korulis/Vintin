@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Discounts.ApplicableDiscounts;
+using System;
 using System.Collections.Generic;
-using Discounts.ApplicableDiscounts;
 
 namespace Discounts.Rules
 {
@@ -27,9 +27,9 @@ namespace Discounts.Rules
             }
 
             var shipment = shipmentCost.Shipment;
-            var month = Month(shipmentCost.Shipment);
+            var month = HalfOfMonth(shipmentCost.Shipment);
 
-            if (_context.TryGetValue(month, out var count) 
+            if (_context.TryGetValue(month, out var count)
                 && shipment.PackageSize == _specialSize
                 && shipment.ShippingProvider == _specialProvider
                 && count == _luckOrderNumber - 1)
@@ -48,20 +48,22 @@ namespace Discounts.Rules
             if (shipment.ShippingProvider != _specialProvider) return;
 
 
-            var month = Month(shipment);
-            if (_context.ContainsKey(month))
+            var halfOfMonth = HalfOfMonth(shipment);
+            if (_context.ContainsKey(halfOfMonth))
             {
-                _context[month]++;
+                _context[halfOfMonth]++;
             }
             else
             {
-                _context.Add(month, 1);
+                _context.Add(halfOfMonth, 1);
             }
         }
 
-        private static DateTime Month(Shipment shipment)
+        private static DateTime HalfOfMonth(Shipment shipment)
         {
-            return new DateTime(shipment.Date.Year, shipment.Date.Month, 1);
+            var day = shipment.Date.Day <= 15 ? 1 : 16;
+            var halfOfMonth = new DateTime(shipment.Date.Year, shipment.Date.Month, day);
+            return halfOfMonth;
         }
     }
 }

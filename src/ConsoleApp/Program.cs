@@ -42,7 +42,6 @@ namespace ConsoleApp
                     Defaults.ThirdLpPackageEveryMonth.SpecialProvider,
                     Defaults.ThirdLpPackageEveryMonth.SpecialSize,
                     Defaults.ThirdLpPackageEveryMonth.LuckOrderNumber));
-            var smallPackage = new SmallPackageLowestPriceDiscounter(thirdPackage, Defaults.CostReference);
 
             var processor = new FileBasedShipmentProcessor(
                 new ShipmentMapper(
@@ -51,7 +50,7 @@ namespace ConsoleApp
                     Defaults.ShippingProviders,
                     Defaults.PackageSizes),
                 new ShipmentCostCalculator(
-                    smallPackage, 
+                    thirdPackage, 
                     Defaults.CostReference),
                 ConsoleOutputMethod);
             return processor;
